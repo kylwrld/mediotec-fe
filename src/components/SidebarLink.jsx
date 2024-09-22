@@ -15,7 +15,7 @@ function SidebarLink({ icon, content, ...props }) {
             {...props}
         >
             {icon}
-            <span className="hidden md:block">{content}</span>
+            <span className="">{content}</span>
         </NavLink>
     );
 }

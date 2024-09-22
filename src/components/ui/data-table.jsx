@@ -9,7 +9,12 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+    ArrowUpDown,
+    ChevronDown,
+    CirclePlus,
+    MoreHorizontal,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -31,138 +36,15 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "./select";
 
-const data = [
-    {
-        id: "m5gr84i9",
-        degree: 3,
-        name: "Daniel Henrique",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        degree: 3,
-        name: "Maria",
-        email: "a@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        degree: 3,
-        name: "João Gabriel",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        degree: 1,
-        name: "Gustavo",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        degree: 3,
-        name: "André Luis",
-        email: "carmella@hotmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        degree: 2,
-        name: "Júlia",
-        email: "carmella@hotmail.com",
-    },
-    {
-        id: "x7pq13jr",
-        degree: 2,
-        name: "Carla Silva",
-        email: "carla_silva@gmail.com",
-    },
-    {
-        id: "h8ytw90d",
-        degree: 1,
-        name: "Roberto Souza",
-        email: "roberto_souza@outlook.com",
-    },
-    {
-        id: "kd8n4l6s",
-        degree: 3,
-        name: "Fernanda Lima",
-        email: "fernanda_lima@yahoo.com",
-    },
-    {
-        id: "n9z45jqb",
-        degree: 2,
-        name: "Ricardo Almeida",
-        email: "ricardo.almeida@gmail.com",
-    },
-    {
-        id: "d5wq7l8v",
-        degree: 1,
-        name: "Pedro Henrique",
-        email: "pedro_henrique@gmail.com",
-    },
-    {
-        id: "c9ys3a8m",
-        degree: 2,
-        name: "Ana Clara",
-        email: "ana.clara@hotmail.com",
-    },
-    {
-        id: "v7dr6f2p",
-        degree: 3,
-        name: "Lucas Fernandes",
-        email: "lucas.fernandes@gmail.com",
-    },
-    {
-        id: "e4k9l2u3",
-        degree: 1,
-        name: "Felipe Santos",
-        email: "felipe_santos@yahoo.com",
-    },
-];
-
-
-export const columns = [
-
-    {
-        accessorKey: "name",
-        // header: "Nome",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                    className="pl-0"
-                >
-                    Nome
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("name")}</div>
-        ),
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-        cell: ({ row }) => (
-            <div className="lowercase">{row.getValue("email")}</div>
-        ),
-    },
-    {
-        accessorKey: "degree",
-        header: () => <div className="text-right">Ano</div>,
-        cell: ({ row }) => {
-            const degree = parseFloat(row.getValue("degree"));
-
-            return <div className="text-right font-medium">{degree}</div>;
-        },
-    },
-
-];
-
-export default function DataTableDemo() {
+export default function DataTable({ columns, data }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -189,17 +71,55 @@ export default function DataTableDemo() {
 
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filtrar estudantes..."
-                    value={table.getColumn("name")?.getFilterValue() ?? ""}
-                    onChange={(event) =>
-                        table
-                            .getColumn("name")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+            <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
+                <div className="flex gap-2">
+                    <Input
+                        placeholder="Filtrar estudantes..."
+                        value={table.getColumn("name")?.getFilterValue() ?? ""}
+                        onChange={(event) =>
+                            table
+                                .getColumn("name")
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm text-[10px] md:text-sm"
+                    />
+                    <Select
+                        onValueChange={(value) => {
+                            table.getColumn("degree")?.setFilterValue(value);
+                        }}
+                    >
+                        <SelectTrigger className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
+                            <SelectValue placeholder="Filtrar ano" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">1</SelectItem>
+                            <SelectItem value="2">2</SelectItem>
+                            <SelectItem value="3">3</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    <Button
+                        className="text-[10px] md:text-sm bg-orange-600"
+                        onClick={(event) => {
+                            table.resetColumnFilters();
+                        }}
+                    >
+                        Remover filtros
+                    </Button>
+                </div>
+                {/* w-full sm:w-fit */}
+                <div className="flex gap-2">
+                    <Button
+                    // w-full sm:w-fit
+                        className="text-[10px] md:text-sm bg-orange-600 gap-2"
+                        onClick={(event) => {
+                            console.log("test");
+                        }}
+                    >
+                        <CirclePlus size={20}/>
+                        Novo estudante
+                    </Button>
+                </div>
                 {/* <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
@@ -260,7 +180,13 @@ export default function DataTableDemo() {
                                     {row.getVisibleCells().map((cell) => (
                                         // Use onClick to redirect to another page
                                         // onClick -> row.original.id -> /estudante/:id
-                                        <TableCell key={cell.id} className="p-4" onClick={() => console.log(row.original)}>
+                                        <TableCell
+                                            key={cell.id}
+                                            className="p-4"
+                                            onClick={() =>
+                                                console.log(row.original)
+                                            }
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
