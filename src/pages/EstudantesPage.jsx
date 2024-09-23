@@ -91,6 +91,24 @@ const data = [
         name: "Felipe Santos",
         email: "felipe_santos@yahoo.com",
     },
+    {
+        id: "e4k9l2u3",
+        degree: 1,
+        name: "Felipe Santos",
+        email: "felipe_santos@yahoo.com",
+    },
+    {
+        id: "e4k9l2u3",
+        degree: 1,
+        name: "Felipe Santos",
+        email: "felipe_santos@yahoo.com",
+    },
+    {
+        id: "e4k9l2u3",
+        degree: 1,
+        name: "Felipe Santos",
+        email: "felipe_santos@yahoo.com",
+    },
 ];
 
 
@@ -154,7 +172,7 @@ export const columns = [
 
 function EstudantesPage() {
   return (
-    <div>
+    <div className='h-full'>
         <h1 className='text-4xl text-blue-600 font-bold'>Estudantes</h1>
         <DataTable columns={columns} data={data}></DataTable>
     </div>

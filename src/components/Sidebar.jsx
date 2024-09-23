@@ -12,7 +12,7 @@ import SidebarLink from "./SidebarLink";
 
 function Sidebar() {
     return (
-        <div className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">
+        <aside className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">
             <div className="flex justify-center items-center h-24 hidden md:flex">
                 <img className="" src="\src\assets\mediotec (6).svg" alt="" />
             </div>
@@ -24,7 +24,7 @@ function Sidebar() {
                 <SidebarLink to="/avisos" icon={<Megaphone/>} content={"Avisos"}/>
                 <SidebarLink to="/faltas" icon={<FileChartColumn/>} content={"Faltas"}/>
             </div>
-        </div>
+        </aside>
     );
 }
 
