@@ -42,7 +42,7 @@ function LoginPage() {
     return (
         <div className="h-full p-4 md:px-16 md:py-10 bg-slate-300">
             <div className="h-full flex drop-shadow-md">
-                <div className="flex justify-center items-center w-1/2 h-full rounded-l-xl bg-[radial-gradient(circle,rgba(89,133,231,1)_0%,rgba(27,93,237,1)_100%)] hidden lg:flex">
+                <div className="flex justify-center items-center w-1/2 h-full rounded-l-xl bg-[radial-gradient(circle,rgba(106,151,255,1)_10%,rgba(0,80,255,1)_80%)] hidden lg:flex">
                     <img
                         className="w-3/5"
                         src="\src\assets\mediotec boneco.svg"

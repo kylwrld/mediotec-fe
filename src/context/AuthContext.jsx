@@ -18,12 +18,13 @@ export function AuthProvider({ children }) {
             body: JSON.stringify(user),
         });
 
-        const data = await res.json();
-        const refresh = { refresh: data.refresh, access: data.access };
+        // const data = await res.json();
+        // const refresh = { refresh: data.refresh, access: data.access };
 
+        console.log(res)
         if (res.ok) {
-            setTokens(refresh);
-            localStorage.setItem("tokens", JSON.stringify(refresh));
+            // setTokens(refresh);
+            // localStorage.setItem("tokens", JSON.stringify(refresh));
         }
 
         return;

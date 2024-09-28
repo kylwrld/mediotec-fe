@@ -194,7 +194,7 @@ export default function AnnouncementDataTable({ columns, data }) {
                 </Dialog>
             </div>
 
-            <div className="rounded-md border-0">
+            <div className="rounded-md border-0 xl:px-60 2xl:px-80 py-8">
                 <Table>
                     <TableBody className="flex flex-col gap-5">
                         {table.getRowModel().rows?.length ? (
@@ -263,7 +263,7 @@ export default function AnnouncementDataTable({ columns, data }) {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No results.
+                                    Nenhum resultado
                                 </TableCell>
                             </TableRow>
                         )}

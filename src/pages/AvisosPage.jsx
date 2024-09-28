@@ -113,7 +113,7 @@ function AvisosPage() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Avisos</h1>
-            <div className='px-4 xl:px-24 py-4'>
+            <div className=''>
                 <AnnouncementDataTable
                     columns={columns}
                     data={announcements}
