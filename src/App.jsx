@@ -14,20 +14,47 @@ import ProfessoresPage from "./pages/ProfessoresPage";
 import HorariosPage from "./pages/HorariosPage";
 import AvisosPage from "./pages/AvisosPage";
 import FaltasPage from "./pages/FaltasPage";
-
+import { AuthProvider } from "./context/AuthContext";
+import TeacherRoute from "./components/PrivateRoutes/TeacherRoute";
+import LoginPage from "./pages/LoginPage";
+import TeacherOrAdminRoute from "./components/PrivateRoutes/TeacherOrAdminRoute";
 
 export default function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
-            <Route path="/" element={<MainLayout></MainLayout>}>
-                <Route path="/estudantes" element={<EstudantesPage/>}></Route>
-                <Route path="/turmas" element={<TurmasPage/>}></Route>
-                <Route path="/professores" element={<ProfessoresPage/>}></Route>
-                <Route path="/horarios" element={<HorariosPage/>}></Route>
-                <Route path="/avisos" element={<AvisosPage/>}></Route>
-                <Route path="/faltas" element={<FaltasPage/>}></Route>
+            <Route path="/">
+                <Route path="/" element={<TeacherOrAdminRoute/>}>
+                    <Route path="/" element={<MainLayout />}>
+                        <Route
+                            path="/estudantes"
+                            element={<EstudantesPage />}
+                        ></Route>
+                        <Route path="/turmas" element={<TurmasPage />}></Route>
+                        <Route
+                            path="/professores"
+                            element={<ProfessoresPage />}
+                        ></Route>
+                        <Route
+                            path="/horarios"
+                            element={<HorariosPage />}
+                        ></Route>
+                        <Route path="/avisos" element={<AvisosPage />}></Route>
+
+                        <Route element={<TeacherRoute />}>
+                            <Route
+                                path="/faltas"
+                                element={<FaltasPage />}
+                            ></Route>
+                        </Route>
+                    </Route>
+                </Route>
+                <Route path="/login" element={<LoginPage />}></Route>
             </Route>
         )
     );
-    return <RouterProvider router={router}/>
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    );
 }

@@ -44,14 +44,14 @@ import {
     SelectValue,
 } from "./select";
 
-export default function DataTable({ columns, data }) {
+export default function StudentsDataTable({ columns, data }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState({
         pageIndex: 0, //initial page index
-        pageSize: 15, //default page size
+        pageSize: 10, //default page size
     });
 
     const table = useReactTable({
@@ -160,7 +160,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id}>
+                                        <TableHead key={header.id} className="px-4">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(

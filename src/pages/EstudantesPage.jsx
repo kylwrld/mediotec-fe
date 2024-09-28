@@ -1,119 +1,35 @@
-import React from 'react'
-import DataTable from '@/components/ui/data-table'
-import { Button } from '@/components/ui/button';
-import { ArrowUpDown } from 'lucide-react';
-import MobileNav from '@/components/ui/mobile-nav';
-import { filterFns } from '@tanstack/react-table';
-
-
-const data = [
-    {
-        id: "m5gr84i9",
-        degree: 3,
-        name: "Daniel Henrique",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        degree: 3,
-        name: "Maria",
-        email: "a@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        degree: 3,
-        name: "João Gabriel",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        degree: 1,
-        name: "Gustavo",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        degree: 3,
-        name: "José Guimarães",
-        email: "carmella@hotmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        degree: 2,
-        name: "Júlia",
-        email: "carmella@hotmail.com",
-    },
-    {
-        id: "x7pq13jr",
-        degree: 2,
-        name: "Carla Silva",
-        email: "carla_silva@gmail.com",
-    },
-    {
-        id: "h8ytw90d",
-        degree: 1,
-        name: "Roberto Souza",
-        email: "roberto_souza@outlook.com",
-    },
-    {
-        id: "kd8n4l6s",
-        degree: 3,
-        name: "Fernanda Lima",
-        email: "fernanda_lima@yahoo.com",
-    },
-    {
-        id: "n9z45jqb",
-        degree: 2,
-        name: "Ricardo Almeida",
-        email: "ricardo.almeida@gmail.com",
-    },
-    {
-        id: "d5wq7l8v",
-        degree: 1,
-        name: "Pedro Henrique",
-        email: "pedro_henrique@gmail.com",
-    },
-    {
-        id: "c9ys3a8m",
-        degree: 2,
-        name: "Ana Clara",
-        email: "ana.clara@hotmail.com",
-    },
-    {
-        id: "v7dr6f2p",
-        degree: 3,
-        name: "Lucas Fernandes",
-        email: "lucas.fernandes@gmail.com",
-    },
-    {
-        id: "e4k9l2u3",
-        degree: 1,
-        name: "Felipe Santos",
-        email: "felipe_santos@yahoo.com",
-    },
-    {
-        id: "e4k9l2u3",
-        degree: 1,
-        name: "Felipe Santos",
-        email: "felipe_santos@yahoo.com",
-    },
-    {
-        id: "e4k9l2u3",
-        degree: 1,
-        name: "Felipe Santos",
-        email: "felipe_santos@yahoo.com",
-    },
-    {
-        id: "e4k9l2u3",
-        degree: 1,
-        name: "Felipe Santos",
-        email: "felipe_santos@yahoo.com",
-    },
-];
-
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import StudentsDataTable from "@/components/ui/students-data-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export const columns = [
-
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) =>
+                    table.toggleAllPageRowsSelected(!!value)
+                }
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
     {
         accessorKey: "name",
         // header: "Nome",
@@ -124,6 +40,7 @@ export const columns = [
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
+                    className="p-0"
                 >
                     Nome
                     <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -146,13 +63,13 @@ export const columns = [
         // header: () => <div className="text-right">Ano</div>,
         header: ({ column }) => {
             return (
-                <div className='flex justify-end'>
+                <div className="flex justify-end">
                     <Button
                         variant="ghost"
                         onClick={() =>
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
-                        className="justify-end"
+                        className="justify-end p-0"
                     >
                         Ano
                         <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -163,20 +80,68 @@ export const columns = [
         cell: ({ row }) => {
             const degree = parseFloat(row.getValue("degree"));
 
-            return <div className="text-right font-medium">{degree}</div>;
+            return (
+                <div className="text-right font-medium">
+                    {degree ? degree : 0}
+                </div>
+            );
         },
-        filterFn: "includesString"
+        filterFn: "includesString",
     },
+    {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+          const payment = row.original
 
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem
+                  onClick={() => navigator.clipboard.writeText(payment.id)}
+                >
+                  Copy payment ID
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+                <DropdownMenuItem>View payment details</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        },
+      },
 ];
 
 function EstudantesPage() {
-  return (
-    <div className='h-full'>
-        <h1 className='text-4xl text-blue-600 font-bold'>Estudantes</h1>
-        <DataTable columns={columns} data={data}></DataTable>
-    </div>
-  )
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            const response = await fetch("http://127.0.0.1:8000/student/");
+            const data = await response.json();
+            setStudents(data.students);
+            setLoading(false);
+        };
+        fetchStudents();
+    }, []);
+
+    return (
+        <div className="h-full">
+            <h1 className="text-4xl text-blue-600 font-bold">Estudantes</h1>
+            <StudentsDataTable
+                columns={columns}
+                data={students}
+            ></StudentsDataTable>
+        </div>
+    );
 }
 
-export default EstudantesPage
+export default EstudantesPage;
