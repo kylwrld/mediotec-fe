@@ -105,7 +105,7 @@ export default function TeacherDataTable({ columns, data }) {
         pageSize: 10, //default page size
     });
 
-    const { postRequest } = useContext(AuthContext);
+    const { postSignup } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -114,7 +114,7 @@ export default function TeacherDataTable({ columns, data }) {
     function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         user.type = "TEACHER";
-        postRequest("http://127.0.0.1:8000/signup/", user);
+        postSignup("http://127.0.0.1:8000/signup/", user);
     }
 
     const table = useReactTable({

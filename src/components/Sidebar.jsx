@@ -12,6 +12,16 @@ import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
 import SidebarLink from "./SidebarLink";
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+
+
 function Sidebar() {
     const { decodeToken, logout } = useContext(AuthContext);
     const user = decodeToken();
@@ -59,10 +69,20 @@ function Sidebar() {
                     />
                 </nav>
                 <div className="flex pl-5 mb-2 gap-2">
-                    <div className="flex justify-center items-center py-6 px-4 gap-2">
-                        <CircleUser />
-                        <span className="text-sm">{profile}</span>
-                    </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <div className="flex justify-center items-center py-6 px-4 gap-2">
+                                    <CircleUser />
+                                    <span className="text-sm">{profile}</span>
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>Perfil</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => logout()}>Sair</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                 </div>
             </div>
         </aside>

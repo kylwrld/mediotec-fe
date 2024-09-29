@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AuthContext from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
     email: z
@@ -30,13 +31,16 @@ const formSchema = z.object({
 
 function LoginPage() {
     const { postLogin } = useContext(AuthContext);
-
+    const navigate = useNavigate()
     const form = useForm({
         resolver: zodResolver(formSchema),
     });
 
-    function onSubmit(user) {
-        postLogin(user)
+    async function onSubmit(user) {
+        const res = await postLogin(user)
+        if (res.ok) {
+            navigate("/estudantes")
+        }
     }
 
     return (

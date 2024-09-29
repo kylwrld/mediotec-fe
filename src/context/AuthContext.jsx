@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
             // localStorage.setItem("tokens", JSON.stringify(refresh));
         }
 
-        return;
+        return res
     }
 
     async function postLogin(userObject) {
@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
             localStorage.setItem("tokens", JSON.stringify(data));
         }
 
-        return;
+        return res;
     }
 
     async function logout() {
