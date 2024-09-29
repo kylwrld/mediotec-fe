@@ -8,9 +8,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    CirclePlus
-} from "lucide-react";
+import { CirclePlus, UsersRound } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -28,7 +26,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from "./dialog";
 import {
     Select,
@@ -109,7 +107,7 @@ const formSchema = z.object({
             .min(14, { message: "O CPF precisa ter 14 dígitos" }),
         // .regex(/[0-9]+\.[0-9]+\.[0-9]+-[0-9]{2}/, { message: "CPF precisa estar no padrão XXX.XXX.XXX-XX" }),
     }),
-    phone: z.array(phoneSchema).optional(),
+    phone: z.array(phoneSchema),
 });
 
 function formatDate(date) {
@@ -124,7 +122,7 @@ function formatDate(date) {
     return [year, month, day].join("-");
 }
 
-export default function StudentsDataTable({ columns, data }) {
+export default function StudentsDataTable({ columns, data, classes }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -133,17 +131,34 @@ export default function StudentsDataTable({ columns, data }) {
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
+    const [_class, setClass] = React.useState({});
 
     const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            phone: [{ ddd: "", number: "" }],
+        },
     });
 
     function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        console.log(user);
         postRequest("http://127.0.0.1:8000/signup/student/", user);
+    }
+
+    async function attachClass(rows, class_id) {
+        const data = {};
+        data.student = rows.map((row) => row.original.id);
+        data._class = class_id;
+
+        if (data.student.length === 0 || typeof data._class !== "string") return;
+
+        const res = await postRequest(
+            "http://127.0.0.1:8000/student-class/",
+            data
+        );
+        console.log(await res.json());
     }
 
     const table = useReactTable({
@@ -207,6 +222,56 @@ export default function StudentsDataTable({ columns, data }) {
                 </div>
 
                 <div className="flex gap-2">
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <UsersRound size={20} />
+                                Atribuir a uma turma
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Atribuir a uma turma</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-3">
+                                <Select
+                                    onValueChange={(value) => setClass(value)}
+                                >
+                                    <SelectTrigger className="text-muted-foreground">
+                                        <SelectValue placeholder="Selecione uma turma" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {classes
+                                            ? classes.map(
+                                                  (class_year, index) => (
+                                                      <SelectItem
+                                                          key={index}
+                                                          value={class_year._class.id.toString()}
+                                                      >
+                                                          {
+                                                              class_year._class
+                                                                  .name
+                                                          }
+                                                      </SelectItem>
+                                                  )
+                                              )
+                                            : null}
+                                    </SelectContent>
+                                </Select>
+                                <Button
+                                    onClick={() =>
+                                        attachClass(
+                                            table.getSelectedRowModel().rows,
+                                            _class
+                                        )
+                                    }
+                                >
+                                    Enviar
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
@@ -549,7 +614,7 @@ export default function StudentsDataTable({ columns, data }) {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        Anterior
                     </Button>
                     <Button
                         variant="outline"
@@ -557,7 +622,7 @@ export default function StudentsDataTable({ columns, data }) {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        Próximo
                     </Button>
                 </div>
             </div>

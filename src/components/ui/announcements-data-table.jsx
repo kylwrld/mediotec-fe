@@ -81,8 +81,8 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
         resolver: zodResolver(formSchema),
     });
 
-    function onSubmit(announcement) {
-        postRequest("http://127.0.0.1:8000/announcement/", announcement)
+    async function onSubmit(announcement) {
+        const res = await postRequest("http://127.0.0.1:8000/announcement/", announcement)
     }
 
     const table = useReactTable({
@@ -264,8 +264,8 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
                                         row.getIsSelected() && "selected"
                                     }
                                 >
-                                    <div
-                                        className="h-fit p-4 border rounded-md"
+                                    <td
+                                        className="flex flex-col h-fit p-4 border rounded-md"
                                         onClick={() =>
                                             console.log(row.original)
                                         }
@@ -302,23 +302,7 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
                                             </p>
                                             <p>{row.original.body}</p>
                                         </div>
-                                    </div>
-                                    {/* {row.getVisibleCells().map((cell) => (
-                                        // Use onClick to redirect to another page
-                                        // onClick -> row.original.id -> /estudante/:id
-                                        <TableCell
-                                            key={cell.id}
-                                            className="p-4"
-                                            onClick={() =>
-                                                console.log(row.original)
-                                            }
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))} */}
+                                    </td>
                                 </TableRow>
                             ))
                         ) : (
@@ -342,7 +326,7 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        Anterior
                     </Button>
                     <Button
                         variant="outline"
@@ -350,7 +334,7 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        Próximo
                     </Button>
                 </div>
             </div>

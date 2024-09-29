@@ -343,7 +343,7 @@ export default function ClassDataTable({ columns, data }) {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        Anterior
                     </Button>
                     <Button
                         variant="outline"
@@ -351,7 +351,7 @@ export default function ClassDataTable({ columns, data }) {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        Próximo
                     </Button>
                 </div>
             </div>

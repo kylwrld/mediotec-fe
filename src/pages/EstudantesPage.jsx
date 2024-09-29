@@ -121,6 +121,7 @@ export const columns = [
 
 function EstudantesPage() {
     const [students, setStudents] = useState([]);
+    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -130,6 +131,14 @@ function EstudantesPage() {
             setStudents(data.students);
             setLoading(false);
         };
+
+        const fetchClasses = async () => {
+            const response = await fetch("http://127.0.0.1:8000/class-year/");
+            const data = await response.json();
+            setClasses(data.class_years);
+        };
+
+        fetchClasses();
         fetchStudents();
     }, []);
 
@@ -139,6 +148,7 @@ function EstudantesPage() {
             <StudentsDataTable
                 columns={columns}
                 data={students}
+                classes={classes}
             ></StudentsDataTable>
         </div>
     );
