@@ -39,17 +39,51 @@ import {
     SelectValue,
 } from "./select";
 
-export default function AnnouncementDataTable({ columns, data }) {
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
+
+const formSchema = z.object({
+    title: z.string({ required_error: "Por favor preencha com um título." }),
+    body: z
+        .string({
+            required_error: "Por favor preencha com algum conteúdo.",
+        }),
+    fixed: z.boolean().default(false),
+    _class: z.string().optional(),
+});
+
+export default function AnnouncementDataTable({ columns, data, classes }) {
     const [sorting, setSorting] = React.useState([]);
-    const [columnFilters, setColumnFilters] = React.useState([
-        { id: "fixed", value: true },
-    ]);
+    const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState({
         pageIndex: 0, //initial page index
         pageSize: 4, //default page size
     });
+
+    const { postRequest } = useContext(AuthContext);
+
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+    });
+
+    function onSubmit(announcement) {
+        postRequest("http://127.0.0.1:8000/announcement/", announcement)
+    }
 
     const table = useReactTable({
         data,
@@ -77,7 +111,7 @@ export default function AnnouncementDataTable({ columns, data }) {
             <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
                 <div className="flex gap-2">
                     <Input
-                        placeholder="Filtrar por título..."
+                        placeholder="Filtrar título..."
                         value={table.getColumn("title")?.getFilterValue() ?? ""}
                         onChange={(event) => {
                             table
@@ -117,12 +151,104 @@ export default function AnnouncementDataTable({ columns, data }) {
                             Novo aviso
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px] h-2/4">
+                    <DialogContent className="sm:max-w-[720px]">
                         <DialogHeader>
                             <DialogTitle>Novo aviso</DialogTitle>
                         </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <div className="flex items-start flex-col gap-2">
+                        <div className="grid gap-4 py-4 overflow-y-auto max-h-[600px]">
+                            <Form {...form}>
+                                <form
+                                    onSubmit={form.handleSubmit(onSubmit)}
+                                    className="space-y-8 px-2 md:px-20 xl:px-32 w-full"
+                                >
+                                    <FormField
+                                        control={form.control}
+                                        name="title"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Título</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="Digite o nome do professor"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="body"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Conteúdo</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        placeholder="Digite o conteúdo do aviso"
+                                                        className="resize-none"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="_class"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Turma</FormLabel>
+                                                <Select
+                                                    onValueChange={field.onChange}
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger className="text-muted-foreground">
+                                                            <SelectValue placeholder="Selecione uma turma (opcional)" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {classes ? classes.map((class_year, index) => (
+                                                            <SelectItem key={index}
+                                                                value={class_year._class.id.toString()}>
+                                                                {class_year._class.name}
+                                                            </SelectItem>)
+                                                        ): null}
+                                                    </SelectContent>
+                                                </Select>
+
+                                                <FormMessage />
+                                            </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="fixed"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                                                    <FormLabel>Fixar</FormLabel>
+                                                    <FormControl>
+                                                        <Checkbox
+                                                            checked={field.value}
+                                                            onCheckedChange={
+                                                                field.onChange
+                                                            }
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+
+                                    <div className="flex gap-2">
+                                        <Button type="submit">Enviar</Button>
+                                    </div>
+                                </form>
+                            </Form>
+                            {/* <div className="flex items-start flex-col gap-2">
                                 <Label htmlFor="title" className="text-right">
                                     Título
                                 </Label>
@@ -143,36 +269,13 @@ export default function AnnouncementDataTable({ columns, data }) {
                                         <SelectValue placeholder="Turma" />
                                     </SelectTrigger>
                                     <SelectContent className="max-h-52">
-                                        <SelectItem value="1">
-                                            Placeholder 1
-                                        </SelectItem>
-                                        <SelectItem value="2">
-                                            Placeholder 2
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            Placeholder 3
-                                        </SelectItem>
+                                        {classes
+                                            ? classes.map((class_year) => (
+                                                <SelectItem value={class_year._class.id}>
+                                                      {class_year._class.name}
+                                                  </SelectItem>
+                                              ))
+                                            : ""}
                                     </SelectContent>
                                 </Select>
 
@@ -185,16 +288,16 @@ export default function AnnouncementDataTable({ columns, data }) {
                                         Fixar aviso
                                     </label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
-                        <DialogFooter>
+                        {/* <DialogFooter>
                             <Button type="submit">Criar aviso</Button>
-                        </DialogFooter>
+                        </DialogFooter> */}
                     </DialogContent>
                 </Dialog>
             </div>
 
-            <div className="rounded-md border-0 xl:px-60 2xl:px-80 py-8">
+            <div className="rounded-md border-0 lg:px-20 xl:px-40 2xl:px-72 py-8">
                 <Table>
                     <TableBody className="flex flex-col gap-5">
                         {table.getRowModel().rows?.length ? (
@@ -205,7 +308,12 @@ export default function AnnouncementDataTable({ columns, data }) {
                                         row.getIsSelected() && "selected"
                                     }
                                 >
-                                    <div className="h-fit p-4 border rounded-md" onClick={() => console.log(row.original)}>
+                                    <div
+                                        className="h-fit p-4 border rounded-md"
+                                        onClick={() =>
+                                            console.log(row.original)
+                                        }
+                                    >
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
                                                 {/* <Avatar>

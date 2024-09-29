@@ -134,7 +134,7 @@ export default function StudentsDataTable({ columns, data }) {
         pageSize: 10, //default page size
     });
 
-    const { postSignup } = useContext(AuthContext);
+    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -143,7 +143,7 @@ export default function StudentsDataTable({ columns, data }) {
     function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         console.log(user);
-        postSignup("http://127.0.0.1:8000/signup/student/", user);
+        postRequest("http://127.0.0.1:8000/signup/student/", user);
     }
 
     const table = useReactTable({
@@ -172,7 +172,7 @@ export default function StudentsDataTable({ columns, data }) {
             <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
                 <div className="flex gap-2">
                     <Input
-                        placeholder="Filtrar estudantes..."
+                        placeholder="Filtrar nome..."
                         value={table.getColumn("name")?.getFilterValue() ?? ""}
                         onChange={(event) =>
                             table

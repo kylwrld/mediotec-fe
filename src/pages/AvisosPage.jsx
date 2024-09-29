@@ -98,16 +98,25 @@ export const columns = [
 
 function AvisosPage() {
     const [announcements, setAnnouncements] = useState([]);
+    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchAnnouncements= async () => {
+        const fetchAnnouncements = async () => {
             const response = await fetch("http://127.0.0.1:8000/announcement/");
             const data = await response.json();
             setAnnouncements(data.announcements);
-            setLoading(false);
         };
+
+        const fetchClasses = async () => {
+            const response = await fetch("http://127.0.0.1:8000/class-year/");
+            const data = await response.json();
+            setClasses(data.class_years);
+        };
+
+        fetchClasses();
         fetchAnnouncements();
+        setLoading(false);
     }, []);
 
     return (
@@ -117,6 +126,7 @@ function AvisosPage() {
                 <AnnouncementDataTable
                     columns={columns}
                     data={announcements}
+                    classes={classes}
                 ></AnnouncementDataTable>
             </div>
         </div>

@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
             : null
     );
 
-    async function postSignup(url, user) {
+    async function postRequest(url, user) {
         const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -21,7 +21,6 @@ export function AuthProvider({ children }) {
         // const data = await res.json();
         // const refresh = { refresh: data.refresh, access: data.access };
 
-        console.log(res)
         if (res.ok) {
             // setTokens(refresh);
             // localStorage.setItem("tokens", JSON.stringify(refresh));
@@ -64,7 +63,7 @@ export function AuthProvider({ children }) {
         tokens,
         decodeToken,
         postLogin,
-        postSignup,
+        postRequest,
         logout,
     };
 

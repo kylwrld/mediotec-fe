@@ -80,7 +80,7 @@ export default function ClassDataTable({ columns, data }) {
             <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
                 <div className="flex gap-2">
                     <Input
-                        placeholder="Filtrar turmas..."
+                        placeholder="Filtrar nome..."
                         value={table.getColumn("name")?.getFilterValue() ?? ""}
                         onChange={(event) =>
                             table
