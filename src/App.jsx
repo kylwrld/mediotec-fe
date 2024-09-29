@@ -18,7 +18,7 @@ import { AuthProvider } from "./context/AuthContext";
 import TeacherRoute from "./components/PrivateRoutes/TeacherRoute";
 import LoginPage from "./pages/LoginPage";
 import TeacherOrAdminRoute from "./components/PrivateRoutes/TeacherOrAdminRoute";
-
+import { Toaster } from "@/components/ui/toaster"
 export default function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -53,8 +53,11 @@ export default function App() {
         )
     );
     return (
-        <AuthProvider>
-            <RouterProvider router={router} />
-        </AuthProvider>
+        <>
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
+            <Toaster />
+        </>
     );
 }

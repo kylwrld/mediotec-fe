@@ -66,6 +66,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }),
@@ -105,16 +106,28 @@ export default function TeacherDataTable({ columns, data }) {
         pageSize: 10, //default page size
     });
 
-    const { postSignup } = useContext(AuthContext);
+    const { toast } = useToast()
+    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
     });
 
-    function onSubmit(user) {
+    async function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         user.type = "TEACHER";
-        postSignup("http://127.0.0.1:8000/signup/", user);
+        const res = await postRequest("http://127.0.0.1:8000/signup/", user);
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Professor criado com sucesso.",
+            })
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar professor"
+            })
+        }
     }
 
     const table = useReactTable({

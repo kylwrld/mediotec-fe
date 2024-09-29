@@ -65,6 +65,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast"
 
 const phoneSchema = z.object({
     ddd: z
@@ -133,6 +134,7 @@ export default function StudentsDataTable({ columns, data, classes }) {
     });
     const [_class, setClass] = React.useState({});
 
+    const { toast } = useToast()
     const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
@@ -142,9 +144,20 @@ export default function StudentsDataTable({ columns, data, classes }) {
         },
     });
 
-    function onSubmit(user) {
+    async function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        postRequest("http://127.0.0.1:8000/signup/student/", user);
+        const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Estudante criado com sucesso.",
+            })
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar estudante.",
+            })
+        }
     }
 
     async function attachClass(rows, class_id) {
@@ -158,7 +171,19 @@ export default function StudentsDataTable({ columns, data, classes }) {
             "http://127.0.0.1:8000/student-class/",
             data
         );
-        console.log(await res.json());
+
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Estudante(s) adicionado(s) a turma com sucesso.",
+            })
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Selecione no mínimo 1 estudante e uma turma",
+                description: "Os estudantes não podem fazer parte da turma escolhida."
+            })
+        }
     }
 
     const table = useReactTable({

@@ -54,6 +54,7 @@ import {
 } from "@/components/ui/form";
 import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
     title: z.string({ required_error: "Por favor preencha com um título." }),
@@ -75,6 +76,7 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
         pageSize: 4, //default page size
     });
 
+    const { toast } = useToast()
     const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
@@ -83,6 +85,13 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
 
     async function onSubmit(announcement) {
         const res = await postRequest("http://127.0.0.1:8000/announcement/", announcement)
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Aviso criado com sucesso",
+                // description: "Redirecionando para página de estudantes."
+            })
+        }
     }
 
     const table = useReactTable({

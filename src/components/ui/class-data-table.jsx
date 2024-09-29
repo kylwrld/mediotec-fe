@@ -54,6 +54,7 @@ import {
     FormLabel,
     FormMessage
 } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 const types = ["INFORMATICA", "LOGISTICA"];
 
@@ -75,14 +76,26 @@ export default function ClassDataTable({ columns, data }) {
         pageSize: 10, //default page size
     });
 
+    const { toast } = useToast()
     const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
     });
 
-    function onSubmit(_class) {
-        postRequest("http://127.0.0.1:8000/class/", _class)
+    async function onSubmit(_class) {
+        const res = await postRequest("http://127.0.0.1:8000/class/", _class)
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Turma criada com sucesso.",
+            })
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar turma"
+            })
+        }
     }
 
     const table = useReactTable({

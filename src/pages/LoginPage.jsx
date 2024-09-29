@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import AuthContext from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
     email: z
@@ -25,20 +26,29 @@ const formSchema = z.object({
     password: z
         .string({
             required_error: "Por favor digite uma senha.",
-        }).min(3, {"message":"A senha precisa ter no mínimo 3 caracteres."})
+        }).min(1, {"message":"Digite sua senha"})
 
 });
 
 function LoginPage() {
+    const { toast } = useToast()
     const { postLogin } = useContext(AuthContext);
     const navigate = useNavigate()
     const form = useForm({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
     });
 
     async function onSubmit(user) {
         const res = await postLogin(user)
         if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Login realizado com sucesso",
+                description: "Redirecionando para página de estudantes."})
             navigate("/estudantes")
         }
     }
@@ -68,6 +78,7 @@ function LoginPage() {
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <Input
+
                                                 placeholder="Digite seu email"
                                                 {...field}
                                             />
