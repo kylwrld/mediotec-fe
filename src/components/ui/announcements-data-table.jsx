@@ -208,7 +208,7 @@ export default function AnnouncementDataTable({ columns, data }) {
                                     <div className="h-fit p-4 border rounded-md" onClick={() => console.log(row.original)}>
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
-                                                <Avatar>
+                                                {/* <Avatar>
                                                     <AvatarImage
                                                         src="https://github.com/shadcn.png"
                                                         alt="@shadcn"
@@ -216,12 +216,12 @@ export default function AnnouncementDataTable({ columns, data }) {
                                                     <AvatarFallback>
                                                         CN
                                                     </AvatarFallback>
-                                                </Avatar>
+                                                </Avatar> */}
                                                 <div className="flex flex-col">
-                                                    <p>
+                                                    <p className="font-bold">
                                                         {row.original.user.name}
                                                     </p>
-                                                    <span>
+                                                    <span className="text-muted-foreground">
                                                         {new Date(
                                                             row.original.created_at
                                                         ).toLocaleString(

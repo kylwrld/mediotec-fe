@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -9,24 +8,10 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    ArrowUpDown,
-    ChevronDown,
-    CirclePlus,
-    MoreHorizontal,
-} from "lucide-react";
+import { CirclePlus } from "lucide-react";
+import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
     Table,
@@ -44,6 +29,72 @@ import {
     SelectValue,
 } from "./select";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+
+import AuthContext from "@/context/AuthContext";
+
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+
+import { Calendar } from "@/components/ui/calendar";
+import { ptBR } from "date-fns/locale";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "./dialog";
+
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+
+const formSchema = z.object({
+    name: z.string({ required_error: "Por favor preencha com um nome." }),
+    email: z
+        .string({
+            required_error: "Por favor preencha com um email.",
+        })
+        .email("Esse email não é válido."),
+    password: z
+        .string({
+            required_error: "Por favor digite uma senha.",
+        })
+        .min(3, { message: "A senha precisa ter no mínimo 3 caracteres." }),
+    birth_date: z.date({
+        required_error: "Por favor especifique a data de nascimento.",
+    }),
+});
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+}
 export default function TeacherDataTable({ columns, data }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
@@ -53,6 +104,18 @@ export default function TeacherDataTable({ columns, data }) {
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
+
+    const { postSignup } = useContext(AuthContext);
+
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+    });
+
+    function onSubmit(user) {
+        user.birth_date = formatDate(new Date(user.birth_date));
+        user.type = "TEACHER";
+        postSignup("http://127.0.0.1:8000/signup/", user);
+    }
 
     const table = useReactTable({
         data,
@@ -71,7 +134,7 @@ export default function TeacherDataTable({ columns, data }) {
             columnFilters,
             columnVisibility,
             rowSelection,
-            pagination
+            pagination,
         },
     });
 
@@ -89,19 +152,6 @@ export default function TeacherDataTable({ columns, data }) {
                         }
                         className="max-w-sm text-[10px] md:text-sm"
                     />
-                    <Select
-                        onValueChange={(value) => {
-                            table.getColumn("type")?.setFilterValue(value);
-                        }}
-                    >
-                        <SelectTrigger className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
-                            <SelectValue placeholder="Filtrar tipo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="informatica">Informática</SelectItem>
-                            <SelectItem value="logistica">Logística</SelectItem>
-                        </SelectContent>
-                    </Select>
 
                     <Button
                         className="text-[10px] md:text-sm bg-orange-600"
@@ -112,45 +162,166 @@ export default function TeacherDataTable({ columns, data }) {
                         Remover filtros
                     </Button>
                 </div>
-                {/* w-full sm:w-fit */}
+
                 <div className="flex gap-2">
-                    <Button
-                    // w-full sm:w-fit
-                        className="text-[10px] md:text-sm bg-orange-600 gap-2"
-                        onClick={(event) => {
-                            console.log("test");
-                        }}
-                    >
-                        <CirclePlus size={20}/>
-                        Novo professor
-                    </Button>
-                </div>
-                {/* <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <CirclePlus size={20} />
+                                Novo professor
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Novo professor</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <Form {...form}>
+                                    <form
+                                        onSubmit={form.handleSubmit(onSubmit)}
+                                        className="space-y-8 px-2 md:px-20 xl:px-32 w-full overflow-y-auto max-h-[600px]"
                                     >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                );
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu> */}
+                                        <FormField
+                                            control={form.control}
+                                            name="name"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>
+                                                        Nome do professor
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            placeholder="Digite o nome do professor"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="email"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Email</FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            placeholder="Digite o email do professor"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="password"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Senha</FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type="password"
+                                                            placeholder="Digite a senha do professor"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="birth_date"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-col">
+                                                    <FormLabel>
+                                                        Data de nascimento
+                                                    </FormLabel>
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <FormControl>
+                                                                <Button
+                                                                    variant={
+                                                                        "outline"
+                                                                    }
+                                                                    className={cn(
+                                                                        "w-[240px] pl-3 text-left font-normal",
+                                                                        !field.value &&
+                                                                            "text-muted-foreground"
+                                                                    )}
+                                                                >
+                                                                    {field.value ? (
+                                                                        format(
+                                                                            field.value,
+                                                                            "PPP",
+                                                                            {
+                                                                                locale: ptBR,
+                                                                            }
+                                                                        )
+                                                                    ) : (
+                                                                        <span>
+                                                                            Selecione
+                                                                            uma
+                                                                            data
+                                                                        </span>
+                                                                    )}
+                                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                                </Button>
+                                                            </FormControl>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent
+                                                            className="w-auto p-0"
+                                                            align="start"
+                                                        >
+                                                            <Calendar
+                                                                mode="single"
+                                                                selected={
+                                                                    field.value
+                                                                }
+                                                                onSelect={
+                                                                    field.onChange
+                                                                }
+                                                                disabled={(
+                                                                    date
+                                                                ) =>
+                                                                    date >
+                                                                        new Date() ||
+                                                                    date <
+                                                                        new Date(
+                                                                            "1900-01-01"
+                                                                        )
+                                                                }
+                                                                initialFocus
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    <FormDescription>
+                                                        A data de nascimento é
+                                                        usada para calcular a
+                                                        idade do professor.
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <div className="flex gap-2">
+                                            <Button type="submit">
+                                                Enviar
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </Form>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -159,7 +330,10 @@ export default function TeacherDataTable({ columns, data }) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} className="px-4">
+                                        <TableHead
+                                            key={header.id}
+                                            className="px-4"
+                                        >
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -184,7 +358,7 @@ export default function TeacherDataTable({ columns, data }) {
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         // Use onClick to redirect to another page
-                                        // onClick -> row.original.id -> /estudante/:id
+                                        // onClick -> row.original.id -> /professor/:id
                                         <TableCell
                                             key={cell.id}
                                             className="p-4"

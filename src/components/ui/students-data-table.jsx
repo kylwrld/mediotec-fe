@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -10,23 +9,11 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {
-    ArrowUpDown,
-    ChevronDown,
-    CirclePlus,
-    MoreHorizontal,
+    CirclePlus
 } from "lucide-react";
+import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
     Table,
@@ -37,26 +24,24 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "./dialog";
+import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from "./select";
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "./dialog";
-import { Label } from "./label";
 
-import { useContext } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
     Form,
@@ -70,12 +55,12 @@ import {
 
 import AuthContext from "@/context/AuthContext";
 
+import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 
 import { Calendar } from "@/components/ui/calendar";
-import { ptBR } from "date-fns/locale"
+import { ptBR } from "date-fns/locale";
 
 import {
     Popover,
@@ -129,16 +114,14 @@ const formSchema = z.object({
 
 function formatDate(date) {
     var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
         year = d.getFullYear();
 
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
 
-    return [year, month, day].join('-');
+    return [year, month, day].join("-");
 }
 
 export default function StudentsDataTable({ columns, data }) {
@@ -158,7 +141,7 @@ export default function StudentsDataTable({ columns, data }) {
     });
 
     function onSubmit(user) {
-        user.birth_date = formatDate(new Date(user.birth_date))
+        user.birth_date = formatDate(new Date(user.birth_date));
         console.log(user);
         postSignup("http://127.0.0.1:8000/signup/student/", user);
     }
@@ -228,7 +211,7 @@ export default function StudentsDataTable({ columns, data }) {
                         <DialogTrigger asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
                                 <CirclePlus size={20} />
-                                Novo aviso
+                                Novo estudante
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[720px]">
@@ -316,23 +299,55 @@ export default function StudentsDataTable({ columns, data }) {
                                                                             "text-muted-foreground"
                                                                     )}
                                                                 >
-                                                                    {field.value ? ( format( field.value, "PPP", { locale: ptBR }) )
-                                                                    : (<span>Selecione uma data</span> )}
+                                                                    {field.value ? (
+                                                                        format(
+                                                                            field.value,
+                                                                            "PPP",
+                                                                            {
+                                                                                locale: ptBR,
+                                                                            }
+                                                                        )
+                                                                    ) : (
+                                                                        <span>
+                                                                            Selecione
+                                                                            uma
+                                                                            data
+                                                                        </span>
+                                                                    )}
                                                                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                                 </Button>
                                                             </FormControl>
                                                         </PopoverTrigger>
-                                                        <PopoverContent className="w-auto p-0" align="start">
+                                                        <PopoverContent
+                                                            className="w-auto p-0"
+                                                            align="start"
+                                                        >
                                                             <Calendar
-                                                                mode="single" selected={field.value}
-                                                                onSelect={field.onChange}
-                                                                disabled={(date) => date > new Date() || date <new Date("1900-01-01")}
+                                                                mode="single"
+                                                                selected={
+                                                                    field.value
+                                                                }
+                                                                onSelect={
+                                                                    field.onChange
+                                                                }
+                                                                disabled={(
+                                                                    date
+                                                                ) =>
+                                                                    date >
+                                                                        new Date() ||
+                                                                    date <
+                                                                        new Date(
+                                                                            "1900-01-01"
+                                                                        )
+                                                                }
                                                                 initialFocus
                                                             />
                                                         </PopoverContent>
                                                     </Popover>
                                                     <FormDescription>
-                                                        A data de nascimento é usada para calcular a idade do estudante.
+                                                        A data de nascimento é
+                                                        usada para calcular a
+                                                        idade do estudante.
                                                     </FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
