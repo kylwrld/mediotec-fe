@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -10,23 +9,11 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {
-    ArrowUpDown,
-    ChevronDown,
-    CirclePlus,
-    MoreHorizontal,
+    CirclePlus
 } from "lucide-react";
+import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
     Table,
@@ -44,6 +31,40 @@ import {
     SelectValue,
 } from "./select";
 
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
+
+
+import AuthContext from "@/context/AuthContext";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "@/components/ui/form";
+
+const types = ["INFORMATICA", "LOGISTICA"];
+
+const formSchema = z.object({
+    name: z.string({ required_error: "Por favor preencha com um nome." }),
+    degree: z.string({
+        required_error: "Por favor preencha com um ano.",
+    }),
+    type: z.enum(types),
+});
+
 export default function ClassDataTable({ columns, data }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
@@ -53,6 +74,16 @@ export default function ClassDataTable({ columns, data }) {
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
+
+    const { postRequest } = useContext(AuthContext);
+
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+    });
+
+    function onSubmit(_class) {
+        postRequest("http://127.0.0.1:8000/class/", _class)
+    }
 
     const table = useReactTable({
         data,
@@ -71,7 +102,7 @@ export default function ClassDataTable({ columns, data }) {
             columnFilters,
             columnVisibility,
             rowSelection,
-            pagination
+            pagination,
         },
     });
 
@@ -98,7 +129,9 @@ export default function ClassDataTable({ columns, data }) {
                             <SelectValue placeholder="Filtrar tipo" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="informatica">Informática</SelectItem>
+                            <SelectItem value="informatica">
+                                Informática
+                            </SelectItem>
                             <SelectItem value="logistica">Logística</SelectItem>
                         </SelectContent>
                     </Select>
@@ -112,45 +145,131 @@ export default function ClassDataTable({ columns, data }) {
                         Remover filtros
                     </Button>
                 </div>
-                {/* w-full sm:w-fit */}
-                <div className="flex gap-2">
-                    <Button
-                    // w-full sm:w-fit
-                        className="text-[10px] md:text-sm bg-orange-600 gap-2"
-                        onClick={(event) => {
-                            console.log("test");
-                        }}
-                    >
-                        <CirclePlus size={20}/>
-                        Nova turma
-                    </Button>
-                </div>
-                {/* <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
+
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button
+                            className="text-[10px] md:text-sm bg-orange-600 gap-2"
+                            onClick={(event) => {
+                                console.log(table.getState().columnFilters);
+                            }}
+                        >
+                            <CirclePlus size={20} />
+                            Nova turma
                         </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                );
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu> */}
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[720px]">
+                        <DialogHeader>
+                            <DialogTitle>Nova turma</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4 overflow-y-auto max-h-[600px]">
+                            <Form {...form}>
+                                <form
+                                    onSubmit={form.handleSubmit(onSubmit)}
+                                    className="space-y-8 px-2 md:px-20 xl:px-32 w-full"
+                                >
+                                    <FormField
+                                        control={form.control}
+                                        name="name"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Título</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="Digite o nome da turma"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="degree"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Ano da turma
+                                                </FormLabel>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger className="text-muted-foreground">
+                                                            <SelectValue placeholder="Selecione um ano" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        <SelectItem value="1">
+                                                            1
+                                                        </SelectItem>
+                                                        <SelectItem value="2">
+                                                            2
+                                                        </SelectItem>
+                                                        <SelectItem value="3">
+                                                            3
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="type"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Turma</FormLabel>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger className="text-muted-foreground">
+                                                            <SelectValue placeholder="Selecione o tipo" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {types
+                                                            ? types.map(
+                                                                  (
+                                                                      type,
+                                                                      index
+                                                                  ) => (
+                                                                      <SelectItem
+                                                                          key={
+                                                                              index
+                                                                          }
+                                                                          value={
+                                                                              type
+                                                                          }
+                                                                      >
+                                                                          {type}
+                                                                      </SelectItem>
+                                                                  )
+                                                              )
+                                                            : null}
+                                                    </SelectContent>
+                                                </Select>
+
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <div className="flex gap-2">
+                                        <Button type="submit">Enviar</Button>
+                                    </div>
+                                </form>
+                            </Form>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -159,7 +278,10 @@ export default function ClassDataTable({ columns, data }) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} className="px-4">
+                                        <TableHead
+                                            key={header.id}
+                                            className="px-4"
+                                        >
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(

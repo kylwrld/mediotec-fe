@@ -248,51 +248,7 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
                                     </div>
                                 </form>
                             </Form>
-                            {/* <div className="flex items-start flex-col gap-2">
-                                <Label htmlFor="title" className="text-right">
-                                    Título
-                                </Label>
-                                <Input id="title" value="" />
-                            </div>
-                            <div className="flex items-start flex-col gap-2">
-                                <Label htmlFor="body" className="text-right">
-                                    Conteúdo
-                                </Label>
-                                <Textarea
-                                    placeholder="Digite o conteúdo do aviso."
-                                    id="body"
-                                />
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <Select onValueChange={(value) => {}}>
-                                    <SelectTrigger className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
-                                        <SelectValue placeholder="Turma" />
-                                    </SelectTrigger>
-                                    <SelectContent className="max-h-52">
-                                        {classes
-                                            ? classes.map((class_year) => (
-                                                <SelectItem value={class_year._class.id}>
-                                                      {class_year._class.name}
-                                                  </SelectItem>
-                                              ))
-                                            : ""}
-                                    </SelectContent>
-                                </Select>
-
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="fixed" />
-                                    <label
-                                        htmlFor="fixed"
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    >
-                                        Fixar aviso
-                                    </label>
-                                </div>
-                            </div> */}
                         </div>
-                        {/* <DialogFooter>
-                            <Button type="submit">Criar aviso</Button>
-                        </DialogFooter> */}
                     </DialogContent>
                 </Dialog>
             </div>
