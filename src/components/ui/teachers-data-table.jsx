@@ -192,7 +192,7 @@ export default function TeacherDataTable({ columns, data }) {
                                 <Form {...form}>
                                     <form
                                         onSubmit={form.handleSubmit(onSubmit)}
-                                        className="space-y-8 px-2 md:px-20 xl:px-32 w-full overflow-y-auto max-h-[600px]"
+                                        className="space-y-8 px-2 xl:px-20 w-full overflow-y-auto max-h-[600px]"
                                     >
                                         <FormField
                                             control={form.control}
