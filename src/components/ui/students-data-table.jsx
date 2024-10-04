@@ -13,43 +13,16 @@ import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "./dialog";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "./select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import AuthContext from "@/context/AuthContext";
 
@@ -60,12 +33,8 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
 
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
 
 const phoneSchema = z.object({
     ddd: z
@@ -134,7 +103,7 @@ export default function StudentsDataTable({ columns, data, classes }) {
     });
     const [_class, setClass] = React.useState({});
 
-    const { toast } = useToast()
+    const { toast } = useToast();
     const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
@@ -151,12 +120,12 @@ export default function StudentsDataTable({ columns, data, classes }) {
             toast({
                 variant: "success",
                 title: "Estudante criado com sucesso.",
-            })
+            });
         } else {
             toast({
                 variant: "destructive",
                 title: "Não foi possível criar estudante.",
-            })
+            });
         }
     }
 
@@ -167,22 +136,19 @@ export default function StudentsDataTable({ columns, data, classes }) {
 
         if (data.student.length === 0 || typeof data._class !== "string") return;
 
-        const res = await postRequest(
-            "http://127.0.0.1:8000/student-class/",
-            data
-        );
+        const res = await postRequest("http://127.0.0.1:8000/student-class/", data);
 
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Estudante(s) adicionado(s) a turma com sucesso.",
-            })
+            });
         } else {
             toast({
                 variant: "destructive",
                 title: "Selecione no mínimo 1 estudante e uma turma",
-                description: "Os estudantes não podem fazer parte da turma escolhida."
-            })
+                description: "Os estudantes não podem fazer parte da turma escolhida.",
+            });
         }
     }
 
@@ -214,18 +180,13 @@ export default function StudentsDataTable({ columns, data, classes }) {
                     <Input
                         placeholder="Filtrar nome..."
                         value={table.getColumn("name")?.getFilterValue() ?? ""}
-                        onChange={(event) =>
-                            table
-                                .getColumn("name")
-                                ?.setFilterValue(event.target.value)
-                        }
+                        onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
                         className="max-w-sm text-[10px] md:text-sm"
                     />
                     <Select
                         onValueChange={(value) => {
                             table.getColumn("degree")?.setFilterValue(value);
-                        }}
-                    >
+                        }}>
                         <SelectTrigger className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
                             <SelectValue placeholder="Filtrar ano" />
                         </SelectTrigger>
@@ -240,8 +201,7 @@ export default function StudentsDataTable({ columns, data, classes }) {
                         className="text-[10px] md:text-sm bg-orange-600"
                         onClick={(event) => {
                             table.resetColumnFilters();
-                        }}
-                    >
+                        }}>
                         Remover filtros
                     </Button>
                 </div>
@@ -259,38 +219,21 @@ export default function StudentsDataTable({ columns, data, classes }) {
                                 <DialogTitle>Atribuir a uma turma</DialogTitle>
                             </DialogHeader>
                             <div className="flex flex-col gap-3">
-                                <Select
-                                    onValueChange={(value) => setClass(value)}
-                                >
+                                <Select onValueChange={(value) => setClass(value)}>
                                     <SelectTrigger className="text-muted-foreground">
                                         <SelectValue placeholder="Selecione uma turma" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {classes
-                                            ? classes.map(
-                                                  (class_year, index) => (
-                                                      <SelectItem
-                                                          key={index}
-                                                          value={class_year._class.id.toString()}
-                                                      >
-                                                          {
-                                                              class_year._class
-                                                                  .name
-                                                          }
-                                                      </SelectItem>
-                                                  )
-                                              )
+                                            ? classes.map((class_year, index) => (
+                                                  <SelectItem key={index} value={class_year._class.id.toString()}>
+                                                      {class_year._class.name}
+                                                  </SelectItem>
+                                              ))
                                             : null}
                                     </SelectContent>
                                 </Select>
-                                <Button
-                                    onClick={() =>
-                                        attachClass(
-                                            table.getSelectedRowModel().rows,
-                                            _class
-                                        )
-                                    }
-                                >
+                                <Button onClick={() => attachClass(table.getSelectedRowModel().rows, _class)}>
                                     Enviar
                                 </Button>
                             </div>
@@ -312,21 +255,15 @@ export default function StudentsDataTable({ columns, data, classes }) {
                                 <Form {...form}>
                                     <form
                                         onSubmit={form.handleSubmit(onSubmit)}
-                                        className="space-y-8 px-2 sm:px-16 xl:px-20 w-full overflow-y-auto max-h-[600px]"
-                                    >
+                                        className="space-y-8 px-2 sm:px-16 xl:px-20 w-full overflow-y-auto max-h-[600px]">
                                         <FormField
                                             control={form.control}
                                             name="name"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>
-                                                        Nome do Estudante
-                                                    </FormLabel>
+                                                    <FormLabel>Nome do Estudante</FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            placeholder="Digite o nome do estudante"
-                                                            {...field}
-                                                        />
+                                                        <Input placeholder="Digite o nome do estudante" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -340,10 +277,7 @@ export default function StudentsDataTable({ columns, data, classes }) {
                                                 <FormItem>
                                                     <FormLabel>Email</FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            placeholder="Digite o email do estudante"
-                                                            {...field}
-                                                        />
+                                                        <Input placeholder="Digite o email do estudante" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -373,71 +307,41 @@ export default function StudentsDataTable({ columns, data, classes }) {
                                             name="birth_date"
                                             render={({ field }) => (
                                                 <FormItem className="flex flex-col">
-                                                    <FormLabel>
-                                                        Data de nascimento
-                                                    </FormLabel>
+                                                    <FormLabel>Data de nascimento</FormLabel>
                                                     <Popover>
                                                         <PopoverTrigger asChild>
                                                             <FormControl>
                                                                 <Button
-                                                                    variant={
-                                                                        "outline"
-                                                                    }
+                                                                    variant={"outline"}
                                                                     className={cn(
                                                                         "w-[240px] pl-3 text-left font-normal",
-                                                                        !field.value &&
-                                                                            "text-muted-foreground"
-                                                                    )}
-                                                                >
+                                                                        !field.value && "text-muted-foreground"
+                                                                    )}>
                                                                     {field.value ? (
-                                                                        format(
-                                                                            field.value,
-                                                                            "PPP",
-                                                                            {
-                                                                                locale: ptBR,
-                                                                            }
-                                                                        )
+                                                                        format(field.value, "PPP", {
+                                                                            locale: ptBR,
+                                                                        })
                                                                     ) : (
-                                                                        <span>
-                                                                            Selecione
-                                                                            uma
-                                                                            data
-                                                                        </span>
+                                                                        <span>Selecione uma data</span>
                                                                     )}
                                                                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                                 </Button>
                                                             </FormControl>
                                                         </PopoverTrigger>
-                                                        <PopoverContent
-                                                            className="w-auto p-0"
-                                                            align="start"
-                                                        >
+                                                        <PopoverContent className="w-auto p-0" align="start">
                                                             <Calendar
                                                                 mode="single"
-                                                                selected={
-                                                                    field.value
-                                                                }
-                                                                onSelect={
-                                                                    field.onChange
-                                                                }
-                                                                disabled={(
-                                                                    date
-                                                                ) =>
-                                                                    date >
-                                                                        new Date() ||
-                                                                    date <
-                                                                        new Date(
-                                                                            "1900-01-01"
-                                                                        )
+                                                                selected={field.value}
+                                                                onSelect={field.onChange}
+                                                                disabled={(date) =>
+                                                                    date > new Date() || date < new Date("1900-01-01")
                                                                 }
                                                                 initialFocus
                                                             />
                                                         </PopoverContent>
                                                     </Popover>
                                                     <FormDescription>
-                                                        A data de nascimento é
-                                                        usada para calcular a
-                                                        idade do estudante.
+                                                        A data de nascimento é usada para calcular a idade do estudante.
                                                     </FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
@@ -449,14 +353,9 @@ export default function StudentsDataTable({ columns, data, classes }) {
                                             name="parent.name"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>
-                                                        Nome do responsável
-                                                    </FormLabel>
+                                                    <FormLabel>Nome do responsável</FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            placeholder="Digite o nome do responsável"
-                                                            {...field}
-                                                        />
+                                                        <Input placeholder="Digite o nome do responsável" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -468,95 +367,63 @@ export default function StudentsDataTable({ columns, data, classes }) {
                                             name="parent.cpf"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>
-                                                        CPF do responsável
-                                                    </FormLabel>
+                                                    <FormLabel>CPF do responsável</FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            placeholder="Digite o CPF do responsável"
-                                                            {...field}
-                                                        />
+                                                        <Input placeholder="Digite o CPF do responsável" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
 
-                                        {(form.watch("phone") || []).map(
-                                            (phone, index) => {
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className="grid grid-cols-2 gap-4"
-                                                    >
-                                                        <FormField
-                                                            control={
-                                                                form.control
-                                                            }
-                                                            name={`phone.${index}.ddd`}
-                                                            render={({
-                                                                field,
-                                                            }) => (
-                                                                <FormItem>
-                                                                    <FormLabel>
-                                                                        DDD
-                                                                    </FormLabel>
-                                                                    <FormControl>
-                                                                        <Input
-                                                                            placeholder="DDD"
-                                                                            {...field}
-                                                                        />
-                                                                    </FormControl>
-                                                                    <FormMessage />
-                                                                </FormItem>
-                                                            )}
-                                                        />
+                                        {(form.watch("phone") || []).map((phone, index) => {
+                                            return (
+                                                <div key={index} className="grid grid-cols-2 gap-4">
+                                                    <FormField
+                                                        control={form.control}
+                                                        name={`phone.${index}.ddd`}
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel>DDD</FormLabel>
+                                                                <FormControl>
+                                                                    <Input placeholder="DDD" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
 
-                                                        <FormField
-                                                            control={
-                                                                form.control
-                                                            }
-                                                            name={`phone.${index}.number`}
-                                                            render={({
-                                                                field,
-                                                            }) => (
-                                                                <FormItem>
-                                                                    <FormLabel>
-                                                                        Número
-                                                                        de
-                                                                        telefone
-                                                                    </FormLabel>
-                                                                    <FormControl>
-                                                                        <Input
-                                                                            placeholder="Digite o número de telefone do responsável"
-                                                                            {...field}
-                                                                        />
-                                                                    </FormControl>
-                                                                    <FormMessage />
-                                                                </FormItem>
-                                                            )}
-                                                        />
-                                                    </div>
-                                                );
-                                            }
-                                        )}
+                                                    <FormField
+                                                        control={form.control}
+                                                        name={`phone.${index}.number`}
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel>Número de telefone</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        placeholder="Digite o número de telefone do responsável"
+                                                                        {...field}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
 
                                         <div className="flex gap-2">
-                                            <Button type="submit">
-                                                Enviar
-                                            </Button>
+                                            <Button type="submit">Enviar</Button>
 
                                             <Button
                                                 type="button"
                                                 onClick={() => {
                                                     form.setValue("phone", [
-                                                        ...(form.watch(
-                                                            "phone"
-                                                        ) || []),
+                                                        ...(form.watch("phone") || []),
                                                         { ddd: "", number: "" },
                                                     ]);
-                                                }}
-                                            >
+                                                }}>
                                                 Adicionar outro telefone
                                             </Button>
                                         </div>
@@ -574,17 +441,10 @@ export default function StudentsDataTable({ columns, data, classes }) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead
-                                            key={header.id}
-                                            className="px-4"
-                                        >
+                                        <TableHead key={header.id} className="px-4">
                                             {header.isPlaceholder
                                                 ? null
-                                                : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext()
-                                                  )}
+                                                : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
                                     );
                                 })}
@@ -594,36 +454,22 @@ export default function StudentsDataTable({ columns, data, classes }) {
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
-                                >
+                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
                                         // Use onClick to redirect to another page
                                         // onClick -> row.original.id -> /estudante/:id
                                         <TableCell
                                             key={cell.id}
                                             className="p-4"
-                                            onClick={() =>
-                                                console.log(row.original)
-                                            }
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
+                                            onClick={() => console.log(row.original)}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
                                     Nenhum resultado
                                 </TableCell>
                             </TableRow>
@@ -637,16 +483,14 @@ export default function StudentsDataTable({ columns, data, classes }) {
                         variant="outline"
                         size="sm"
                         onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
+                        disabled={!table.getCanPreviousPage()}>
                         Anterior
                     </Button>
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
+                        disabled={!table.getCanNextPage()}>
                         Próximo
                     </Button>
                 </div>

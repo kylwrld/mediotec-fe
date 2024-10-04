@@ -1,10 +1,12 @@
 import {
+    BookOpen,
     CalendarDays,
     CircleUser,
     FileChartColumn,
     GraduationCap,
     Megaphone,
     User,
+    UserRound,
     UsersRound,
 } from "lucide-react";
 import { useContext } from "react";
@@ -19,16 +21,12 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
-
-function Sidebar() {
+function Sidebar({ links }) {
     const { decodeToken, logout } = useContext(AuthContext);
     const user = decodeToken();
-    const profile =
-        user.type == "ADMIN"
-            ? "Coordenação"
-            : "Professor"
+    const profile = user.type == "ADMIN" ? "Coordenação" : "Professor";
 
     return (
         <aside className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">
@@ -37,36 +35,14 @@ function Sidebar() {
             </div>
             <div className="flex flex-col justify-between h-full">
                 <nav className="flex flex-col w-full pl-5 pt-16 gap-2">
-                    <SidebarLink
-                        to="/estudantes"
-                        icon={<User />}
-                        content={"Estudantes"}
-                    />
-                    <SidebarLink
-                        to="/turmas"
-                        icon={<UsersRound />}
-                        content={"Turmas"}
-                    />
-                    <SidebarLink
-                        to="/professores"
-                        icon={<GraduationCap />}
-                        content={"Professores"}
-                    />
-                    <SidebarLink
-                        to="/avisos"
-                        icon={<Megaphone />}
-                        content={"Avisos"}
-                    />
-                    <SidebarLink
-                        to="/faltas"
-                        icon={<FileChartColumn />}
-                        content={"Faltas"}
-                    />
-                    <SidebarLink
-                        to="/horarios"
-                        icon={<CalendarDays />}
-                        content={"Horários"}
-                    />
+                    {links.map((link, index) => (
+                        <SidebarLink
+                            key={index}
+                            to={link.url}
+                            icon={link.icon}
+                            content={link.content}
+                        />
+                    ))}
                 </nav>
                 <div className="flex pl-5 mb-2 gap-2">
                     <DropdownMenu>
@@ -79,8 +55,15 @@ function Sidebar() {
                         <DropdownMenuContent>
                             <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="font-medium">Perfil</DropdownMenuItem>
-                            <DropdownMenuItem className="font-medium" onClick={() => logout()}>Sair</DropdownMenuItem>
+                            <DropdownMenuItem className="font-medium">
+                                Perfil
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="font-medium"
+                                onClick={() => logout()}
+                            >
+                                Sair
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

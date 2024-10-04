@@ -1,9 +1,4 @@
-import {
-    Route,
-    createBrowserRouter,
-    createRoutesFromElements,
-    RouterProvider,
-} from "react-router-dom";
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from "react-router-dom";
 
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -18,33 +13,23 @@ import { AuthProvider } from "./context/AuthContext";
 import TeacherRoute from "./components/PrivateRoutes/TeacherRoute";
 import LoginPage from "./pages/LoginPage";
 import TeacherOrAdminRoute from "./components/PrivateRoutes/TeacherOrAdminRoute";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
+import DisciplinasPage from "./pages/DisciplinasPage";
 export default function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/">
-                <Route path="/" element={<TeacherOrAdminRoute/>}>
+                <Route path="/" element={<TeacherOrAdminRoute />}>
                     <Route path="/" element={<MainLayout />}>
-                        <Route
-                            path="/estudantes"
-                            element={<EstudantesPage />}
-                        ></Route>
+                        <Route path="/estudantes" element={<EstudantesPage />}></Route>
                         <Route path="/turmas" element={<TurmasPage />}></Route>
-                        <Route
-                            path="/professores"
-                            element={<ProfessoresPage />}
-                        ></Route>
-                        <Route
-                            path="/horarios"
-                            element={<HorariosPage />}
-                        ></Route>
+                        <Route path="/professores" element={<ProfessoresPage />}></Route>
+                        <Route path="/horarios" element={<HorariosPage />}></Route>
                         <Route path="/avisos" element={<AvisosPage />}></Route>
+                        <Route path="/disciplinas" element={<DisciplinasPage />}></Route>
 
                         <Route element={<TeacherRoute />}>
-                            <Route
-                                path="/faltas"
-                                element={<FaltasPage />}
-                            ></Route>
+                            <Route path="/faltas" element={<FaltasPage />}></Route>
                         </Route>
                     </Route>
                 </Route>
