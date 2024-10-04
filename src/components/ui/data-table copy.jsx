@@ -50,8 +50,8 @@ export default function DataTable({ columns, data }) {
     const [columnVisibility, setColumnVisibility] = React.useState({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState({
-        pageIndex: 0, //initial page index
-        pageSize: 10, //default page size
+        pageIndex: 0,
+        pageSize: 10,
     });
 
     const table = useReactTable({

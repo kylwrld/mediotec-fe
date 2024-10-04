@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import StudentsDataTable from "@/components/ui/students-data-table";
+import StudentsDataTable from "@/components/ui/student/student-data-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 

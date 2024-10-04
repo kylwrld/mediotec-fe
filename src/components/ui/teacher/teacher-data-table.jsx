@@ -8,11 +8,9 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { CirclePlus } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,43 +18,86 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
 import AuthContext from "@/context/AuthContext";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog";
-
 import { useToast } from "@/hooks/use-toast";
+import TeacherController from "./teacher-controller";
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }),
+    email: z
+        .string({
+            required_error: "Por favor preencha com um email.",
+        })
+        .email("Esse email não é válido."),
+    password: z
+        .string({
+            required_error: "Por favor digite uma senha.",
+        })
+        .min(3, { message: "A senha precisa ter no mínimo 3 caracteres." }),
+    birth_date: z.date({
+        required_error: "Por favor especifique a data de nascimento.",
+    }),
 });
 
-export default function SubjectDataTable({ columns, data }) {
+function formatDate(date) {
+    var d = new Date(date),
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+}
+export default function TeacherDataTable({ columns, data, classes }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState({
-        pageIndex: 0, //initial page index
-        pageSize: 10, //default page size
+        pageIndex: 0,
+        pageSize: 10,
     });
 
-    const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-    });
 
-    async function onSubmit(subject) {
-        const res = await postRequest("http://127.0.0.1:8000/subject/", subject)
+    async function onSubmit(user) {
+        user.birth_date = formatDate(new Date(user.birth_date));
+        user.type = "TEACHER";
+        const res = await postRequest("http://127.0.0.1:8000/signup/", user);
         if (res.ok) {
             toast({
                 variant: "success",
-                title: "Disciplina criada com sucesso",
-            })
+                title: "Professor criado com sucesso.",
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar professor",
+            });
         }
+    }
+
+    async function attachClass(rows, teacher_id) {
+        // const data = {};
+        // data.student = rows.map((row) => row.original.id);
+        // data._class = class_id;
+        // if (data.student.length === 0 || typeof data._class !== "string") return;
+        // const res = await postRequest("http://127.0.0.1:8000/student-class/", data);
+        // if (res.ok) {
+        //     toast({
+        //         variant: "success",
+        //         title: "Estudante(s) adicionado(s) a turma com sucesso.",
+        //     });
+        // } else {
+        //     toast({
+        //         variant: "destructive",
+        //         title: "Selecione no mínimo 1 estudante e uma turma",
+        //         description: "Os estudantes não podem fazer parte da turma escolhida.",
+        //     });
+        // }
     }
 
     const table = useReactTable({
@@ -82,65 +123,7 @@ export default function SubjectDataTable({ columns, data }) {
 
     return (
         <div className="w-full">
-            <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
-                <div className="flex gap-2">
-                    <Input
-                        placeholder="Filtrar nome..."
-                        value={table.getColumn("name")?.getFilterValue() ?? ""}
-                        onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
-                        className="max-w-sm text-[10px] md:text-sm"
-                    />
-
-                    <Button
-                        className="text-[10px] md:text-sm bg-orange-600"
-                        onClick={(event) => {
-                            table.resetColumnFilters();
-                        }}>
-                        Remover filtros
-                    </Button>
-                </div>
-
-                <div className="flex gap-2">
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                                <CirclePlus size={20} />
-                                Nova disciplina
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[720px]">
-                            <DialogHeader>
-                                <DialogTitle>Novo disciplina</DialogTitle>
-                            </DialogHeader>
-                            <div className="grid gap-4 py-4">
-                                <Form {...form}>
-                                    <form
-                                        onSubmit={form.handleSubmit(onSubmit)}
-                                        className="space-y-8 px-2 xl:px-20 w-full overflow-y-auto max-h-[600px]">
-                                        <FormField
-                                            control={form.control}
-                                            name="name"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Nome da disciplina</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="Digite o nome do professor" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <div className="flex gap-2">
-                                            <Button type="submit">Enviar</Button>
-                                        </div>
-                                    </form>
-                                </Form>
-                            </div>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-            </div>
+            <TeacherController table={table} classes={classes} />
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

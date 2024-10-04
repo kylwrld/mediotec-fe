@@ -1,11 +1,10 @@
 import React from "react";
-import ClassDataTable from '@/components/ui/class-data-table';
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import TeacherDataTable from "@/components/ui/teachers-data-table";
+import TeacherDataTable from "@/components/ui/teacher/teacher-data-table";
 
 export const columns = [
     {
@@ -16,17 +15,26 @@ export const columns = [
                     table.getIsAllPageRowsSelected() ||
                     (table.getIsSomePageRowsSelected() && "indeterminate")
                 }
-                onCheckedChange={(value) =>
-                    table.toggleAllPageRowsSelected(!!value)
-                }
-                aria-label="Select all"
+                // onCheckedChange={(value) =>
+                //     table.toggleAllPageRowsSelected(!!value)
+                // }
+                aria-label="Seleciona todos"
             />
         ),
-        cell: ({ row }) => (
+        cell: ({ row, table }) => (
             <Checkbox
                 checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
+                onCheckedChange={(value) => {
+                    const rowsModel = table.getSelectedRowModel()
+                    if (rowsModel.rows.length > 0) {
+                        const s_row = rowsModel.rows[0]
+                        s_row.toggleSelected(false)
+                        row.toggleSelected(!!value)
+                    } else {
+                        row.toggleSelected(!!value)
+                    }
+                }}
+                aria-label="Seleciona linha"
             />
         ),
         enableSorting: false,
@@ -43,6 +51,7 @@ export const columns = [
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
                     className="p-0"
+                    aria-label="Ordena por nome"
                 >
                     Nome
                     <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -93,6 +102,7 @@ export const columns = [
 
 function ProfessoresPage() {
     const [teachers, setTeachers] = useState([]);
+    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -102,13 +112,20 @@ function ProfessoresPage() {
             setTeachers(data.teachers);
             setLoading(false);
         };
+        const fetchClasses = async () => {
+            const response = await fetch("http://127.0.0.1:8000/class-year/");
+            const data = await response.json();
+            setClasses(data.class_years);
+        };
+
         fetchTeachers();
+        fetchClasses();
     }, []);
 
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Professores</h1>
-            <TeacherDataTable columns={columns} data={teachers}></TeacherDataTable>
+            <TeacherDataTable columns={columns} data={teachers} classes={classes}></TeacherDataTable>
         </div>
     );
 }

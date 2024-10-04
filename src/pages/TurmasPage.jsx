@@ -1,4 +1,4 @@
-import ClassDataTable from '@/components/ui/class-data-table';
+import ClassDataTable from '@/components/ui/class/class-data-table';
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -60,7 +60,7 @@ export const columns = [
     {
         accessorKey: "type",
         // header: () => <div className="text-right">Ano</div>,
-        header: () => <div className='text-right'>Tipo</div>,
+        header: () => <div className='text-right'>Curso</div>,
         cell: ({ row }) => {
             return (
                 <div className="text-right font-medium">

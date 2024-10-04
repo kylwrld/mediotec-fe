@@ -1,13 +1,11 @@
-import React from "react";
 import Sidebar from "@/components/Sidebar";
-import { Outlet } from "react-router-dom";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import MobileNav from "@/components/ui/mobile-nav";
-import { BookOpen, CalendarDays, GraduationCap, Megaphone, User, UserRound } from "lucide-react";
+import { BookOpen, CalendarDays, GraduationCap, Megaphone, UserRound, UsersRound } from "lucide-react";
+import { Outlet } from "react-router-dom";
 
 const links = [
-    { url: "/estudantes", icon: <User />, content: "Estudantes" },
-    { url: "/turmas", icon: <UserRound />, content: "Turmas" },
+    { url: "/estudantes", icon: <UserRound />, content: "Estudantes" },
+    { url: "/turmas", icon: <UsersRound />, content: "Turmas" },
     { url: "/professores", icon: <GraduationCap />, content: "Professores" },
     { url: "/disciplinas", icon: <BookOpen />, content: "Disciplinas" },
     { url: "/avisos", icon: <Megaphone />, content: "Avisos" },

@@ -1,5 +1,5 @@
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import SubjectDataTable from "@/components/ui/subject-data-table";
+import SubjectDataTable from "@/components/ui/subject/subject-data-table";
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -63,6 +63,7 @@ export const columns = [
 
 function DisciplinasPage() {
     const [subjects, setSubjects] = useState([]);
+    const [teachers, setTeachers]= useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -72,7 +73,14 @@ function DisciplinasPage() {
             setSubjects(data.subjects);
         };
 
+        const fetchTeachers = async () => {
+            const response = await fetch("http://127.0.0.1:8000/teacher/");
+            const data = await response.json();
+            setTeachers(data.teachers);
+        };
+
         fetchSubjects();
+        fetchTeachers()
         setLoading(false);
     }, []);
 
@@ -80,7 +88,7 @@ function DisciplinasPage() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Disciplinas</h1>
             <div>
-                <SubjectDataTable columns={columns} data={subjects} />
+                <SubjectDataTable columns={columns} data={subjects} teachers={teachers}/>
             </div>
         </div>
     );

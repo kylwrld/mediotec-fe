@@ -1,4 +1,4 @@
-import AnnouncementDataTable from '@/components/ui/announcements-data-table';
+import AnnouncementDataTable from '@/components/ui/announcement/announcement-data-table';
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
