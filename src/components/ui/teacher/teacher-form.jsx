@@ -81,7 +81,7 @@ function TeacherForm() {
         // data.student = rows.map((row) => row.original.id);
         // data._class = class_id;
         // if (data.student.length === 0 || typeof data._class !== "string") return;
-        // const res = await postRequest("http://127.0.0.1:8000/student-class/", data);
+        // const res = await postRequest("http://127.0.0.1:8000/student_class/", data);
         // if (res.ok) {
         //     toast({
         //         variant: "success",
