@@ -2,8 +2,10 @@ import StudentsDataTable from "@/components/ui/student/student-data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { columns } from "./EstudantesPage";
 
+import { Button } from "@/components/ui/button";
+import GradeDataTable from "@/components/ui/grade/grade-data-table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import StudentControllerClass from "@/components/ui/student/student-controller-class";
 import {
     getCoreRowModel,
@@ -12,7 +14,8 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import GradeDataTable from "@/components/ui/grade/grade-data-table";
+import { ArrowUpDown, Dot } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const LOOKUP = {
     NANA: "ND",
@@ -26,7 +29,7 @@ const LOOKUP = {
     AA: "D",
 };
 
-export const gradesColumns = [
+const gradesColumns = [
     {
         accessorKey: "teacher_subject",
         header: "Disciplina",
@@ -111,10 +114,58 @@ export const gradesColumns = [
     },
 ];
 
+const columns = [
+    {
+        accessorKey: "name",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0">
+                    Nome
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    },
+    {
+        accessorKey: "email",
+        header: "Email",
+        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+        accessorKey: "degree",
+        header: ({ column }) => {
+            return (
+                <div className="flex justify-end">
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="justify-end p-0">
+                        Ano
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            );
+        },
+        cell: ({ row }) => {
+            const degree = parseFloat(row.getValue("degree"));
+
+            return <div className="text-right font-medium">{degree ? degree : 0}</div>;
+        },
+        filterFn: "includesString",
+    },
+];
+
 function TurmaPage() {
     const { id } = useParams();
+    const [classYear, setClassYear] = useState();
     const [students, setStudents] = useState([]);
     const [grades, setGrades] = useState([]);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [defaultGrades, setDefaultGrades] = useState([]);
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -130,37 +181,53 @@ function TurmaPage() {
             const response = await fetch(`http://127.0.0.1:8000/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
+            setSelectedStudent(data.students[0]?.id || null);
+            setClassYear(data);
         };
         const fetchSubjects = async () => {
             const response = await fetch("http://127.0.0.1:8000/subject/");
             const data = await response.json();
-            setGrades(
-                data.subjects.map((subject) => {
-                    return {
-                        teacher_subject: { subject: { name: subject.name } },
-                        av1_1: null,
-                        av2_1: null,
-                        mu_1: null,
-                        noa_1: null,
-                        cf_1: null,
-                        av1_2: null,
-                        av2_2: null,
-                        mu_2: null,
-                        noa_2: null,
-                        cf_2: null,
-                        av1_3: null,
-                        av2_3: null,
-                        mu_3: null,
-                        noa_3: null,
-                        cf_3: null,
-                    };
-                })
-            );
+            const gradesList = data.subjects.map((subject) => {
+                return {
+                    teacher_subject: { subject: { name: subject.name } },
+                    av1_1: null,
+                    av2_1: null,
+                    mu_1: null,
+                    noa_1: null,
+                    cf_1: null,
+                    av1_2: null,
+                    av2_2: null,
+                    mu_2: null,
+                    noa_2: null,
+                    cf_2: null,
+                    av1_3: null,
+                    av2_3: null,
+                    mu_3: null,
+                    noa_3: null,
+                    cf_3: null,
+                };
+            });
+            setGrades(gradesList);
+            setDefaultGrades(gradesList);
         };
 
         fetchStudents();
         fetchSubjects();
     }, []);
+
+    async function fetchGrades(student_id) {
+        const response = await fetch(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
+        const data = await response.json();
+        const newGrades = [];
+        grades.map((grade) =>
+            data.grades.map((obj) =>
+                grade.teacher_subject.subject.name == obj.teacher_subject.subject.name
+                    ? newGrades.push(obj)
+                    : newGrades.push(grade)
+            )
+        );
+        newGrades.length < 1 ? setGrades(defaultGrades) : setGrades(newGrades);
+    }
 
     const studentsTable = useReactTable({
         columns,
@@ -195,8 +262,14 @@ function TurmaPage() {
     return (
         <div className="h-full">
             <div className="flex flex-col justify-start text-left gap-3">
-                <h1 className="text-4xl text-blue-600 font-bold">Turma {id}</h1>
-                <h2 className="text-muted-foreground ml-[1.5px]">Turma</h2>
+                    <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name}</h1>
+                <div className="flex items-end w-full">
+                    <h2 className="text-muted-foreground ml-[1.5px]">Turma</h2>
+                    <Dot className="text-muted-foreground"/>
+                    <p className="text-muted-foreground font-bold">{classYear?.year}</p>
+                    <Dot className="text-muted-foreground"/>
+                    <p className="text-muted-foreground font-bold">{classYear?._class?.shift || "Manhã"}</p>
+                </div>
             </div>
             <div className="mt-5">
                 <Tabs defaultValue="students">
@@ -204,7 +277,7 @@ function TurmaPage() {
                         <TabsTrigger value="students" className="w-full">
                             Estudantes
                         </TabsTrigger>
-                        <TabsTrigger value="grades" className="w-full">
+                        <TabsTrigger value="grades" className="w-full" onClick={() => fetchGrades(selectedStudent)}>
                             Conceitos
                         </TabsTrigger>
                         {/* <TabsTrigger value="students3" className="w-full">
@@ -221,6 +294,27 @@ function TurmaPage() {
                     </TabsContent>
 
                     <TabsContent value="grades">
+                        <div className="flex gap-5 w-fit my-5">
+                            <Select onValueChange={(value) => fetchGrades(value)} defaultValue={selectedStudent}>
+                                <SelectTrigger className="text-muted-foreground">
+                                    <SelectValue placeholder="Selecione um aluno" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    {students ? (
+                                        students.map((student) => (
+                                            <SelectItem key={student.id} value={student.id}>
+                                                {student.name}
+                                            </SelectItem>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm p-2">Nenhum estudante encontrado.</p>
+                                    )}
+                                </SelectContent>
+                            </Select>
+                            <Button onClick={() => fetchGrades(selectedStudent)}>Pesquisar conceito</Button>
+                        </div>
+
                         <GradeDataTable table={gradesTable}></GradeDataTable>
                     </TabsContent>
 

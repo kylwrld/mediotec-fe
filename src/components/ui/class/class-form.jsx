@@ -12,8 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { postRequest } from "@/lib/utils";
 
-const TYPES = ["INFORMATICA", "LOGISTICA"];
-const SHIFT_TYPES = ["MANHA", "TARDE"];
+const TYPES = ["Informática", "Logística"];
+const SHIFT_TYPES = ["Manhã", "Tarde"];
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }),
