@@ -4,14 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-import AuthContext from "@/context/AuthContext";
-
-import { cn } from "@/lib/utils";
+import { cn, postRequest } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 
@@ -20,6 +17,7 @@ import { ptBR } from "date-fns/locale";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
+import { formatDate } from "@/lib/utils";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -39,21 +37,8 @@ const formSchema = z.object({
     }),
 });
 
-function formatDate(date) {
-    var d = new Date(date),
-        month = "" + (d.getMonth() + 1),
-        day = "" + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
-}
-
 function TeacherForm() {
     const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -95,6 +80,7 @@ function TeacherForm() {
         //     });
         // }
     }
+    
     return (
         <Form {...form}>
             <form

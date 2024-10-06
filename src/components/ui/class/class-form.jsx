@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import AuthContext from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { postRequest } from "@/lib/utils";
 
 const TYPES = ["INFORMATICA", "LOGISTICA"];
 const SHIFT_TYPES = ["MANHA", "TARDE"];
@@ -22,16 +21,15 @@ const formSchema = z.object({
         required_error: "Por favor preencha com um ano.",
     }),
     type: z.enum(TYPES, {
-        errorMap: (issue, ctx) => ({ message: 'Informe o curso da turma' })
-      }),
+        errorMap: (issue, ctx) => ({ message: "Informe o curso da turma" }),
+    }),
     shift: z.enum(SHIFT_TYPES, {
-        errorMap: (issue, ctx) => ({ message: 'Informe o turno da turma' })
-      })
+        errorMap: (issue, ctx) => ({ message: "Informe o turno da turma" }),
+    }),
 });
 
 function ClassForm() {
     const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),

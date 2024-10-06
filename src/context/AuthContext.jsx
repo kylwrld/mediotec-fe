@@ -11,24 +11,6 @@ export function AuthProvider({ children }) {
             : null
     );
 
-    async function postRequest(url, user) {
-        const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user),
-        });
-
-        // const data = await res.json();
-        // const refresh = { refresh: data.refresh, access: data.access };
-
-        if (res.ok) {
-            // setTokens(refresh);
-            // localStorage.setItem("tokens", JSON.stringify(refresh));
-        }
-
-        return res
-    }
-
     async function postLogin(userObject) {
         const res = await fetch("http://127.0.0.1:8000/login/", {
             method: "POST",
@@ -63,7 +45,6 @@ export function AuthProvider({ children }) {
         tokens,
         decodeToken,
         postLogin,
-        postRequest,
         logout,
     };
 

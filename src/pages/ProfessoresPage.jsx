@@ -5,6 +5,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import TeacherDataTable from "@/components/ui/teacher/teacher-data-table";
+import {
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import TeacherController from "@/components/ui/teacher/teacher-controller"
 
 export const columns = [
     {
@@ -105,6 +114,36 @@ function ProfessoresPage() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [sorting, setSorting] = React.useState([]);
+    const [columnFilters, setColumnFilters] = React.useState([]);
+    const [columnVisibility, setColumnVisibility] = React.useState({});
+    const [rowSelection, setRowSelection] = React.useState({});
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    const table = useReactTable({
+        columns,
+        data:teachers,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        onPaginationChange: setPagination,
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
+            pagination,
+        },
+    });
+
     useEffect(() => {
         const fetchTeachers = async () => {
             const response = await fetch("http://127.0.0.1:8000/teacher/");
@@ -113,7 +152,7 @@ function ProfessoresPage() {
             setLoading(false);
         };
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class-year/");
+            const response = await fetch("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
@@ -125,7 +164,11 @@ function ProfessoresPage() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Professores</h1>
-            <TeacherDataTable columns={columns} data={teachers} classes={classes}></TeacherDataTable>
+            <TeacherDataTable
+                table={table}
+            >
+                <TeacherController table={table} classes={classes}/>
+            </TeacherDataTable>
         </div>
     );
 }

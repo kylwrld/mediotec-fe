@@ -15,40 +15,10 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/custom-ta
 import { useState } from "react";
 import AnnouncementController from "./announcement-controller";
 
-export default function AnnouncementDataTable({ columns, data, classes }) {
-    const [sorting, setSorting] = useState([]);
-    const [columnFilters, setColumnFilters] = useState([]);
-    const [columnVisibility, setColumnVisibility] = useState({});
-    const [rowSelection, setRowSelection] = useState({});
-    const [pagination, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 4,
-    });
-
-    const table = useReactTable({
-        data,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        onPaginationChange: setPagination,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-            pagination,
-        },
-    });
-
+export default function AnnouncementDataTable({ table, controller }) {
     return (
         <div className="w-full">
-            <AnnouncementController table={table} classes={classes} />
+            { controller }
 
             <div className="rounded-md border-0 lg:px-20 xl:px-40 2xl:px-72 py-8">
                 <Table>
@@ -88,7 +58,7 @@ export default function AnnouncementDataTable({ columns, data, classes }) {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
                                     Nenhum resultado
                                 </TableCell>
                             </TableRow>

@@ -4,6 +4,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import StudentsDataTable from "@/components/ui/student/student-data-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import StudentController from "@/components/ui/student/student-controller";
+
 
 export const columns = [
     {
@@ -124,6 +135,37 @@ function EstudantesPage() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [sorting, setSorting] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([]);
+    const [columnVisibility, setColumnVisibility] = useState({});
+    const [rowSelection, setRowSelection] = useState({});
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    const studentsTable = useReactTable({
+        columns,
+        data: students,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        onPaginationChange: setPagination,
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
+            pagination,
+        },
+    });
+
+
     useEffect(() => {
         const fetchStudents = async () => {
             const response = await fetch("http://127.0.0.1:8000/student/");
@@ -133,11 +175,11 @@ function EstudantesPage() {
         };
 
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class-year/");
+            const response = await fetch("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
-
+        console.log(classes)
         fetchClasses();
         fetchStudents();
     }, []);
@@ -146,9 +188,8 @@ function EstudantesPage() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Estudantes</h1>
             <StudentsDataTable
-                columns={columns}
-                data={students}
-                classes={classes}
+                table={studentsTable}
+                controller={<StudentController table={studentsTable} classes={classes} />}
             ></StudentsDataTable>
         </div>
     );

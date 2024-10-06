@@ -12,9 +12,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { useContext } from "react";
+import { postRequest } from "@/lib/utils";
 
 const formSchema = z.object({
     title: z.string({ required_error: "Por favor preencha com um título." }),
@@ -27,7 +26,6 @@ const formSchema = z.object({
 
 function AnnouncementForm({ classes }) {
     const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),

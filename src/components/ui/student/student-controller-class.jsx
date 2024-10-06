@@ -1,25 +1,23 @@
-"use client";
-
-import { CirclePlus, UsersRound } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { formatDate, postRequest } from "@/lib/utils";
 
 import { useToast } from "@/hooks/use-toast";
+import { formatDate, postRequest } from "@/lib/utils";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import StudentForm from "./student-form";
 
-function StudentController({ table, classes }) {
+function StudentControllerClass({ table, classes }) {
     const [_class, setClass] = useState({});
+    const { id } = useParams();
     const { toast } = useToast();
 
-    async function attachClass(rows, class_id) {
-        const data = {};
-        data.student = rows.map((row) => row.original.id);
-        data._class = class_id;
+    async function attachClass(student, _class) {
+        const data = { student, _class };
 
         if (data.student.length === 0 || typeof data._class !== "string") return;
 
@@ -28,13 +26,13 @@ function StudentController({ table, classes }) {
         if (res.ok) {
             toast({
                 variant: "success",
-                title: "Estudante(s) adicionado(s) a turma com sucesso.",
+                title: "Estudante adicionado a turma com sucesso.",
             });
         } else {
             toast({
                 variant: "destructive",
-                title: "Selecione no mínimo 1 estudante e uma turma",
-                description: "Os estudantes não podem fazer parte da turma escolhida.",
+                title: "Não foi possível adicionar estudante a turma",
+                description: "O estudante não pode faze parte da turma escolhida.",
             });
         }
     }
@@ -42,11 +40,14 @@ function StudentController({ table, classes }) {
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
+        const data = await res.json();
+
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Estudante criado com sucesso.",
             });
+            attachClass(data.id, id);
         } else {
             toast({
                 variant: "destructive",
@@ -91,39 +92,6 @@ function StudentController({ table, classes }) {
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                            <UsersRound size={20} />
-                            Atribuir a uma turma
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px]">
-                        <DialogHeader>
-                            <DialogTitle>Atribuir a uma turma</DialogTitle>
-                        </DialogHeader>
-                        <div className="flex flex-col gap-3">
-                            <Select onValueChange={(value) => setClass(value)}>
-                                <SelectTrigger className="text-muted-foreground">
-                                    <SelectValue placeholder="Selecione uma turma" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {classes
-                                        ? classes.map((class_year, index) => (
-                                              <SelectItem key={index} value={class_year._class.id.toString()}>
-                                                  {class_year._class.name}
-                                              </SelectItem>
-                                          ))
-                                        : null}
-                                </SelectContent>
-                            </Select>
-                            <Button onClick={() => attachClass(table.getSelectedRowModel().rows, _class)}>
-                                Enviar
-                            </Button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
-
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
                             <CirclePlus size={20} />
                             Novo estudante
                         </Button>
@@ -142,4 +110,4 @@ function StudentController({ table, classes }) {
     );
 }
 
-export default StudentController;
+export default StudentControllerClass;

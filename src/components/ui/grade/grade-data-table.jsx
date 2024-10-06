@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 
-export default function StudentsDataTable({ table, controller }) {
+function GradeDataTable({ table, children }) {
     return (
         <div className="w-full">
-            {controller}
+            {children}
 
             <div className="rounded-md border">
                 <Table>
@@ -29,8 +29,6 @@ export default function StudentsDataTable({ table, controller }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        // Use onClick to redirect to another page
-                                        // onClick -> row.original.id -> /estudante/:id
                                         <TableCell
                                             key={cell.id}
                                             className="p-4"
@@ -50,24 +48,8 @@ export default function StudentsDataTable({ table, controller }) {
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}>
-                        Anterior
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}>
-                        Próximo
-                    </Button>
-                </div>
-            </div>
         </div>
     );
 }
+
+export default GradeDataTable;

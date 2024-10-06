@@ -2,15 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-import AuthContext from "@/context/AuthContext";
-
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { postRequest } from "@/lib/utils";
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }),
@@ -18,7 +16,6 @@ const formSchema = z.object({
 
 function SubjectForm() {
     const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),

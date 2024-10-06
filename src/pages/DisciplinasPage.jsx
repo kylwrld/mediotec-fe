@@ -11,6 +11,17 @@ import React, { useEffect, useState } from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import {
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+
+import SubjectController from "@/components/ui/subject/subject-controller";
+
 
 export const columns = [
     {
@@ -71,6 +82,36 @@ function DisciplinasPage() {
     const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [sorting, setSorting] = React.useState([]);
+    const [columnFilters, setColumnFilters] = React.useState([]);
+    const [columnVisibility, setColumnVisibility] = React.useState({});
+    const [rowSelection, setRowSelection] = React.useState({});
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    const table = useReactTable({
+        columns,
+        data:subjects,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        onPaginationChange: setPagination,
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
+            pagination,
+        },
+    });
+
     useEffect(() => {
         const fetchSubjects = async () => {
             const response = await fetch("http://127.0.0.1:8000/subject/");
@@ -93,7 +134,10 @@ function DisciplinasPage() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Disciplinas</h1>
             <div>
-                <SubjectDataTable columns={columns} data={subjects} teachers={teachers} />
+                <SubjectDataTable
+                table={table}
+                controller={<SubjectController table={table} teachers={teachers}/>}
+                />
             </div>
         </div>
     );

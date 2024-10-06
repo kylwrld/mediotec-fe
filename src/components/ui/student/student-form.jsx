@@ -1,11 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-import AuthContext from "@/context/AuthContext";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -65,22 +62,9 @@ const formSchema = z.object({
     phone: z.array(phoneSchema),
 });
 
-function formatDate(date) {
-    var d = new Date(date),
-        month = "" + (d.getMonth() + 1),
-        day = "" + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
-}
-
-function StudentForm() {
-    const [_class, setClass] = React.useState({});
+function StudentForm({ onSubmit }) {
+    const [_class, setClass] = useState({});
     const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -88,22 +72,6 @@ function StudentForm() {
             phone: [{ ddd: "", number: "" }],
         },
     });
-
-    async function onSubmit(user) {
-        user.birth_date = formatDate(new Date(user.birth_date));
-        const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
-        if (res.ok) {
-            toast({
-                variant: "success",
-                title: "Estudante criado com sucesso.",
-            });
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Não foi possível criar estudante.",
-            });
-        }
-    }
 
     return (
         <Form {...form}>
