@@ -22,8 +22,7 @@ const linksTeacher = [
 function MainLayout() {
     const { decodeToken } = useContext(AuthContext);
     const user = decodeToken()
-
-    const links = user.type == "ADMIN" ? linksAdmin : linksTeacher
+    const links = user?.type == "ADMIN" ? linksAdmin : linksTeacher
 
     return (
         <>

@@ -7,7 +7,7 @@ import {
 import SubjectDataTable from "@/components/ui/subject/subject-data-table";
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import {
 
 import SubjectController from "@/components/ui/subject/subject-controller";
 import CustomDataTable from "@/components/ui/custom-data-table";
+import AuthContext from "@/context/AuthContext";
 
 
 export const columns = [

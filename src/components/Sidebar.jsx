@@ -26,7 +26,7 @@ import {
 function Sidebar({ links }) {
     const { decodeToken, logout } = useContext(AuthContext);
     const user = decodeToken();
-    const profile = user.type == "ADMIN" ? "Coordenação" : "Professor";
+    const profile = user?.type == "ADMIN" ? "Coordenação" : "Professor";
 
     return (
         <aside className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">

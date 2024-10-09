@@ -20,7 +20,7 @@ import {
 export default function MobileNav({ links }) {
     const { decodeToken, logout } = useContext(AuthContext);
     const user = decodeToken();
-    const profile = user.type == "ADMIN" ? "Coordenação" : "Professor";
+    const profile = user?.type == "ADMIN" ? "Coordenação" : "Professor";
 
     return (
         <Sheet>
