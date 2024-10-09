@@ -113,14 +113,9 @@ export default function DataTable({ columns, data }) {
                         Remover filtros
                     </Button>
                 </div>
-                {/* w-full sm:w-fit */}
                 <div className="flex gap-2">
                     <Button
-                    // w-full sm:w-fit
                         className="text-[10px] md:text-sm bg-orange-600 gap-2"
-                        onClick={(event) => {
-                            console.log("test");
-                        }}
                     >
                         <CirclePlus size={20}/>
                         Novo estudante
@@ -184,14 +179,9 @@ export default function DataTable({ columns, data }) {
                                     }
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        // Use onClick to redirect to another page
-                                        // onClick -> row.original.id -> /estudante/:id
                                         <TableCell
                                             key={cell.id}
                                             className="p-4"
-                                            onClick={() =>
-                                                console.log(row.original)
-                                            }
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

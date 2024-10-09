@@ -1,14 +1,12 @@
-"use client";
-
 import { flexRender } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export default function ClassDataTable({ table, controller }) {
+export default function ClassDataTable({ table, children }) {
     return (
         <div className="w-full">
-            {controller}
+            {children}
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -31,12 +29,9 @@ export default function ClassDataTable({ table, controller }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        // Use onClick to redirect to another page
-                                        // onClick -> row.original.id -> /estudante/:id
                                         <TableCell
                                             key={cell.id}
-                                            className="p-4"
-                                            onClick={() => console.log(row.original)}>
+                                            className="p-4">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

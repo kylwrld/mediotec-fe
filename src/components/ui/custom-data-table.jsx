@@ -1,14 +1,11 @@
-"use client";
-
-import { flexRender } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { flexRender } from "@tanstack/react-table";
 
-export default function TeacherDataTable({ table, children }) {
+function CustomDataTable({ table, children, redirect }) {
     return (
         <div className="w-full">
-            { children }
+            {children}
 
             <div className="rounded-md border">
                 <Table>
@@ -34,7 +31,9 @@ export default function TeacherDataTable({ table, children }) {
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
                                             key={cell.id}
-                                            className="p-4">
+                                            className="p-4"
+                                            // Redirect
+                                            onClick={() => redirect ? redirect(row) : null}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -71,3 +70,5 @@ export default function TeacherDataTable({ table, children }) {
         </div>
     );
 }
+
+export default CustomDataTable

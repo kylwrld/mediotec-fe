@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import TeacherForm from "./teacher-form";
+import { postRequest } from "@/lib/utils";
 
 function TeacherController({ table, classes }) {
     const [_class, setClass] = useState({});
@@ -38,7 +39,7 @@ function TeacherController({ table, classes }) {
         data.teacher = teacher_id;
         data.subject = subject_id;
         const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", data);
-        console.log(await res.json());
+
         if (res.ok) {
             toast({
                 variant: "success",

@@ -36,7 +36,7 @@ function SubjectForm() {
         // TODO: Handle multiple subjects
         data.subject = subject[0].original.id;
         data.teacher = teacher_id;
-        console.log(data);
+
         const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", data);
         if (res.ok) {
             toast({

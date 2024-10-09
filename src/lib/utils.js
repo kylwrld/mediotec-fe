@@ -25,3 +25,10 @@ export async function postRequest(url, obj) {
     });
     return res
 }
+
+export function mergeLists(first_list, second_list) {
+    return first_list.map(first_list_item => {
+        const found = second_list.find(item => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name);
+        return found ? found : first_list_item
+    });
+}

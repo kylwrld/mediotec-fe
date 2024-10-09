@@ -61,26 +61,6 @@ function TeacherForm() {
         }
     }
 
-    async function attachClass(rows, teacher_id) {
-        // const data = {};
-        // data.student = rows.map((row) => row.original.id);
-        // data._class = class_id;
-        // if (data.student.length === 0 || typeof data._class !== "string") return;
-        // const res = await postRequest("http://127.0.0.1:8000/student_class/", data);
-        // if (res.ok) {
-        //     toast({
-        //         variant: "success",
-        //         title: "Estudante(s) adicionado(s) a turma com sucesso.",
-        //     });
-        // } else {
-        //     toast({
-        //         variant: "destructive",
-        //         title: "Selecione no mínimo 1 estudante e uma turma",
-        //         description: "Os estudantes não podem fazer parte da turma escolhida.",
-        //     });
-        // }
-    }
-    
     return (
         <Form {...form}>
             <form

@@ -16,6 +16,8 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import CustomDataTable from "@/components/ui/custom-data-table";
+import { mergeLists } from "@/lib/utils";
 
 const LOOKUP = {
     NANA: "ND",
@@ -159,7 +161,7 @@ const columns = [
     },
 ];
 
-function TurmaPage() {
+function TurmaPageAdmin() {
     const { id } = useParams();
     const [classYear, setClassYear] = useState();
     const [students, setStudents] = useState([]);
@@ -218,15 +220,7 @@ function TurmaPage() {
     async function fetchGrades(student_id) {
         const response = await fetch(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
         const data = await response.json();
-        const newGrades = [];
-        grades.map((grade) =>
-            data.grades.map((obj) =>
-                grade.teacher_subject.subject.name == obj.teacher_subject.subject.name
-                    ? newGrades.push(obj)
-                    : newGrades.push(grade)
-            )
-        );
-        newGrades.length < 1 ? setGrades(defaultGrades) : setGrades(newGrades);
+        setGrades(mergeLists(defaultGrades, data.grades))
     }
 
     const studentsTable = useReactTable({
@@ -266,9 +260,11 @@ function TurmaPage() {
                 <div className="flex items-end w-full">
                     <h2 className="text-muted-foreground ml-[1.5px]">Turma</h2>
                     <Dot className="text-muted-foreground"/>
-                    <p className="text-muted-foreground font-bold">{classYear?.year}</p>
+                    <p className="text-muted-foreground">{classYear?.year || "Não especificado"}</p>
                     <Dot className="text-muted-foreground"/>
-                    <p className="text-muted-foreground font-bold">{classYear?._class?.shift || "Manhã"}</p>
+                    <p className="text-muted-foreground">{classYear?._class?.shift || "Não especificado"}</p>
+                    <Dot className="text-muted-foreground"/>
+                    <p className="text-muted-foreground">{classYear?._class?.type || "Não especificado"}</p>
                 </div>
             </div>
             <div className="mt-5">
@@ -287,14 +283,17 @@ function TurmaPage() {
 
                     <TabsContent value="students">
                         {students.length > 0 ? (
-                            <StudentsDataTable
+                            <CustomDataTable
                                 table={studentsTable}
-                                controller={<StudentControllerClass table={studentsTable} />}></StudentsDataTable>
+                                >
+                                    <StudentControllerClass table={studentsTable} />
+                                </CustomDataTable>
                         ) : null}
                     </TabsContent>
 
                     <TabsContent value="grades">
                         <div className="flex gap-5 w-fit my-5">
+                            {/* {setSelectedStudent(value)} */}
                             <Select onValueChange={(value) => fetchGrades(value)} defaultValue={selectedStudent}>
                                 <SelectTrigger className="text-muted-foreground">
                                     <SelectValue placeholder="Selecione um aluno" />
@@ -312,10 +311,10 @@ function TurmaPage() {
                                     )}
                                 </SelectContent>
                             </Select>
-                            <Button onClick={() => fetchGrades(selectedStudent)}>Pesquisar conceito</Button>
+                            {/* <Button onClick={() => fetchGrades(selectedStudent)}>Pesquisar conceito</Button> */}
                         </div>
 
-                        <GradeDataTable table={gradesTable}></GradeDataTable>
+                        <CustomDataTable table={gradesTable}></CustomDataTable>
                     </TabsContent>
 
                     {/* <TabsContent value="students3"></TabsContent> */}
@@ -325,4 +324,4 @@ function TurmaPage() {
     );
 }
 
-export default TurmaPage;
+export default TurmaPageAdmin;

@@ -40,10 +40,7 @@ function AnnouncementController({ table, classes }) {
             <Dialog>
                 <DialogTrigger asChild>
                     <Button
-                        className="text-[10px] md:text-sm bg-orange-600 gap-2"
-                        onClick={(event) => {
-                            console.log(table.getState().columnFilters);
-                        }}>
+                        className="text-[10px] md:text-sm bg-orange-600 gap-2">
                         <CirclePlus size={20} />
                         Novo aviso
                     </Button>

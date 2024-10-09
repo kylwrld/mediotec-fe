@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import ClassController from "@/components/ui/class/class-controller";
+import ClassControllerTeacher from "@/components/ui/class/class-controller-teacher";
 import ClassDataTable from "@/components/ui/class/class-data-table";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,6 +21,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const columns = [
     {
@@ -62,7 +65,6 @@ export const columns = [
     },
     {
         accessorKey: "type",
-        // header: () => <div className="text-right">Ano</div>,
         header: () => <div className="text-right">Curso</div>,
         cell: ({ row }) => {
             return <div className="text-right font-medium">{row.getValue("type")}</div>;
@@ -98,7 +100,7 @@ export const columns = [
     },
 ];
 
-function TurmasPage() {
+function TurmasPageTeacher() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -110,6 +112,8 @@ function TurmasPage() {
         pageIndex: 0,
         pageSize: 10,
     });
+
+    const navigate = useNavigate()
 
     const table = useReactTable({
         columns,
@@ -145,9 +149,11 @@ function TurmasPage() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
-            <ClassDataTable table={table} controller={<ClassController table={table} />}></ClassDataTable>
+            <CustomDataTable table={table} redirect={(row) => navigate(`/turma/${row.original.id}`)}>
+                <ClassControllerTeacher table={table} />
+            </CustomDataTable>
         </div>
     );
 }
 
-export default TurmasPage;
+export default TurmasPageTeacher;

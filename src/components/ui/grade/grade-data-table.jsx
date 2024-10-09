@@ -31,8 +31,7 @@ function GradeDataTable({ table, children }) {
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
                                             key={cell.id}
-                                            className="p-4"
-                                            onClick={() => console.log(row.original)}>
+                                            className="p-4">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

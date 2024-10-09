@@ -27,19 +27,9 @@ export default function AnnouncementDataTable({ table, controller }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     <td
-                                        className="flex flex-col h-fit p-4 border rounded-md"
-                                        onClick={() => console.log(row.original)}>
+                                        className="flex flex-col h-fit p-4 border rounded-md">
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
-                                                {/* <Avatar>
-                                                    <AvatarImage
-                                                        src="https://github.com/shadcn.png"
-                                                        alt="@shadcn"
-                                                    />
-                                                    <AvatarFallback>
-                                                        CN
-                                                    </AvatarFallback>
-                                                </Avatar> */}
                                                 <div className="flex flex-col">
                                                     <p className="font-bold">{row.original.user.name}</p>
                                                     <span className="text-muted-foreground">
@@ -58,7 +48,7 @@ export default function AnnouncementDataTable({ table, controller }) {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
+                                <TableCell colSpan={table.getAllColumns().length} className="flex justify-center items-center h-24 text-center border rounded-md">
                                     Nenhum resultado
                                 </TableCell>
                             </TableRow>

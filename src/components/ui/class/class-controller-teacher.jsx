@@ -1,16 +1,10 @@
 "use client";
 
-import { CirclePlus } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-
-import ClassForm from "./class-form";
-
-function ClassController({ table }) {
+function ClassControllerTeacher({ table }) {
     return (
         <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
             <div className="flex gap-2">
@@ -41,26 +35,8 @@ function ClassController({ table }) {
                     Remover filtros
                 </Button>
             </div>
-
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button
-                        className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                        <CirclePlus size={20} />
-                        Nova turma
-                    </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[720px]">
-                    <DialogHeader>
-                        <DialogTitle>Nova turma</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4 overflow-y-auto max-h-[600px]">
-                        <ClassForm />
-                    </div>
-                </DialogContent>
-            </Dialog>
         </div>
     );
 }
 
-export default ClassController;
+export default ClassControllerTeacher;

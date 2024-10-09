@@ -14,6 +14,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import TeacherController from "@/components/ui/teacher/teacher-controller"
+import CustomDataTable from "@/components/ui/custom-data-table";
 
 export const columns = [
     {
@@ -24,9 +25,6 @@ export const columns = [
                     table.getIsAllPageRowsSelected() ||
                     (table.getIsSomePageRowsSelected() && "indeterminate")
                 }
-                // onCheckedChange={(value) =>
-                //     table.toggleAllPageRowsSelected(!!value)
-                // }
                 aria-label="Seleciona todos"
             />
         ),
@@ -51,7 +49,6 @@ export const columns = [
     },
     {
         accessorKey: "name",
-        // header: "Nome",
         header: ({ column }) => {
             return (
                 <Button
@@ -164,11 +161,11 @@ function ProfessoresPage() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Professores</h1>
-            <TeacherDataTable
+            <CustomDataTable
                 table={table}
             >
                 <TeacherController table={table} classes={classes}/>
-            </TeacherDataTable>
+            </CustomDataTable>
         </div>
     );
 }

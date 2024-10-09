@@ -32,13 +32,11 @@ export const columns = [
     },
     {
         accessorKey: "title",
-        // header: "Nome",
         header: "Título",
         cell: ({ row }) => <div className="capitalize">{row.getValue("title")}</div>,
     },
     {
         accessorKey: "body",
-        // header: () => <div className="text-right">Ano</div>,
         header: "Conteúdo",
         cell: ({ row }) => {
             return <div className="text-right font-medium">{row.getValue("body")}</div>;
@@ -47,7 +45,6 @@ export const columns = [
     },
     {
         accessorKey: "fixed",
-        // header: () => <div className="text-right">Ano</div>,
         header: "Fixado",
         cell: ({ row }) => {
             return <div className="text-right font-medium">{row.getValue("fixed")}</div>;

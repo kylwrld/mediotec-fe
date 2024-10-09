@@ -32,13 +32,11 @@ function AnnouncementForm({ classes }) {
     });
 
     async function onSubmit(announcement) {
-        console.log(announcement);
         const res = await postRequest("http://127.0.0.1:8000/announcement/", announcement);
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Aviso criado com sucesso",
-                // description: "Redirecionando para página de estudantes."
             });
         }
     }

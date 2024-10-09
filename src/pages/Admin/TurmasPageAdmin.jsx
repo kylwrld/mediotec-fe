@@ -1,27 +1,26 @@
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import ClassController from "@/components/ui/class/class-controller";
+import ClassDataTable from "@/components/ui/class/class-data-table";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import {
+    DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import SubjectDataTable from "@/components/ui/subject/subject-data-table";
-import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import React, { useEffect, useState } from "react";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
 import {
-    flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-
-import SubjectController from "@/components/ui/subject/subject-controller";
-
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const columns = [
     {
@@ -45,8 +44,31 @@ export const columns = [
     },
     {
         accessorKey: "name",
-        header: "Nome",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0">
+                    Nome
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
         cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    },
+    {
+        accessorKey: "degree",
+        header: "Ano",
+        cell: ({ row }) => <div className="lowercase">{row.getValue("degree")}</div>,
+    },
+    {
+        accessorKey: "type",
+        header: () => <div className="text-right">Curso</div>,
+        cell: ({ row }) => {
+            return <div className="text-right font-medium">{row.getValue("type")}</div>;
+        },
+        filterFn: "includesString",
     },
     {
         id: "actions",
@@ -77,23 +99,24 @@ export const columns = [
     },
 ];
 
-function DisciplinasPage() {
-    const [subjects, setSubjects] = useState([]);
-    const [teachers, setTeachers] = useState([]);
+function TurmasPageAdmin() {
+    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [sorting, setSorting] = React.useState([]);
-    const [columnFilters, setColumnFilters] = React.useState([]);
-    const [columnVisibility, setColumnVisibility] = React.useState({});
-    const [rowSelection, setRowSelection] = React.useState({});
-    const [pagination, setPagination] = React.useState({
+    const [sorting, setSorting] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([]);
+    const [columnVisibility, setColumnVisibility] = useState({});
+    const [rowSelection, setRowSelection] = useState({});
+    const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10,
     });
 
+    const navigate = useNavigate()
+
     const table = useReactTable({
         columns,
-        data:subjects,
+        data: classes,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -113,34 +136,23 @@ function DisciplinasPage() {
     });
 
     useEffect(() => {
-        const fetchSubjects = async () => {
-            const response = await fetch("http://127.0.0.1:8000/subject/");
+        const fetchClasses = async () => {
+            const response = await fetch("http://127.0.0.1:8000/class/");
             const data = await response.json();
-            setSubjects(data.subjects);
+            setClasses(data.classes);
+            setLoading(false);
         };
-
-        const fetchTeachers = async () => {
-            const response = await fetch("http://127.0.0.1:8000/teacher/");
-            const data = await response.json();
-            setTeachers(data.teachers);
-        };
-
-        fetchSubjects();
-        fetchTeachers();
-        setLoading(false);
+        fetchClasses();
     }, []);
 
     return (
         <div className="h-full">
-            <h1 className="text-4xl text-blue-600 font-bold">Disciplinas</h1>
-            <div>
-                <SubjectDataTable
-                table={table}
-                controller={<SubjectController table={table} teachers={teachers}/>}
-                />
-            </div>
+            <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
+            <CustomDataTable table={table} redirect={(row) => navigate(`/turma/${row.original.id}`)}>
+                <ClassController table={table} />
+            </CustomDataTable>
         </div>
     );
 }
 
-export default DisciplinasPage;
+export default TurmasPageAdmin;
