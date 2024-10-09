@@ -1,12 +1,10 @@
-"use client";
+import React, { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
@@ -15,44 +13,38 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-    name: z.string({ required_error: "Por favor preencha com um nome." }),
-    email: z
-        .string({
-            required_error: "Por favor preencha com um email.",
-        })
-        .email("Esse email não é válido."),
+    name: z.string().optional(),
+    email: z.string().email("Esse email não é válido.").optional(),
     password: z
-        .string({
-            required_error: "Por favor digite uma senha.",
-        })
-        .min(3, { message: "A senha precisa ter no mínimo 3 caracteres." }),
-    birth_date: z.date({
-        required_error: "Por favor especifique a data de nascimento.",
-    }),
+        .string()
+        .min(3).optional(),
+    birth_date: z.date().optional(),
 });
 
-function TeacherForm({ onSubmit }) {
+function StudentFormEdit({ onSubmit }) {
     const form = useForm({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(formSchema.partial()),
     });
 
     return (
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8 px-2 xl:px-20 w-full overflow-y-auto max-h-[600px]">
+                className="space-y-8 px-2 sm:px-16 xl:px-20 w-full overflow-y-auto max-h-[600px]">
                 <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Nome do professor</FormLabel>
+                            <FormLabel>Nome do Estudante</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o nome do professor" {...field} />
+                                <Input placeholder="Digite o nome do estudante" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -66,7 +58,7 @@ function TeacherForm({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o email do professor" {...field} />
+                                <Input placeholder="Digite o email do estudante" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -80,7 +72,7 @@ function TeacherForm({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Senha</FormLabel>
                             <FormControl>
-                                <Input type="password" placeholder="Digite a senha do professor" {...field} />
+                                <Input type="password" placeholder="Digite a senha do estudante" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -124,7 +116,7 @@ function TeacherForm({ onSubmit }) {
                                 </PopoverContent>
                             </Popover>
                             <FormDescription>
-                                A data de nascimento é usada para calcular a idade do professor.
+                                A data de nascimento é usada para calcular a idade do estudante.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -139,4 +131,4 @@ function TeacherForm({ onSubmit }) {
     );
 }
 
-export default TeacherForm;
+export default StudentFormEdit;

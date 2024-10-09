@@ -9,9 +9,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
-import { useContext } from "react";
-import AuthContext from "@/context/AuthContext";
 
 const TYPES = ["Informática", "Logística"];
 const SHIFT_TYPES = ["Manhã", "Tarde"];
@@ -29,28 +26,10 @@ const formSchema = z.object({
     }),
 });
 
-function ClassForm() {
-    const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
-
+function ClassForm({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
     });
-
-    async function onSubmit(_class) {
-        const res = await postRequest("http://127.0.0.1:8000/class/", _class);
-        if (res.ok) {
-            toast({
-                variant: "success",
-                title: "Turma criada com sucesso.",
-            });
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Não foi possível criar turma",
-            });
-        }
-    }
 
     return (
         <Form {...form}>
@@ -60,7 +39,7 @@ function ClassForm() {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Título</FormLabel>
+                            <FormLabel>Nome</FormLabel>
                             <FormControl>
                                 <Input placeholder="Digite o nome da turma" {...field} />
                             </FormControl>
@@ -95,7 +74,7 @@ function ClassForm() {
                     name="type"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Turma</FormLabel>
+                            <FormLabel>Curso</FormLabel>
                             <Select onValueChange={field.onChange}>
                                 <FormControl>
                                     <SelectTrigger className="text-muted-foreground">

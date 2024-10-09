@@ -31,6 +31,7 @@ export default function AnnouncementDataTable({ table, controller }) {
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
                                                 <div className="flex flex-col">
+                                                    {console.log(row)}
                                                     <p className="font-bold">{row.original.user.name}</p>
                                                     <span className="text-muted-foreground">
                                                         {new Date(row.original.created_at).toLocaleString("pt-BR")}

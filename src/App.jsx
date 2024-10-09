@@ -2,12 +2,13 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 
 import { Toaster } from "@/components/ui/toaster";
 import MainLayout from "@/layouts/MainLayout";
+import OnlyAdminRoute from "./components/PrivateRoutes/OnlyAdminRoute";
 import Redirect from "./components/PrivateRoutes/Redirect";
 import TeacherOrAdminRoute from "./components/PrivateRoutes/TeacherOrAdminRoute";
 import { AuthProvider } from "./context/AuthContext";
 import DisciplinasPage from "./pages/Admin/DisciplinasPage";
 import EstudantesPageAdmin from "./pages/Admin/EstudantesPageAdmin";
-import ProfessoresPage from "./pages/Admin/ProfessoresPage";
+import ProfessoresPageAdmin from "./pages/Admin/ProfessoresPageAdmin";
 import TurmaPageAdmin from "./pages/Admin/TurmaPageAdmin";
 import TurmasPageAdmin from "./pages/Admin/TurmasPageAdmin";
 import AvisosPage from "./pages/AvisosPage";
@@ -18,7 +19,6 @@ import LoginPage from "./pages/LoginPage";
 import EstudantesPageTeacher from "./pages/Teacher/EstudantesPageTeacher";
 import TurmaPageTeacher from "./pages/Teacher/TurmaPageTeacher";
 import TurmasPageTeacher from "./pages/Teacher/TurmasPageTeacher";
-import OnlyAdminRoute from "./components/PrivateRoutes/OnlyAdminRoute";
 
 export default function App() {
     const router = createBrowserRouter(
@@ -31,12 +31,12 @@ export default function App() {
                         <Route path="/turma/:id" element={<Redirect teacher={<TurmaPageTeacher />} admin={<TurmaPageAdmin />} />}></Route>
                         <Route path="/turmas" element={<Redirect teacher={<TurmasPageTeacher />} admin={<TurmasPageAdmin />} />}></Route>
                         <Route path="/avisos" element={<AvisosPage />}></Route>
-                        
+
                         <Route path="/faltas" element={<FaltasPage />}></Route>
                         <Route path="/horarios" element={<HorariosPage />}></Route>
                     </Route>
                     <Route path="/" element={<OnlyAdminRoute />}>
-                        <Route path="/professores" element={<ProfessoresPage />}></Route>
+                        <Route path="/professores" element={<ProfessoresPageAdmin />}></Route>
                         <Route path="/disciplinas" element={<DisciplinasPage />}></Route>
                     </Route>
                 </Route>

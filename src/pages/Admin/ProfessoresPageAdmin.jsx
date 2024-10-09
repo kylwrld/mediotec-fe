@@ -107,7 +107,7 @@ export const columns = [
       },
 ];
 
-function ProfessoresPage() {
+function ProfessoresPageAdmin() {
     const [teachers, setTeachers] = useState([]);
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -167,10 +167,10 @@ function ProfessoresPage() {
             <CustomDataTable
                 table={table}
             >
-                <TeacherController table={table} classes={classes}/>
+                <TeacherController table={table} addTeacher={(teacher) => setTeachers([...teachers, teacher])} classes={classes}/>
             </CustomDataTable>
         </div>
     );
 }
 
-export default ProfessoresPage;
+export default ProfessoresPageAdmin;

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 
-function CustomDataTable({ table, children, redirect }) {
+function CustomDataTable({ table, children, rowOnClick }) {
     return (
         <div className="w-full">
             {children}
@@ -33,7 +33,7 @@ function CustomDataTable({ table, children, redirect }) {
                                             key={cell.id}
                                             className="p-4"
                                             // Redirect
-                                            onClick={() => redirect ? redirect(row) : null}>
+                                            onClick={() => rowOnClick ? rowOnClick(row) : null}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

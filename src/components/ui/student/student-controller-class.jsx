@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import StudentForm from "./student-form";
 import AuthContext from "@/context/AuthContext";
 
-function StudentControllerClass({ table, classes, newStudentButton=false }) {
+function StudentControllerClass({ table, addStudent, newStudentButton=false }) {
     const [_class, setClass] = useState({});
     const { id } = useParams();
     const { toast } = useToast();
@@ -42,14 +42,15 @@ function StudentControllerClass({ table, classes, newStudentButton=false }) {
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
-        const data = await res.json();
+        const student = await res.json();
 
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Estudante criado com sucesso.",
             });
-            attachClass(data.id, id);
+            attachClass(student.id, id);
+            addStudent(student)
         } else {
             toast({
                 variant: "destructive",

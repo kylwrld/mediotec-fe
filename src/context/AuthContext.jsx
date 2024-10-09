@@ -20,6 +20,11 @@ export function AuthProvider({ children }) {
             },
             body: JSON.stringify(obj),
         });
+
+        if (res.status === 401) {
+            logout()
+        }
+
         return res
     }
 
@@ -28,6 +33,44 @@ export function AuthProvider({ children }) {
             method: "GET",
             headers: { "Authorization": "Bearer " + tokens.access },
         });
+
+        if (res.status === 401) {
+            logout()
+        }
+
+        return res
+    }
+
+    async function deleteRequest(url) {
+        const res = await fetch(url, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + tokens.access },
+        });
+
+        if (res.status === 401) {
+            logout()
+        }
+
+        return res
+    }
+
+    async function patchRequest(url, obj) {
+        const res = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + tokens.access
+            },
+            body: JSON.stringify(obj),
+        });
+
+        if (res.status === 401) {
+            logout()
+        }
+
+        console.log(res)
+
+
         return res
     }
 
@@ -67,6 +110,8 @@ export function AuthProvider({ children }) {
         postRequest,
         postLogin,
         getRequest,
+        deleteRequest,
+        patchRequest,
         logout,
     };
 

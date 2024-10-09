@@ -223,7 +223,7 @@ function TurmaPageAdmin() {
     async function fetchGrades(student_id) {
         const response = await getRequest(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
         const data = await response.json();
-        setGrades(mergeLists(defaultGrades, data.grades))
+        setGrades(mergeLists(defaultGrades, data.grades));
     }
 
     const studentsTable = useReactTable({
@@ -259,14 +259,14 @@ function TurmaPageAdmin() {
     return (
         <div className="h-full">
             <div className="flex flex-col justify-start text-left gap-3">
-                    <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name}</h1>
+                <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name}</h1>
                 <div className="flex items-end w-full">
                     <h2 className="text-muted-foreground ml-[1.5px]">Turma</h2>
-                    <Dot className="text-muted-foreground"/>
+                    <Dot className="text-muted-foreground" />
                     <p className="text-muted-foreground">{classYear?.year || "Não especificado"}</p>
-                    <Dot className="text-muted-foreground"/>
+                    <Dot className="text-muted-foreground" />
                     <p className="text-muted-foreground">{classYear?._class?.shift || "Não especificado"}</p>
-                    <Dot className="text-muted-foreground"/>
+                    <Dot className="text-muted-foreground" />
                     <p className="text-muted-foreground">{classYear?._class?.type || "Não especificado"}</p>
                 </div>
             </div>
@@ -286,11 +286,16 @@ function TurmaPageAdmin() {
 
                     <TabsContent value="students">
                         {students.length > 0 ? (
-                            <CustomDataTable
-                                table={studentsTable}
-                                >
-                                    <StudentControllerClass table={studentsTable} newStudentButton />
-                                </CustomDataTable>
+                            <CustomDataTable table={studentsTable}>
+                                <StudentControllerClass
+                                    table={studentsTable}
+                                    addStudent={(student) => {
+                                        student.degree = classYear._class?.degree;
+                                        setStudents([...students, student]);
+                                    }}
+                                    newStudentButton
+                                />
+                            </CustomDataTable>
                         ) : null}
                     </TabsContent>
 

@@ -67,7 +67,7 @@ export const columns = [
         accessorKey: "type",
         header: () => <div className="text-right">Curso</div>,
         cell: ({ row }) => {
-            return <div className="text-right font-medium">{row.getValue("type")}</div>;
+            return <div className="text-right font-medium">{row.getValue("type") || "Sem tipo"}</div>;
         },
         filterFn: "includesString",
     },
@@ -151,8 +151,8 @@ function TurmasPageAdmin() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
-            <CustomDataTable table={table} redirect={(row) => navigate(`/turma/${row.original.id}`)}>
-                <ClassController table={table} newClassButton/>
+            <CustomDataTable table={table} rowOnClick={(row) => navigate(`/turma/${row.original.id}`)}>
+                <ClassController table={table} addClass={(_class) => setClasses([...classes, _class])} newClassButton/>
             </CustomDataTable>
         </div>
     );

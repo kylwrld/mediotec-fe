@@ -11,8 +11,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useContext, useState } from "react";
 import TeacherForm from "./teacher-form";
 import AuthContext from "@/context/AuthContext";
+import { formatDate } from "@/lib/utils";
 
-function TeacherController({ table, classes }) {
+function TeacherController({ table, addTeacher, classes }) {
     const [_class, setClass] = useState({});
     const [teacherSubject, setTeacherSubject] = useState({});
     const [teacherSubjects, setTeacherSubjects] = useState([]);
@@ -68,6 +69,25 @@ function TeacherController({ table, classes }) {
             toast({
                 variant: "destructive",
                 title: "Não foi possível atribuir professor a turma",
+            });
+        }
+    }
+
+    async function onSubmit(user) {
+        user.birth_date = formatDate(new Date(user.birth_date));
+        user.type = "TEACHER";
+        const res = await postRequest("http://127.0.0.1:8000/signup/", user);
+        const teacher = await res.json()
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Professor criado com sucesso.",
+            });
+            addTeacher(teacher)
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar professor",
             });
         }
     }
@@ -188,7 +208,7 @@ function TeacherController({ table, classes }) {
                             <DialogTitle>Novo professor</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
-                            <TeacherForm />
+                            <TeacherForm onSubmit={onSubmit}/>
                         </div>
                     </DialogContent>
                 </Dialog>

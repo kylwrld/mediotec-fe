@@ -150,7 +150,7 @@ function TurmasPageTeacher() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
-            <CustomDataTable table={table} redirect={(row) => navigate(`/turma/${row.original.id}`)}>
+            <CustomDataTable table={table} rowOnClick={(row) => navigate(`/turma/${row.original.id}`)}>
                 <ClassController table={table} />
             </CustomDataTable>
         </div>

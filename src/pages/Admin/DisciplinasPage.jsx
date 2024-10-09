@@ -141,7 +141,7 @@ function DisciplinasPage() {
                 <CustomDataTable
                 table={table}
                 >
-                    <SubjectController table={table} teachers={teachers}/>
+                    <SubjectController table={table} addSubject={(subject) => setSubjects([...subjects, subject])} teachers={teachers}/>
                 </CustomDataTable>
             </div>
         </div>

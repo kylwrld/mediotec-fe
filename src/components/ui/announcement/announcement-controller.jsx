@@ -7,8 +7,31 @@ import { Input } from "@/components/ui/input";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AnnouncementForm from "./announcement-form";
+import { useToast } from "@/hooks/use-toast";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
-function AnnouncementController({ table, classes }) {
+function AnnouncementController({ table, addAnnouncement, classes }) {
+    const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
+
+    async function onSubmit(announcement) {
+        const res = await postRequest("http://127.0.0.1:8000/announcement/", announcement);
+        const data = await res.json()
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Aviso criado com sucesso",
+            });
+            addAnnouncement(data.announcement)
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar aviso",
+            });
+        }
+    }
+
     return (
         <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
             <div className="flex gap-2">
@@ -50,7 +73,7 @@ function AnnouncementController({ table, classes }) {
                         <DialogTitle>Novo aviso</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4 overflow-y-auto max-h-[600px]">
-                        <AnnouncementForm classes={classes} />
+                        <AnnouncementForm classes={classes} onSubmit={onSubmit} />
                     </div>
                 </DialogContent>
             </Dialog>

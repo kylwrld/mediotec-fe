@@ -13,7 +13,7 @@ import { useContext, useState } from "react";
 import StudentForm from "./student-form";
 import AuthContext from "@/context/AuthContext";
 
-function StudentController({ table, classes, newStudentButton=false, attachClassButton=false }) {
+function StudentController({ table, classes, addStudent, newStudentButton=false, attachClassButton=false }) {
     const [_class, setClass] = useState({});
     const { toast } = useToast();
     const { postRequest } = useContext(AuthContext);
@@ -44,11 +44,13 @@ function StudentController({ table, classes, newStudentButton=false, attachClass
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
+        const student = await res.json()
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Estudante criado com sucesso.",
             });
+            addStudent(student)
         } else {
             toast({
                 variant: "destructive",

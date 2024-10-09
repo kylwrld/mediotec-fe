@@ -5,24 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import { z } from "zod";
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useContext, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { useContext, useState } from "react";
 
-
-function SubjectController({ table, teachers }) {
+function SubjectController({ table, addSubject, teachers }) {
     const [teacher, setTeacher] = useState({});
     const { toast } = useToast();
     const { postRequest } = useContext(AuthContext);
 
     async function attachTeacher(subjects, teacher) {
-        const subject = subjects.map(subject => subject.original.id)
-        const data = {subject, teacher}
-        const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", data)
-        console.log(data)
+        const subject = subjects.map((subject) => subject.original.id);
+        const obj = { subject, teacher };
+        const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", obj);
         if (res.ok) {
             toast({
                 variant: "success",
@@ -32,6 +28,23 @@ function SubjectController({ table, teachers }) {
             toast({
                 variant: "destructive",
                 title: "Não foi possível atribuir disciplina(s) ao professor",
+            });
+        }
+    }
+
+    async function onSubmit(subject) {
+        const res = await postRequest("http://127.0.0.1:8000/subject/", subject);
+        const data = await res.json();
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Disciplina criada com sucesso",
+            });
+            addSubject(data.subject);
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar disciplina",
             });
         }
     }
@@ -101,7 +114,7 @@ function SubjectController({ table, teachers }) {
                             <DialogTitle>Novo disciplina</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
-                            <SubjectForm />
+                            <SubjectForm onSubmit={onSubmit} />
                         </div>
                     </DialogContent>
                 </Dialog>

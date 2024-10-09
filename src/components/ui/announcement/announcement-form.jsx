@@ -25,23 +25,11 @@ const formSchema = z.object({
     _class: z.string().optional(),
 });
 
-function AnnouncementForm({ classes }) {
-    const { toast } = useToast();
-    const { postRequest } = useContext(AuthContext);
-
+function AnnouncementForm({ classes, onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
     });
 
-    async function onSubmit(announcement) {
-        const res = await postRequest("http://127.0.0.1:8000/announcement/", announcement);
-        if (res.ok) {
-            toast({
-                variant: "success",
-                title: "Aviso criado com sucesso",
-            });
-        }
-    }
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 px-2 md:px-20 xl:px-32 w-full">

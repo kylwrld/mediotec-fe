@@ -9,8 +9,32 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import ClassForm from "./class-form";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
-function ClassController({ table, newClassButton=false }) {
+function ClassController({ table, addClass, newClassButton=false }) {
+    const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
+
+    async function onSubmit(_class) {
+        const res = await postRequest("http://127.0.0.1:8000/class/", _class);
+        const data = await res.json()
+        console.log(data)
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Turma criada com sucesso.",
+            });
+            addClass(data._class)
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível criar turma",
+            });
+        }
+    }
+
     return (
         <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">
             <div className="flex gap-2">
@@ -56,7 +80,7 @@ function ClassController({ table, newClassButton=false }) {
                             <DialogTitle>Nova turma</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-4 overflow-y-auto max-h-[600px]">
-                            <ClassForm />
+                            <ClassForm onSubmit={onSubmit}/>
                         </div>
                     </DialogContent>
                 </Dialog>

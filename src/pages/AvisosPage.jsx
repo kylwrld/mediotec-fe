@@ -114,7 +114,7 @@ function AvisosPage() {
             <div className="">
                 <AnnouncementDataTable
                     table={table}
-                    controller={<AnnouncementController table={table} classes={classes} />}></AnnouncementDataTable>
+                    controller={<AnnouncementController table={table} classes={classes} addAnnouncement={(announcement) => setAnnouncements([...announcements, announcement])} />}></AnnouncementDataTable>
             </div>
         </div>
     );
