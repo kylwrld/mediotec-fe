@@ -1,4 +1,6 @@
+import AuthContext from "@/context/AuthContext";
 import { clsx } from "clsx";
+import { useContext } from "react";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs) {
@@ -15,15 +17,6 @@ export function formatDate(date) {
     if (day.length < 2) day = "0" + day;
 
     return [year, month, day].join("-");
-}
-
-export async function postRequest(url, obj) {
-    const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(obj),
-    });
-    return res
 }
 
 export function mergeLists(first_list, second_list) {

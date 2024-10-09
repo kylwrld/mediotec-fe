@@ -92,6 +92,8 @@ function DisciplinasPage() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     const table = useReactTable({
         columns,
         data:subjects,
@@ -115,13 +117,13 @@ function DisciplinasPage() {
 
     useEffect(() => {
         const fetchSubjects = async () => {
-            const response = await fetch("http://127.0.0.1:8000/subject/");
+            const response = await getRequest("http://127.0.0.1:8000/subject/");
             const data = await response.json();
             setSubjects(data.subjects);
         };
 
         const fetchTeachers = async () => {
-            const response = await fetch("http://127.0.0.1:8000/teacher/");
+            const response = await getRequest("http://127.0.0.1:8000/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
         };

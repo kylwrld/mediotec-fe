@@ -6,15 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { useToast } from "@/hooks/use-toast";
-import { formatDate, postRequest } from "@/lib/utils";
-import { useState } from "react";
+import { formatDate } from "@/lib/utils";
+import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import StudentForm from "./student-form";
+import AuthContext from "@/context/AuthContext";
 
-function StudentControllerClass({ table, classes }) {
+function StudentControllerClass({ table, classes, newStudentButton=false }) {
     const [_class, setClass] = useState({});
     const { id } = useParams();
     const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
 
     async function attachClass(student, _class) {
         const data = { student, _class };
@@ -89,22 +91,24 @@ function StudentControllerClass({ table, classes }) {
             </div>
 
             <div className="flex gap-2">
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                            <CirclePlus size={20} />
-                            Novo estudante
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px]">
-                        <DialogHeader>
-                            <DialogTitle>Novo estudante</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <StudentForm onSubmit={onSubmitNewStudent} />
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                { newStudentButton  ? (
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <CirclePlus size={20} />
+                                Novo estudante
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Novo estudante</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <StudentForm onSubmit={onSubmitNewStudent} />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                ) : null}
             </div>
         </div>
     );

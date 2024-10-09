@@ -10,7 +10,8 @@ import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { postRequest } from "@/lib/utils";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
 const TYPES = ["Informática", "Logística"];
 const SHIFT_TYPES = ["Manhã", "Tarde"];
@@ -30,6 +31,7 @@ const formSchema = z.object({
 
 function ClassForm() {
     const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),

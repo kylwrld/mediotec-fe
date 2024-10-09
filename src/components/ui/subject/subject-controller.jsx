@@ -8,11 +8,33 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { z } from "zod";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import AuthContext from "@/context/AuthContext";
 
 
 function SubjectController({ table, teachers }) {
     const [teacher, setTeacher] = useState({});
+    const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
+
+    async function attachTeacher(subjects, teacher) {
+        const subject = subjects.map(subject => subject.original.id)
+        const data = {subject, teacher}
+        const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", data)
+        console.log(data)
+        if (res.ok) {
+            toast({
+                variant: "success",
+                title: "Professor atribuído com sucesso",
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível atribuir disciplina(s) ao professor",
+            });
+        }
+    }
 
     return (
         <div className="flex justify-between items-center flex-wrap gap-2 py-4 ">

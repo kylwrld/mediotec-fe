@@ -1,12 +1,14 @@
-import StudentsDataTable from "@/components/ui/student/student-data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import GradeDataTable from "@/components/ui/grade/grade-data-table";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import StudentControllerClass from "@/components/ui/student/student-controller-class";
+import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { mergeLists } from "@/lib/utils";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -15,13 +17,6 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import CustomDataTable from "@/components/ui/custom-data-table";
-import AuthContext from "@/context/AuthContext";
-import { jwtDecode } from "jwt-decode";
-import { mergeLists, postRequest } from "@/lib/utils";
-import { toast, useToast } from "@/hooks/use-toast";
-import StudentControllerClassTeacher from "@/components/ui/student/student-controller-class-teacher";
 
 const LOOKUP = {
     NANA: "ND",
@@ -82,13 +77,15 @@ const columns = [
 
 function TurmaPageTeacher() {
     const { id } = useParams();
+    const { postRequest } = useContext(AuthContext);
+
     const [classYear, setClassYear] = useState();
     const [students, setStudents] = useState([]);
     const [grades, setGrades] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [defaultGrades, setDefaultGrades] = useState([]);
 
-    const { decodeToken } = useContext(AuthContext);
+    const { decodeToken, getRequest } = useContext(AuthContext);
     const user = decodeToken();
     const { toast } = useToast();
 
@@ -114,12 +111,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.av1_1 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.av1_1 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.av1_1 ? row.original.av1_1 : "-"}
@@ -143,12 +141,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.av2_1 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.av2_1 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.av2_1 ? row.original.av2_1 : "-"}
@@ -176,12 +175,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.noa_1 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.noa_1 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.noa_1 ? row.original.noa_1 : "-"}
@@ -210,12 +210,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.av1_2 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.av1_2 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.av1_2 ? row.original.av1_2 : "-"}
@@ -238,12 +239,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.av2_2 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.av2_2 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.av2_2 ? row.original.av2_2 : "-"}
@@ -271,12 +273,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.noa_2 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.noa_2 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.noa_2 ? row.original.noa_2 : "-"}
@@ -305,12 +308,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.av1_3 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.av1_3 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.av1_3 ? row.original.av1_3 : "-"}
@@ -333,12 +337,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.av2_3 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.av2_3 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.av2_3 ? row.original.av2_3 : "-"}
@@ -366,12 +371,13 @@ function TurmaPageTeacher() {
                 <div className="capitalize text-center">
                     <Select
                         onValueChange={(value) => {
-                            const index = grades.findIndex((obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name)
-                            const data = grades[index]
-                            data.noa_3 = value
-                            setGrades(grades)
-                        }
-                        }>
+                            const index = grades.findIndex(
+                                (obj) => obj.teacher_subject.subject.name == row.original.teacher_subject.subject.name
+                            );
+                            const data = grades[index];
+                            data.noa_3 = value;
+                            setGrades(grades);
+                        }}>
                         <SelectTrigger className="text-[10px] md:text-sm border-0 shadow-none justify-center">
                             <SelectValue
                                 placeholder={row.original.noa_3 ? row.original.noa_3 : "-"}
@@ -396,14 +402,14 @@ function TurmaPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await fetch(`http://127.0.0.1:8000/student_class/${id}/2024/`);
+            const response = await getRequest(`http://127.0.0.1:8000/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             setSelectedStudent(data.students[0]?.id || null);
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            const response = await fetch(`http://127.0.0.1:8000/teacher/${user.id}/subjects/`);
+            const response = await getRequest(`http://127.0.0.1:8000/teacher/${user.id}/subjects/`);
             const data = await response.json();
             const gradesList = data.teacher.map((obj) => {
                 return {
@@ -426,7 +432,7 @@ function TurmaPageTeacher() {
                 };
             });
             setGrades(gradesList);
-            setDefaultGrades(gradesList)
+            setDefaultGrades(gradesList);
         };
 
         fetchStudents();
@@ -434,10 +440,10 @@ function TurmaPageTeacher() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await fetch(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
+        const response = await getRequest(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
         const data = await response.json();
         // colocando as notas nas disciplinas certas
-        setGrades(mergeLists(defaultGrades, data.grades))
+        setGrades(mergeLists(defaultGrades, data.grades));
     }
 
     const studentsTable = useReactTable({
@@ -471,27 +477,41 @@ function TurmaPageTeacher() {
     });
 
     async function submitGrades(grades) {
-        const data = []
-        grades.map(grade => {
-            let {av1_1, av2_1, av1_2, av2_2, av1_3, av2_3, noa_1, noa_2, noa_3} = grade
-            let teacher_subject = grade.teacher_subject.id
-            let student = selectedStudent
-            let year = classYear.year
-            let degree = classYear._class.degree
-            data.push({av1_1, av2_1, av1_2, av2_2, av1_3, av2_3, noa_1, noa_2, noa_3, teacher_subject, student, year, degree})
-        })
+        const data = [];
+        grades.map((grade) => {
+            let { av1_1, av2_1, av1_2, av2_2, av1_3, av2_3, noa_1, noa_2, noa_3 } = grade;
+            let teacher_subject = grade.teacher_subject.id;
+            let student = selectedStudent;
+            let year = classYear.year;
+            let degree = classYear._class.degree;
+            data.push({
+                av1_1,
+                av2_1,
+                av1_2,
+                av2_2,
+                av1_3,
+                av2_3,
+                noa_1,
+                noa_2,
+                noa_3,
+                teacher_subject,
+                student,
+                year,
+                degree,
+            });
+        });
 
-        const res = await postRequest("http://127.0.0.1:8000/grade/", {grade: data})
+        const res = await postRequest("http://127.0.0.1:8000/grade/", { grade: data });
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Conceito atribuído com sucesso",
-            })
+            });
         } else {
             toast({
                 variant: "destructive",
                 title: "Não foi possível atribuir o conceito",
-            })
+            });
         }
     }
 
@@ -523,14 +543,19 @@ function TurmaPageTeacher() {
                     <TabsContent value="students">
                         {students.length > 0 ? (
                             <CustomDataTable table={studentsTable}>
-                                <StudentControllerClassTeacher table={studentsTable} />
+                                <StudentControllerClass table={studentsTable} />
                             </CustomDataTable>
                         ) : null}
                     </TabsContent>
 
                     <TabsContent value="grades">
                         <div className="flex gap-5 w-fit my-5">
-                            <Select onValueChange={(value) => {fetchGrades(value); setSelectedStudent(value)}} defaultValue={selectedStudent}>
+                            <Select
+                                onValueChange={(value) => {
+                                    fetchGrades(value);
+                                    setSelectedStudent(value);
+                                }}
+                                defaultValue={selectedStudent}>
                                 <SelectTrigger className="text-muted-foreground">
                                     <SelectValue placeholder="Selecione um aluno" />
                                 </SelectTrigger>
@@ -550,7 +575,9 @@ function TurmaPageTeacher() {
                         </div>
 
                         <CustomDataTable table={gradesTable}></CustomDataTable>
-                        <Button className="bg-orange-600" onClick={() => submitGrades(grades)}>Salvar conceitos</Button>
+                        <Button className="bg-orange-600" onClick={() => submitGrades(grades)}>
+                            Salvar conceitos
+                        </Button>
                     </TabsContent>
                 </Tabs>
             </div>

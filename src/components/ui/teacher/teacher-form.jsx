@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-import { cn, postRequest } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 
@@ -19,6 +19,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useToast } from "@/hooks/use-toast";
 import { formatDate } from "@/lib/utils";
 import { z } from "zod";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }),
@@ -39,6 +41,7 @@ const formSchema = z.object({
 
 function TeacherForm() {
     const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),

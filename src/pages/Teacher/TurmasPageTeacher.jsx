@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import ClassController from "@/components/ui/class/class-controller";
-import ClassControllerTeacher from "@/components/ui/class/class-controller-teacher";
-import ClassDataTable from "@/components/ui/class/class-data-table";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import {
     DropdownMenu,
@@ -12,6 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import AuthContext from "@/context/AuthContext";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -20,7 +19,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const columns = [
@@ -113,6 +112,8 @@ function TurmasPageTeacher() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     const navigate = useNavigate()
 
     const table = useReactTable({
@@ -138,7 +139,7 @@ function TurmasPageTeacher() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class/");
+            const response = await getRequest("http://127.0.0.1:8000/class/");
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);
@@ -150,7 +151,7 @@ function TurmasPageTeacher() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
             <CustomDataTable table={table} redirect={(row) => navigate(`/turma/${row.original.id}`)}>
-                <ClassControllerTeacher table={table} />
+                <ClassController table={table} />
             </CustomDataTable>
         </div>
     );

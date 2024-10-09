@@ -8,7 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
-import { postRequest } from "@/lib/utils";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }),
@@ -16,6 +17,7 @@ const formSchema = z.object({
 
 function SubjectForm() {
     const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
 
     const form = useForm({
         resolver: zodResolver(formSchema),

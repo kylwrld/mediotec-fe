@@ -8,9 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TeacherForm from "./teacher-form";
-import { postRequest } from "@/lib/utils";
+import AuthContext from "@/context/AuthContext";
 
 function TeacherController({ table, classes }) {
     const [_class, setClass] = useState({});
@@ -18,18 +18,19 @@ function TeacherController({ table, classes }) {
     const [teacherSubjects, setTeacherSubjects] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [subject, setSubject] = useState({});
+    const { postRequest, getRequest } = useContext(AuthContext);
 
     const { toast } = useToast();
 
     async function fetchTeacherSubject() {
         const teacher_id = table.getSelectedRowModel().rows[0].original.id;
-        const data = await (await fetch(`http://127.0.0.1:8000/teacher/${teacher_id}/subjects/`)).json();
+        const data = await (await getRequest(`http://127.0.0.1:8000/teacher/${teacher_id}/subjects/`)).json();
         setTeacherSubjects(data.teacher);
     }
 
     async function fetchSubjects() {
         if (subjects.length == 0) {
-            const data = await (await fetch(`http://127.0.0.1:8000/subject/`)).json();
+            const data = await (await getRequest("http://127.0.0.1:8000/subject/")).json();
             setSubjects(data.subjects);
         }
     }

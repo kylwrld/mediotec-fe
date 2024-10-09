@@ -1,6 +1,6 @@
 import StudentsDataTable from "@/components/ui/student/student-data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { ArrowUpDown, Dot } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import { mergeLists } from "@/lib/utils";
+import AuthContext from "@/context/AuthContext";
 
 const LOOKUP = {
     NANA: "ND",
@@ -178,16 +179,18 @@ function TurmaPageAdmin() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await fetch(`http://127.0.0.1:8000/student_class/${id}/2024/`);
+            const response = await getRequest(`http://127.0.0.1:8000/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             setSelectedStudent(data.students[0]?.id || null);
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            const response = await fetch("http://127.0.0.1:8000/subject/");
+            const response = await getRequest("http://127.0.0.1:8000/subject/");
             const data = await response.json();
             const gradesList = data.subjects.map((subject) => {
                 return {
@@ -218,7 +221,7 @@ function TurmaPageAdmin() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await fetch(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
+        const response = await getRequest(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
         const data = await response.json();
         setGrades(mergeLists(defaultGrades, data.grades))
     }
@@ -286,7 +289,7 @@ function TurmaPageAdmin() {
                             <CustomDataTable
                                 table={studentsTable}
                                 >
-                                    <StudentControllerClass table={studentsTable} />
+                                    <StudentControllerClass table={studentsTable} newStudentButton />
                                 </CustomDataTable>
                         ) : null}
                     </TabsContent>

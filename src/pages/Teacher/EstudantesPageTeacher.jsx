@@ -9,16 +9,17 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import StudentControllerTeacher from "@/components/ui/student/student-controller-teacher";
+import StudentController from "@/components/ui/student/student-controller";
+import AuthContext from "@/context/AuthContext";
 import {
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable
+    useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export const columns = [
     {
@@ -125,6 +126,8 @@ function EstudantesPageTeacher() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     const studentsTable = useReactTable({
         columns,
         data: students,
@@ -148,14 +151,14 @@ function EstudantesPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await fetch("http://127.0.0.1:8000/student/");
+            const response = await getRequest("http://127.0.0.1:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
@@ -168,7 +171,7 @@ function EstudantesPageTeacher() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Estudantes</h1>
             <CustomDataTable table={studentsTable}>
-                <StudentControllerTeacher table={studentsTable} classes={classes} />
+                <StudentController table={studentsTable} classes={classes} />
             </CustomDataTable>
         </div>
     );

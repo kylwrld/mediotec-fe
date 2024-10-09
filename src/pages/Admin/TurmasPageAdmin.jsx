@@ -112,6 +112,8 @@ function TurmasPageAdmin() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     const navigate = useNavigate()
 
     const table = useReactTable({
@@ -137,7 +139,7 @@ function TurmasPageAdmin() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class/");
+            const response = await getRequest("http://127.0.0.1:8000/class/");
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);
@@ -149,7 +151,7 @@ function TurmasPageAdmin() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
             <CustomDataTable table={table} redirect={(row) => navigate(`/turma/${row.original.id}`)}>
-                <ClassController table={table} />
+                <ClassController table={table} newClassButton/>
             </CustomDataTable>
         </div>
     );

@@ -11,6 +11,26 @@ export function AuthProvider({ children }) {
             : null
     );
 
+    async function postRequest(url, obj) {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + tokens.access
+            },
+            body: JSON.stringify(obj),
+        });
+        return res
+    }
+
+    async function getRequest(url) {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: { "Authorization": "Bearer " + tokens.access },
+        });
+        return res
+    }
+
     async function postLogin(userObject) {
         const res = await fetch("http://127.0.0.1:8000/login/", {
             method: "POST",
@@ -44,7 +64,9 @@ export function AuthProvider({ children }) {
     const context = {
         tokens,
         decodeToken,
+        postRequest,
         postLogin,
+        getRequest,
         logout,
     };
 

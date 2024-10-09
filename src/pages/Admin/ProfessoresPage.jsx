@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 import TeacherController from "@/components/ui/teacher/teacher-controller"
 import CustomDataTable from "@/components/ui/custom-data-table";
+import AuthContext from "@/context/AuthContext";
 
 export const columns = [
     {
@@ -120,6 +121,8 @@ function ProfessoresPage() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     const table = useReactTable({
         columns,
         data:teachers,
@@ -143,13 +146,13 @@ function ProfessoresPage() {
 
     useEffect(() => {
         const fetchTeachers = async () => {
-            const response = await fetch("http://127.0.0.1:8000/teacher/");
+            const response = await getRequest("http://127.0.0.1:8000/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
             setLoading(false);
         };
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

@@ -6,15 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { formatDate, postRequest } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import StudentForm from "./student-form";
+import AuthContext from "@/context/AuthContext";
 
-function StudentController({ table, classes }) {
+function StudentController({ table, classes, newStudentButton=false, attachClassButton=false }) {
     const [_class, setClass] = useState({});
     const { toast } = useToast();
+    const { postRequest } = useContext(AuthContext);
 
     async function attachClass(rows, class_id) {
         const data = {};
@@ -88,55 +90,62 @@ function StudentController({ table, classes }) {
             </div>
 
             <div className="flex gap-2">
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                            <UsersRound size={20} />
-                            Atribuir a uma turma
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px]">
-                        <DialogHeader>
-                            <DialogTitle>Atribuir a uma turma</DialogTitle>
-                        </DialogHeader>
-                        <div className="flex flex-col gap-3">
-                            <Select onValueChange={(value) => setClass(value)}>
-                                <SelectTrigger className="text-muted-foreground">
-                                    <SelectValue placeholder="Selecione uma turma" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {classes
-                                        ? classes.map((class_year, index) => (
-                                              <SelectItem key={index} value={class_year._class.id.toString()}>
-                                                  {class_year._class.name}
-                                              </SelectItem>
-                                          ))
-                                        : null}
-                                </SelectContent>
-                            </Select>
-                            <Button onClick={() => attachClass(table.getSelectedRowModel().rows, _class)}>
-                                Enviar
+                { attachClassButton ? (
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <UsersRound size={20} />
+                                Atribuir a uma turma
                             </Button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Atribuir a uma turma</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-3">
+                                <Select onValueChange={(value) => setClass(value)}>
+                                    <SelectTrigger className="text-muted-foreground">
+                                        <SelectValue placeholder="Selecione uma turma" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {classes
+                                            ? classes.map((class_year, index) => (
+                                                <SelectItem key={index} value={class_year._class.id.toString()}>
+                                                    {class_year._class.name}
+                                                </SelectItem>
+                                            ))
+                                            : null}
+                                    </SelectContent>
+                                </Select>
+                                <Button onClick={() => attachClass(table.getSelectedRowModel().rows, _class)}>
+                                    Enviar
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
 
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                            <CirclePlus size={20} />
-                            Novo estudante
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px]">
-                        <DialogHeader>
-                            <DialogTitle>Novo estudante</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <StudentForm onSubmit={onSubmitNewStudent} />
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                ) : null}
+
+                { newStudentButton ? (
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <CirclePlus size={20} />
+                                Novo estudante
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Novo estudante</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <StudentForm onSubmit={onSubmitNewStudent} />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+
+                ) : null}
+
             </div>
         </div>
     );

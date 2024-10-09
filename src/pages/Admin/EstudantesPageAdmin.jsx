@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import StudentsDataTable from "@/components/ui/student/student-data-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
     flexRender,
@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 import StudentController from "@/components/ui/student/student-controller";
 import CustomDataTable from "@/components/ui/custom-data-table";
+import AuthContext from "@/context/AuthContext";
 
 export const columns = [
     {
@@ -142,6 +143,8 @@ function EstudantesPageAdmin() {
         pageSize: 10,
     });
 
+    const { getRequest } = useContext(AuthContext);
+
     const studentsTable = useReactTable({
         columns,
         data: students,
@@ -166,14 +169,14 @@ function EstudantesPageAdmin() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await fetch("http://127.0.0.1:8000/student/");
+            const response = await getRequest("http://127.0.0.1:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await fetch("http://127.0.0.1:8000/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
@@ -188,7 +191,7 @@ function EstudantesPageAdmin() {
             <CustomDataTable
                 table={studentsTable}
             >
-                <StudentController table={studentsTable} classes={classes} />
+                <StudentController table={studentsTable} classes={classes} newStudentButton attachClassButton />
             </CustomDataTable>
         </div>
     );
