@@ -59,13 +59,13 @@ function LoginPage() {
                 <div className="flex justify-center items-center w-1/2 h-full rounded-l-xl bg-[radial-gradient(circle,rgba(106,151,255,1)_10%,rgba(0,80,255,1)_80%)] hidden lg:flex">
                     <img
                         className="w-3/5"
-                        src="\src\assets\mediotec-boneco.svg"
-                        alt=""
+                        src="https://svgshare.com/i/1BNB.svg"
+                        alt="Boneco do Mediotec"
                     />
                 </div>
                 <div className="flex items-center flex-col w-full lg:w-1/2 h-full border border-gray-300 rounded-lg lg:rounded-l-none lg:rounded-r-xl bg-white">
                     <div className="w-1/4 m-20">
-                        <img src="\src\assets\mediotec-mobile.webp" className="" alt="Logo do Mediotec" />
+                        <img src="https://svgshare.com/i/1BNW.svg" className="" alt="Logo do Mediotec" />
                     </div>
                     <div className="flex grow w-full">
                         <Form {...form}>
