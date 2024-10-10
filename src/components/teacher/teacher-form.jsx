@@ -19,7 +19,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { z } from "zod";
 
 const formSchema = z.object({
-    name: z.string({ required_error: "Por favor preencha com um nome." }),
+    name: z.string({ required_error: "Por favor preencha com um nome." }).min(3, {
+        message: "Nome precisa ter no mínimo 3 caracteres."
+    }),
     email: z
         .string({
             required_error: "Por favor preencha com um email.",
@@ -38,6 +40,11 @@ const formSchema = z.object({
 function TeacherForm({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password:""
+        }
     });
 
     return (

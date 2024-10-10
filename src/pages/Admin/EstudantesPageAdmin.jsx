@@ -1,26 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import CustomDataTable from "@/components/ui/custom-data-table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import StudentController from "@/components/student/student-controller";
-import AuthContext from "@/context/AuthContext";
-import {
-    filterFns,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash, Trash2 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import StudentFormEdit from "@/components/student/student-form-edit";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -32,11 +11,22 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import StudentForm from "@/components/student/student-form";
-import StudentFormEdit from "@/components/student/student-form-edit";
 import { deleteUndefinedKeys, formatDate, mergeObjs } from "@/lib/utils";
+import {
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import { ArrowUpDown, Pencil, Trash2 } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
 
 function getColumns(students, setStudents) {
     const { toast } = useToast();
@@ -85,7 +75,9 @@ function getColumns(students, setStudents) {
             accessorKey: "class_year",
             header: "Turma",
             cell: ({ row }) => <div>{row.original.class_year?._class.name || "Sem turma"}</div>,
-            filterFn: (row, columnId, filterValue) => row.original.class_year != null && row.original.class_year._class.name.toLowerCase().includes(filterValue)
+            filterFn: (row, columnId, filterValue) =>
+                row.original.class_year != null &&
+                row.original.class_year._class.name.toLowerCase().includes(filterValue),
         },
         {
             accessorKey: "degree",
@@ -123,30 +115,41 @@ function getColumns(students, setStudents) {
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[720px]">
-                            <DialogHeader>
-                                <DialogTitle>Editar estudante</DialogTitle>
-                            </DialogHeader>
-                            <div className="grid gap-4 py-4">
-                                <StudentFormEdit onSubmit={async (student) => {
-                                    student = deleteUndefinedKeys(student)
-                                    if (student.birth_date) {student.birth_date = formatDate(new Date(student.birth_date))}
-                                    const res = await patchRequest(`http://127.0.0.1:8000/student/${row.original.id}/`, student);
-                                    if (res.ok) {
-                                        toast({
-                                            variant: "success",
-                                            title: "Estudante editado com sucesso",
-                                        });
-                                        setStudents(
-                                            students.map((studentObj) => studentObj.id !== row.original.id ? studentObj : mergeObjs(studentObj, student))
-                                        );
-                                    } else {
-                                        toast({
-                                            variant: "destructive",
-                                            title: "Não foi possível editar informações do estudante",
-                                        });
-                                    }
-                                }} />
-                            </div>
+                                <DialogHeader>
+                                    <DialogTitle>Editar estudante</DialogTitle>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                    <StudentFormEdit
+                                        onSubmit={async (student) => {
+                                            student = deleteUndefinedKeys(student);
+                                            if (student.birth_date) {
+                                                student.birth_date = formatDate(new Date(student.birth_date));
+                                            }
+                                            const res = await patchRequest(
+                                                `http://127.0.0.1:8000/student/${row.original.id}/`,
+                                                student
+                                            );
+                                            if (res.ok) {
+                                                toast({
+                                                    variant: "success",
+                                                    title: "Estudante editado com sucesso",
+                                                });
+                                                setStudents(
+                                                    students.map((studentObj) =>
+                                                        studentObj.id !== row.original.id
+                                                            ? studentObj
+                                                            : mergeObjs(studentObj, student)
+                                                    )
+                                                );
+                                            } else {
+                                                toast({
+                                                    variant: "destructive",
+                                                    title: "Não foi possível editar informações do estudante",
+                                                });
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </DialogContent>
                         </Dialog>
 

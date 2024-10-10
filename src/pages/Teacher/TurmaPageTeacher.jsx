@@ -111,7 +111,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -525,7 +525,7 @@ function TurmaPageTeacher() {
     return (
         <div className="h-full">
             <div className="flex flex-col justify-start text-left gap-3">
-                <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name}</h1>
+                <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name || "Não encontrada"}</h1>
                 <div className="flex items-end w-full">
                     <h2 className="text-muted-foreground ml-[1.5px]">Turma</h2>
                     <Dot className="text-muted-foreground" />
@@ -548,7 +548,7 @@ function TurmaPageTeacher() {
                     </TabsList>
 
                     <TabsContent value="students">
-                        {students.length > 0 ? (
+                        {students?.length > 0 ? (
                             <CustomDataTable table={studentsTable}>
                                 <StudentControllerClass table={studentsTable} />
                             </CustomDataTable>

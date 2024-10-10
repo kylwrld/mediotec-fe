@@ -20,37 +20,6 @@ import CustomDataTable from "@/components/ui/custom-data-table";
 import { mergeLists } from "@/lib/utils";
 import AuthContext from "@/context/AuthContext";
 
-const LOOKUP = {
-    NANA: "ND",
-    NAPA: "ND",
-    PANA: "ND",
-    NAA: "ND",
-    ANA: "ND",
-    PAPA: "D",
-    PAA: "D",
-    APA: "D",
-    AA: "D",
-};
-
-const WEIGHT = {
-    NA: 0,
-    PA: 1,
-    NA: 2
-}
-
-
-function calculateMU(n1, n2, n3) {
-    // if (n3) {
-
-    // }
-    console.log(n1, n2)
-    if (n1 && n2) {
-        console.log("a")
-        const n = LOOKUP[n1+n2]
-        return n
-    }
-}
-
 const gradesColumns = [
     {
         accessorKey: "teacher_subject",
@@ -70,7 +39,7 @@ const gradesColumns = [
     {
         accessorKey: "mu_1",
         header: "Menção da Unidade",
-        cell: ({ row }) => <div className="capitalize text-center">{calculateMU(row.original.av1_1, row.original.av2_1)}</div>,
+        cell: ({ row }) => <div className="capitalize text-center">{row.original.mu_1 || "-"}</div>,
     },
     {
         accessorKey: "noa_1",
@@ -278,7 +247,7 @@ function TurmaPageAdmin() {
     return (
         <div className="h-full">
             <div className="flex flex-col justify-start text-left gap-3">
-                <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name}</h1>
+                <h1 className="text-4xl text-blue-600 font-bold">{classYear?._class?.name || "Não especificado"}</h1>
                 <div className="flex items-end w-full">
                     <h2 className="text-muted-foreground ml-[1.5px]">Turma</h2>
                     <Dot className="text-muted-foreground" />
@@ -304,7 +273,7 @@ function TurmaPageAdmin() {
                     </TabsList>
 
                     <TabsContent value="students">
-                        {students.length > 0 ? (
+                        {students?.length > 0 ? (
                             <CustomDataTable table={studentsTable}>
                                 <StudentControllerClass
                                     table={studentsTable}
