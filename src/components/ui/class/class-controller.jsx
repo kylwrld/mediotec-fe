@@ -20,13 +20,12 @@ function ClassController({ table, addClass, newClassButton=false }) {
     async function onSubmit(_class) {
         const res = await postRequest("http://127.0.0.1:8000/class/", _class);
         const data = await res.json()
-        console.log(data)
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Turma criada com sucesso.",
             });
-            addClass(data._class)
+            addClass(data.class_year._class)
         } else {
             toast({
                 variant: "destructive",

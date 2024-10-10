@@ -1,111 +1,184 @@
-import React, { useContext } from "react";
-import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import TeacherDataTable from "@/components/ui/teacher/teacher-data-table";
+import CustomDataTable from "@/components/ui/custom-data-table";
+import TeacherController from "@/components/ui/teacher/teacher-controller";
+import TeacherFormEdit from "@/components/ui/teacher/teacher-form-edit";
+import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import {
-    flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import TeacherController from "@/components/ui/teacher/teacher-controller"
-import CustomDataTable from "@/components/ui/custom-data-table";
+import { ArrowUpDown, Pencil, Trash2 } from "lucide-react";
+import React, { useContext, useEffect, useState } from "react";
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 import AuthContext from "@/context/AuthContext";
+function getColumns(state, setState) {
+    const { toast } = useToast();
+    const { deleteRequest, patchRequest } = useContext(AuthContext);
 
-export const columns = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                aria-label="Seleciona todos"
-            />
-        ),
-        cell: ({ row, table }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => {
-                    const rowsModel = table.getSelectedRowModel()
-                    if (rowsModel.rows.length > 0) {
-                        const s_row = rowsModel.rows[0]
-                        s_row.toggleSelected(false)
-                        row.toggleSelected(!!value)
-                    } else {
-                        row.toggleSelected(!!value)
-                    }
-                }}
-                aria-label="Seleciona linha"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                    className="p-0"
-                    aria-label="Ordena por nome"
-                >
-                    Nome
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
+    const columns = [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+                    aria-label="Seleciona todos"
+                />
+            ),
+            cell: ({ row, table }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => {
+                        const rowsModel = table.getSelectedRowModel();
+                        if (rowsModel.rows.length > 0) {
+                            const s_row = rowsModel.rows[0];
+                            s_row.toggleSelected(false);
+                            row.toggleSelected(!!value);
+                        } else {
+                            row.toggleSelected(!!value);
+                        }
+                    }}
+                    aria-label="Seleciona linha"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
         },
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("name")}</div>
-        ),
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-        cell: ({ row }) => (
-            <div className="lowercase">{row.getValue("email")}</div>
-        ),
-    },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-          const payment = row.original
+        {
+            accessorKey: "name",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="p-0"
+                        aria-label="Ordena por nome">
+                        Nome
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+        },
+        {
+            accessorKey: "email",
+            header: "Email",
+            cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        },
+        {
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                return (
+                    <div className="flex justify-end items-end gap-2">
+                        {/* edit */}
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                    <Pencil size={18} />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[720px]">
+                                <DialogHeader>
+                                    <DialogTitle>Editar professor</DialogTitle>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                    <TeacherFormEdit
+                                        onSubmit={async (obj) => {
+                                            obj = deleteUndefinedKeys(obj);
+                                            if (obj.birth_date) {obj.birth_date = formatDate(new Date(obj.birth_date))}
+                                            const res = await patchRequest(
+                                                `http://127.0.0.1:8000/teacher/${row.original.id}/`,
+                                                obj
+                                            );
+                                            if (res.ok) {
+                                                toast({
+                                                    variant: "success",
+                                                    title: "Professor editado com sucesso",
+                                                });
+                                                setState(
+                                                    state.map((stateObj) =>
+                                                        stateObj.id !== row.original.id
+                                                            ? stateObj
+                                                            : mergeObjs(stateObj, obj)
+                                                    )
+                                                );
+                                            } else {
+                                                toast({
+                                                    variant: "destructive",
+                                                    title: "Não foi possível editar informações do professor",
+                                                });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </DialogContent>
+                        </Dialog>
 
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0 w-full justify-end">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(payment.id)}
-                >
-                  Copy payment ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View customer</DropdownMenuItem>
-                <DropdownMenuItem>View payment details</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )
+                        {/* delete */}
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                    <Trash2 size={18} />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Tem certeza que deseja remover um professor?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Esta ação não pode ser desfeita. Os dados serão permanentemente deletados.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        className="bg-red-600 hover:bg-red-800"
+                                        onClick={async () => {
+                                            const res = await deleteRequest(
+                                                `http://127.0.0.1:8000/teacher/${row.original.id}/`
+                                            );
+                                            if (res.ok) {
+                                                toast({
+                                                    variant: "success",
+                                                    title: "Turma removida com sucesso",
+                                                });
+                                                setState(state.filter((_class) => _class.id !== row.original.id));
+                                            } else {
+                                                toast({
+                                                    variant: "destructive",
+                                                    title: "Não foi possível remover turma",
+                                                });
+                                            }
+                                        }}>
+                                        Remover
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
+                );
+            },
         },
-      },
-];
+    ];
+
+    return columns
+}
 
 function ProfessoresPageAdmin() {
     const [teachers, setTeachers] = useState([]);
@@ -122,10 +195,11 @@ function ProfessoresPageAdmin() {
     });
 
     const { getRequest } = useContext(AuthContext);
+    const columns = getColumns(teachers, setTeachers)
 
     const table = useReactTable({
         columns,
-        data:teachers,
+        data: teachers,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -164,10 +238,12 @@ function ProfessoresPageAdmin() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Professores</h1>
-            <CustomDataTable
-                table={table}
-            >
-                <TeacherController table={table} addTeacher={(teacher) => setTeachers([...teachers, teacher])} classes={classes}/>
+            <CustomDataTable table={table}>
+                <TeacherController
+                    table={table}
+                    addTeacher={(teacher) => setTeachers([...teachers, teacher])}
+                    classes={classes}
+                />
             </CustomDataTable>
         </div>
     );

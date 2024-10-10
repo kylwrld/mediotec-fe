@@ -26,6 +26,7 @@ function MainLayout() {
 
     return (
         <>
+            <div id="portal-container" />
             <header className="w-full h-16 flex items-center p-4 md:hidden fixed z-50">
                 <MobileNav links={links} />
             </header>

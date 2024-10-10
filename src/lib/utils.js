@@ -25,3 +25,15 @@ export function mergeLists(first_list, second_list) {
         return found ? found : first_list_item
     });
 }
+
+export function mergeObjs(first_obj, second_obj) {
+    const newObj = {}
+    Object.keys(first_obj).map(key => newObj[key] = first_obj[key])
+    Object.keys(second_obj).map(key => newObj[key] = second_obj[key])
+    return newObj
+}
+
+export function deleteUndefinedKeys(obj) {
+    Object.keys(obj).forEach((key) => key in obj && typeof obj[key] === "undefined" ? delete obj[key] : null)
+    return obj
+}

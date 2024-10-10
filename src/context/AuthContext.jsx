@@ -68,9 +68,6 @@ export function AuthProvider({ children }) {
             logout()
         }
 
-        console.log(res)
-
-
         return res
     }
 

@@ -11,7 +11,7 @@ import {
 import AnnouncementController from "@/components/ui/announcement/announcement-controller";
 import AuthContext from "@/context/AuthContext";
 
-export const columns = [
+const columns = [
     {
         id: "select",
         header: ({ table }) => (
@@ -53,6 +53,7 @@ export const columns = [
         filterFn: "includesString",
     },
 ];
+
 
 function AvisosPage() {
     const [announcements, setAnnouncements] = useState([]);
@@ -114,7 +115,16 @@ function AvisosPage() {
             <div className="">
                 <AnnouncementDataTable
                     table={table}
-                    controller={<AnnouncementController table={table} classes={classes} addAnnouncement={(announcement) => setAnnouncements([...announcements, announcement])} />}></AnnouncementDataTable>
+                    state={announcements}
+                    classes={classes}
+                    setState={setAnnouncements}
+                    controller={
+                        <AnnouncementController
+                            table={table}
+                            classes={classes}
+                            addAnnouncement={(announcement) => setAnnouncements([...announcements, announcement])}
+                        />
+                    }></AnnouncementDataTable>
             </div>
         </div>
     );

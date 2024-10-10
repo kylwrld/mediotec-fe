@@ -33,7 +33,7 @@ function CustomDataTable({ table, children, rowOnClick }) {
                                             key={cell.id}
                                             className="p-4"
                                             // Redirect
-                                            onClick={() => rowOnClick ? rowOnClick(row) : null}>
+                                            onClick={() => (rowOnClick ? rowOnClick(row) : null)}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -71,4 +71,4 @@ function CustomDataTable({ table, children, rowOnClick }) {
     );
 }
 
-export default CustomDataTable
+export default CustomDataTable;

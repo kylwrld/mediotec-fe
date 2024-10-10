@@ -31,11 +31,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import StudentForm from "@/components/ui/student/student-form";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import StudentFormEdit from "@/components/ui/student/student-form-edit";
-import { formatDate } from "@/lib/utils";
+import { deleteUndefinedKeys, formatDate, mergeObjs } from "@/lib/utils";
 
 function getColumns(students, setStudents) {
     const { toast } = useToast();
@@ -121,19 +121,17 @@ function getColumns(students, setStudents) {
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
                                 <StudentFormEdit onSubmit={async (student) => {
-                                    Object.keys(student).forEach((key) => key in student && typeof student[key] === "undefined" ? delete student[key] : null)
+                                    student = deleteUndefinedKeys(student)
                                     if (student.birth_date) {student.birth_date = formatDate(new Date(student.birth_date))}
                                     const res = await patchRequest(`http://127.0.0.1:8000/student/${row.original.id}/`, student);
-                                    // const data = await res.json();
-                                    // console.log(data)
                                     if (res.ok) {
                                         toast({
                                             variant: "success",
                                             title: "Estudante editado com sucesso",
                                         });
-                                        // setStudents(
-                                        //     students.filter((studentObj) => studentObj.id !== row.original.id ? studentObj : data.student)
-                                        // );
+                                        setStudents(
+                                            students.map((studentObj) => studentObj.id !== row.original.id ? studentObj : mergeObjs(studentObj, student))
+                                        );
                                     } else {
                                         toast({
                                             variant: "destructive",
