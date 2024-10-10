@@ -171,14 +171,14 @@ function TurmaPageAdmin() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest(`http://127.0.0.1:8000/student_class/${id}/2024/`);
+            const response = await getRequest(`https://mediotec-be.onrender.com/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             setSelectedStudent(data.students[0]?.id || null);
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            const response = await getRequest("http://127.0.0.1:8000/subject/");
+            const response = await getRequest("https://mediotec-be.onrender.com/subject/");
             const data = await response.json();
             const gradesList = data.subjects.map((subject) => {
                 return {
@@ -209,7 +209,7 @@ function TurmaPageAdmin() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await getRequest(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
+        const response = await getRequest(`https://mediotec-be.onrender.com/grade/${student_id}/2024/`);
         const data = await response.json();
         setGrades(mergeLists(defaultGrades, data.grades));
     }

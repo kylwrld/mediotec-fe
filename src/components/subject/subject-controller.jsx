@@ -18,7 +18,7 @@ function SubjectController({ table, addSubject, teachers }) {
     async function attachTeacher(subjects, teacher) {
         const subject = subjects.map((subject) => subject.original.id);
         const obj = { subject, teacher };
-        const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", obj);
+        const res = await postRequest("https://mediotec-be.onrender.com/teacher_subject/", obj);
         if (res.ok) {
             toast({
                 variant: "success",
@@ -33,7 +33,7 @@ function SubjectController({ table, addSubject, teachers }) {
     }
 
     async function onSubmit(subject) {
-        const res = await postRequest("http://127.0.0.1:8000/subject/", subject);
+        const res = await postRequest("https://mediotec-be.onrender.com/subject/", subject);
         const data = await res.json();
         if (res.ok) {
             toast({

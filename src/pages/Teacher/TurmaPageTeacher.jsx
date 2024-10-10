@@ -406,14 +406,14 @@ function TurmaPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest(`http://127.0.0.1:8000/student_class/${id}/2024/`);
+            const response = await getRequest(`https://mediotec-be.onrender.com/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             setSelectedStudent(data.students[0]?.id || null);
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            const response = await getRequest(`http://127.0.0.1:8000/teacher/${user.id}/subjects/`);
+            const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${user.id}/subjects/`);
             const data = await response.json();
             const gradesList = data.teacher.map((obj) => {
                 return {
@@ -444,7 +444,7 @@ function TurmaPageTeacher() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await getRequest(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
+        const response = await getRequest(`https://mediotec-be.onrender.com/grade/${student_id}/2024/`);
         const data = await response.json();
         // colocando as notas nas disciplinas certas
         setGrades(mergeLists(defaultGrades, data.grades));
@@ -505,7 +505,7 @@ function TurmaPageTeacher() {
             });
         });
 
-        const res = await postRequest("http://127.0.0.1:8000/grade/", { grade: data });
+        const res = await postRequest("https://mediotec-be.onrender.com/grade/", { grade: data });
         const dataObj = await res.json()
         if (res.ok) {
             toast({

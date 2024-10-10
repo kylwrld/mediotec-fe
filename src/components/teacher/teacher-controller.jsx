@@ -25,13 +25,13 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
 
     async function fetchTeacherSubject() {
         const teacher_id = table.getSelectedRowModel().rows[0].original.id;
-        const data = await (await getRequest(`http://127.0.0.1:8000/teacher/${teacher_id}/subjects/`)).json();
+        const data = await (await getRequest(`https://mediotec-be.onrender.com/teacher/${teacher_id}/subjects/`)).json();
         setTeacherSubjects(data.teacher);
     }
 
     async function fetchSubjects() {
         if (subjects.length == 0) {
-            const data = await (await getRequest("http://127.0.0.1:8000/subject/")).json();
+            const data = await (await getRequest("https://mediotec-be.onrender.com/subject/")).json();
             setSubjects(data.subjects);
         }
     }
@@ -40,7 +40,7 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
         const data = {};
         data.teacher = teacher_id;
         data.subject = subject_id;
-        const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", data);
+        const res = await postRequest("https://mediotec-be.onrender.com/teacher_subject/", data);
 
         if (res.ok) {
             toast({
@@ -59,7 +59,7 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
         const data = {};
         data.teacher_subject = teacherSubject_id;
         data._class = class_id;
-        const res = await postRequest("http://127.0.0.1:8000/class_year_teacher_subject/", data);
+        const res = await postRequest("https://mediotec-be.onrender.com/class_year_teacher_subject/", data);
         if (res.ok) {
             toast({
                 variant: "success",
@@ -76,7 +76,7 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
     async function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         user.type = "TEACHER";
-        const res = await postRequest("http://127.0.0.1:8000/signup/", user);
+        const res = await postRequest("https://mediotec-be.onrender.com/signup/", user);
         const teacher = await res.json()
         if (res.ok) {
             toast({
