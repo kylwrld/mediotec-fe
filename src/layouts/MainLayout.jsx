@@ -1,7 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/ui/mobile-nav";
 import AuthContext from "@/context/AuthContext";
-import { BookOpen, CalendarDays, GraduationCap, Megaphone, UserRound, UsersRound } from "lucide-react";
+import { BookOpen, GraduationCap, Megaphone, UserRound, UsersRound } from "lucide-react";
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -21,8 +21,8 @@ const linksTeacher = [
 
 function MainLayout() {
     const { decodeToken } = useContext(AuthContext);
-    const user = decodeToken()
-    const links = user?.type == "ADMIN" ? linksAdmin : linksTeacher
+    const user = decodeToken();
+    const links = user?.type == "ADMIN" ? linksAdmin : linksTeacher;
 
     return (
         <>

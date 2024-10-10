@@ -1,11 +1,9 @@
-import React from "react";
-
 const formSchema = z.object({
     teacher_subject: z.string({ required_error: "Por favor preencha com um nome." }),
     _class: z.string({ required_error: "Por favor preencha com um nome." }),
 });
 
-function AttachClassForm({classes, subjects}) {
+function AttachClassForm({ classes, subjects }) {
     return (
         <Form {...form}>
             <form

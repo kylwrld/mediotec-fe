@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,14 +14,11 @@ import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
     name: z.string().optional(),
     email: z.string().email("Esse email não é válido.").optional(),
-    password: z
-        .string()
-        .min(3).optional(),
+    password: z.string().min(3).optional(),
     birth_date: z.date().optional(),
 });
 

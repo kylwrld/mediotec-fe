@@ -15,7 +15,7 @@ const SHIFT_TYPES = ["Manhã", "Tarde"];
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }).min(2, {
-        "message":"Nome da turma precisa ter no mínimo 2 caracteres."
+        message: "Nome da turma precisa ter no mínimo 2 caracteres.",
     }),
     degree: z.string({
         required_error: "Por favor preencha com um ano.",
@@ -32,8 +32,8 @@ function ClassForm({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ""
-        }
+            name: "",
+        },
     });
 
     return (

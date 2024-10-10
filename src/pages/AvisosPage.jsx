@@ -1,6 +1,7 @@
+import AnnouncementController from "@/components/announcement/announcement-controller";
 import AnnouncementDataTable from "@/components/announcement/announcement-data-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useContext, useEffect, useState } from "react";
+import AuthContext from "@/context/AuthContext";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -8,8 +9,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import AnnouncementController from "@/components/announcement/announcement-controller";
-import AuthContext from "@/context/AuthContext";
+import { useContext, useEffect, useState } from "react";
 
 const columns = [
     {
@@ -53,7 +53,6 @@ const columns = [
         filterFn: "includesString",
     },
 ];
-
 
 function AvisosPage() {
     const [announcements, setAnnouncements] = useState([]);

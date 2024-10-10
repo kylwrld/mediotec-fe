@@ -1,15 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import CustomDataTable from "@/components/ui/custom-data-table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import StudentController from "@/components/student/student-controller";
+import { Button } from "@/components/ui/button";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import AuthContext from "@/context/AuthContext";
 import {
     getCoreRowModel,
@@ -18,7 +9,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 export const columns = [
@@ -47,8 +38,7 @@ export const columns = [
         header: "Turma",
         cell: ({ row }) => <div>{row.original.class_year?._class.name || "Sem turma"}</div>,
         filterFn: (row, columnId, filterValue) =>
-            row.original.class_year != null &&
-            row.original.class_year._class.name.toLowerCase().includes(filterValue),
+            row.original.class_year != null && row.original.class_year._class.name.toLowerCase().includes(filterValue),
     },
     {
         accessorKey: "degree",

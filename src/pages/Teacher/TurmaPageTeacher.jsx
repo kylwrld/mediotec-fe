@@ -2,10 +2,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import StudentControllerClass from "@/components/student/student-controller-class";
 import { Button } from "@/components/ui/button";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import StudentControllerClass from "@/components/student/student-controller-class";
 import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { mergeLists } from "@/lib/utils";
@@ -329,7 +329,7 @@ function getGradeColumns(grades, setGrades) {
         },
     ];
 
-    return gradesColumns
+    return gradesColumns;
 }
 
 const columns = [
@@ -376,8 +376,6 @@ const columns = [
         filterFn: "includesString",
     },
 ];
-
-
 
 function TurmaPageTeacher() {
     const { id } = useParams();
@@ -506,14 +504,14 @@ function TurmaPageTeacher() {
         });
 
         const res = await postRequest("https://mediotec-be.onrender.com/grade/", { grade: data });
-        const dataObj = await res.json()
+        const dataObj = await res.json();
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Conceito atribuído com sucesso",
             });
 
-            setGrades(mergeLists(grades, dataObj.grade))
+            setGrades(mergeLists(grades, dataObj.grade));
         } else {
             toast({
                 variant: "destructive",

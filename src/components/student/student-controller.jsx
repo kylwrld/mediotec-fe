@@ -8,12 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatDate } from "@/lib/utils";
 
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useContext, useState } from "react";
 import StudentForm from "./student-form";
-import AuthContext from "@/context/AuthContext";
 
-function StudentController({ table, classes, addStudent, newStudentButton=false, attachClassButton=false }) {
+function StudentController({ table, classes, addStudent, newStudentButton = false, attachClassButton = false }) {
     const [_class, setClass] = useState({});
     const { toast } = useToast();
     const { postRequest } = useContext(AuthContext);
@@ -44,13 +44,13 @@ function StudentController({ table, classes, addStudent, newStudentButton=false,
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         const res = await postRequest("https://mediotec-be.onrender.com/signup/student/", user);
-        const student = await res.json()
+        const student = await res.json();
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Estudante criado com sucesso.",
             });
-            addStudent(student)
+            addStudent(student);
         } else {
             toast({
                 variant: "destructive",
@@ -98,7 +98,7 @@ function StudentController({ table, classes, addStudent, newStudentButton=false,
             </div>
 
             <div className="flex gap-2">
-                { attachClassButton ? (
+                {attachClassButton ? (
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
@@ -118,10 +118,10 @@ function StudentController({ table, classes, addStudent, newStudentButton=false,
                                     <SelectContent>
                                         {classes
                                             ? classes.map((class_year, index) => (
-                                                <SelectItem key={index} value={class_year._class.id.toString()}>
-                                                    {class_year._class.name}
-                                                </SelectItem>
-                                            ))
+                                                  <SelectItem key={index} value={class_year._class.id.toString()}>
+                                                      {class_year._class.name}
+                                                  </SelectItem>
+                                              ))
                                             : null}
                                     </SelectContent>
                                 </Select>
@@ -131,10 +131,9 @@ function StudentController({ table, classes, addStudent, newStudentButton=false,
                             </div>
                         </DialogContent>
                     </Dialog>
-
                 ) : null}
 
-                { newStudentButton ? (
+                {newStudentButton ? (
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
@@ -151,9 +150,7 @@ function StudentController({ table, classes, addStudent, newStudentButton=false,
                             </div>
                         </DialogContent>
                     </Dialog>
-
                 ) : null}
-
             </div>
         </div>
     );

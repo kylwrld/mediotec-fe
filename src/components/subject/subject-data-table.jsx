@@ -1,14 +1,6 @@
 "use client";
 
-import {
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
-import * as React from "react";
+import { flexRender } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -16,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export default function SubjectDataTable({ table, children }) {
     return (
         <div className="w-full">
-            { children }
+            {children}
 
             <div className="rounded-md border">
                 <Table>
@@ -40,9 +32,7 @@ export default function SubjectDataTable({ table, children }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell
-                                            key={cell.id}
-                                            className="p-4">
+                                        <TableCell key={cell.id} className="p-4">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

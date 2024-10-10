@@ -20,7 +20,7 @@ import { z } from "zod";
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }).min(3, {
-        message: "Nome precisa ter no mínimo 3 caracteres."
+        message: "Nome precisa ter no mínimo 3 caracteres.",
     }),
     email: z
         .string({
@@ -43,8 +43,8 @@ function TeacherForm({ onSubmit }) {
         defaultValues: {
             name: "",
             email: "",
-            password:""
-        }
+            password: "",
+        },
     });
 
     return (

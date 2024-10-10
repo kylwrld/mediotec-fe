@@ -1,12 +1,13 @@
-import StudentsDataTable from "@/components/student/student-data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
-import GradeDataTable from "@/components/grade/grade-data-table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import StudentControllerClass from "@/components/student/student-controller-class";
+import { Button } from "@/components/ui/button";
+import CustomDataTable from "@/components/ui/custom-data-table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import AuthContext from "@/context/AuthContext";
+import { mergeLists } from "@/lib/utils";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -15,10 +16,6 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import CustomDataTable from "@/components/ui/custom-data-table";
-import { mergeLists } from "@/lib/utils";
-import AuthContext from "@/context/AuthContext";
 
 const gradesColumns = [
     {

@@ -1,18 +1,9 @@
-import {
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import SubjectDataTable from "@/components/subject/subject-data-table";
-import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-    flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
@@ -21,8 +12,7 @@ import {
 } from "@tanstack/react-table";
 
 import SubjectController from "@/components/subject/subject-controller";
-import CustomDataTable from "@/components/ui/custom-data-table";
-import AuthContext from "@/context/AuthContext";
+import SubjectFormEdit from "@/components/subject/subject-form-edit";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -34,17 +24,17 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import SubjectFormEdit from "@/components/subject/subject-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-
 
 function getColumns(state, setState) {
     const { toast } = useToast();
     const { deleteRequest, patchRequest } = useContext(AuthContext);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -69,7 +59,11 @@ function getColumns(state, setState) {
         {
             accessorKey: "name",
             header: "Nome",
-            cell: ({ row }) => <div className="capitalize" onClick={() => navigate(`/disciplina/${row.original.id}`)}>{row.getValue("name")}</div>,
+            cell: ({ row }) => (
+                <div className="capitalize" onClick={() => navigate(`/disciplina/${row.original.id}`)}>
+                    {row.getValue("name")}
+                </div>
+            ),
         },
         {
             id: "actions",
@@ -166,9 +160,8 @@ function getColumns(state, setState) {
         },
     ];
 
-    return columns
+    return columns;
 }
-
 
 function DisciplinasPageAdmin() {
     const [subjects, setSubjects] = useState([]);
@@ -185,11 +178,11 @@ function DisciplinasPageAdmin() {
     });
 
     const { getRequest } = useContext(AuthContext);
-    const columns = getColumns(subjects, setSubjects)
+    const columns = getColumns(subjects, setSubjects);
 
     const table = useReactTable({
         columns,
-        data:subjects,
+        data: subjects,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -230,10 +223,12 @@ function DisciplinasPageAdmin() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Disciplinas</h1>
             <div>
-                <CustomDataTable
-                table={table}
-                >
-                    <SubjectController table={table} addSubject={(subject) => setSubjects([...subjects, subject])} teachers={teachers}/>
+                <CustomDataTable table={table}>
+                    <SubjectController
+                        table={table}
+                        addSubject={(subject) => setSubjects([...subjects, subject])}
+                        teachers={teachers}
+                    />
                 </CustomDataTable>
             </div>
         </div>

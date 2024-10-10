@@ -1,14 +1,4 @@
-import {
-    BookOpen,
-    CalendarDays,
-    CircleUser,
-    FileChartColumn,
-    GraduationCap,
-    Megaphone,
-    User,
-    UserRound,
-    UsersRound,
-} from "lucide-react";
+import { CircleUser } from "lucide-react";
 import { useContext } from "react";
 
 import AuthContext from "@/context/AuthContext";
@@ -37,12 +27,7 @@ function Sidebar({ links }) {
             <div className="flex flex-col justify-between h-full">
                 <nav className="flex flex-col w-full pl-5 pt-16 gap-2">
                     {links.map((link, index) => (
-                        <SidebarLink
-                            key={index}
-                            to={link.url}
-                            icon={link.icon}
-                            content={link.content}
-                        />
+                        <SidebarLink key={index} to={link.url} icon={link.icon} content={link.content} />
                     ))}
                 </nav>
                 <div className="flex pl-5 mb-2 gap-2">
@@ -56,13 +41,8 @@ function Sidebar({ links }) {
                         <DropdownMenuContent>
                             <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="font-medium">
-                                Perfil
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="font-medium"
-                                onClick={() => logout()}
-                            >
+                            <DropdownMenuItem className="font-medium">Perfil</DropdownMenuItem>
+                            <DropdownMenuItem className="font-medium" onClick={() => logout()}>
                                 Sair
                             </DropdownMenuItem>
                         </DropdownMenuContent>

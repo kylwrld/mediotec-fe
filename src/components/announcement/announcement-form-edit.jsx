@@ -12,9 +12,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
-import { useContext } from "react";
-import AuthContext from "@/context/AuthContext";
 
 const formSchema = z.object({
     title: z.string({ required_error: "Por favor preencha com um título." }),

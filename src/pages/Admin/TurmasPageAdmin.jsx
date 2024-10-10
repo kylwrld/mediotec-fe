@@ -1,28 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import ClassController from "@/components/class/class-controller";
-import ClassDataTable from "@/components/class/class-data-table";
-import CustomDataTable from "@/components/ui/custom-data-table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import ClassFormEdit from "@/components/class/class-form-edit";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -34,14 +11,27 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import CustomDataTable from "@/components/ui/custom-data-table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import ClassFormEdit from "@/components/class/class-form-edit";
+import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
+import {
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import { ArrowUpDown, Pencil, Trash2 } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
     const { deleteRequest, patchRequest } = useContext(AuthContext);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -57,9 +47,11 @@ function getColumns(state, setState) {
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="capitalize" onClick={() => navigate(`/turma/${row.original.id}`)}>
-                {row.getValue("name")}
-            </div>,
+            cell: ({ row }) => (
+                <div className="capitalize" onClick={() => navigate(`/turma/${row.original.id}`)}>
+                    {row.getValue("name")}
+                </div>
+            ),
         },
         {
             accessorKey: "degree",
@@ -88,29 +80,38 @@ function getColumns(state, setState) {
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[720px]">
-                            <DialogHeader>
-                                <DialogTitle>Editar turma</DialogTitle>
-                            </DialogHeader>
-                            <div className="grid gap-4 py-4">
-                                <ClassFormEdit onSubmit={async (obj) => {
-                                    obj = deleteUndefinedKeys(obj)
-                                    const res = await patchRequest(`https://mediotec-be.onrender.com/class/${row.original.id}/`, obj);
-                                    if (res.ok) {
-                                        toast({
-                                            variant: "success",
-                                            title: "Turma editada com sucesso",
-                                        });
-                                        setState(
-                                            state.map((stateObj) => stateObj.id !== row.original.id ? stateObj : mergeObjs(stateObj, obj))
-                                        );
-                                    } else {
-                                        toast({
-                                            variant: "destructive",
-                                            title: "Não foi possível editar informações da turma",
-                                        });
-                                    }
-                                }}/>
-                            </div>
+                                <DialogHeader>
+                                    <DialogTitle>Editar turma</DialogTitle>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                    <ClassFormEdit
+                                        onSubmit={async (obj) => {
+                                            obj = deleteUndefinedKeys(obj);
+                                            const res = await patchRequest(
+                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`,
+                                                obj
+                                            );
+                                            if (res.ok) {
+                                                toast({
+                                                    variant: "success",
+                                                    title: "Turma editada com sucesso",
+                                                });
+                                                setState(
+                                                    state.map((stateObj) =>
+                                                        stateObj.id !== row.original.id
+                                                            ? stateObj
+                                                            : mergeObjs(stateObj, obj)
+                                                    )
+                                                );
+                                            } else {
+                                                toast({
+                                                    variant: "destructive",
+                                                    title: "Não foi possível editar informações da turma",
+                                                });
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </DialogContent>
                         </Dialog>
 
@@ -141,9 +142,7 @@ function getColumns(state, setState) {
                                                     variant: "success",
                                                     title: "Turma removida com sucesso",
                                                 });
-                                                setState(
-                                                    state.filter((_class) => _class.id !== row.original.id)
-                                                );
+                                                setState(state.filter((_class) => _class.id !== row.original.id));
                                             } else {
                                                 toast({
                                                     variant: "destructive",
@@ -162,7 +161,7 @@ function getColumns(state, setState) {
         },
     ];
 
-    return columns
+    return columns;
 }
 
 function TurmasPageAdmin() {
@@ -179,8 +178,7 @@ function TurmasPageAdmin() {
     });
 
     const { getRequest } = useContext(AuthContext);
-    const columns = getColumns(classes, setClasses)
-
+    const columns = getColumns(classes, setClasses);
 
     const table = useReactTable({
         columns,
@@ -216,8 +214,8 @@ function TurmasPageAdmin() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
-            <CustomDataTable table={table} >
-                <ClassController table={table} addClass={(_class) => setClasses([...classes, _class])} newClassButton/>
+            <CustomDataTable table={table}>
+                <ClassController table={table} addClass={(_class) => setClasses([...classes, _class])} newClassButton />
             </CustomDataTable>
         </div>
     );

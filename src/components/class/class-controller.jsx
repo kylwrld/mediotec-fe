@@ -8,24 +8,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-import ClassForm from "./class-form";
-import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useContext } from "react";
+import ClassForm from "./class-form";
 
-function ClassController({ table, addClass, newClassButton=false }) {
+function ClassController({ table, addClass, newClassButton = false }) {
     const { toast } = useToast();
     const { postRequest } = useContext(AuthContext);
 
     async function onSubmit(_class) {
         const res = await postRequest("https://mediotec-be.onrender.com/class/", _class);
-        const data = await res.json()
+        const data = await res.json();
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Turma criada com sucesso.",
             });
-            addClass(data.class_year._class)
+            addClass(data.class_year._class);
         } else {
             toast({
                 variant: "destructive",
@@ -65,11 +65,10 @@ function ClassController({ table, addClass, newClassButton=false }) {
                 </Button>
             </div>
 
-            { newClassButton ? (
+            {newClassButton ? (
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button
-                            className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
                             <CirclePlus size={20} />
                             Nova turma
                         </Button>
@@ -79,7 +78,7 @@ function ClassController({ table, addClass, newClassButton=false }) {
                             <DialogTitle>Nova turma</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-4 overflow-y-auto max-h-[600px]">
-                            <ClassForm onSubmit={onSubmit}/>
+                            <ClassForm onSubmit={onSubmit} />
                         </div>
                     </DialogContent>
                 </Dialog>

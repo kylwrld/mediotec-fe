@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export default function TeacherDataTable({ table, children }) {
     return (
         <div className="w-full">
-            { children }
+            {children}
 
             <div className="rounded-md border">
                 <Table>
@@ -32,9 +32,7 @@ export default function TeacherDataTable({ table, children }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell
-                                            key={cell.id}
-                                            className="p-4">
+                                        <TableCell key={cell.id} className="p-4">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

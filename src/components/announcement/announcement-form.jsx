@@ -16,7 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 const formSchema = z.object({
     title: z.string({ required_error: "Por favor preencha com um título." }).min(3, {
         message: "Título precisa ter pelo menos 3 caracteres.",
-      }),
+    }),
     body: z.string({
         required_error: "Por favor preencha com algum conteúdo.",
     }),
@@ -28,8 +28,8 @@ function AnnouncementForm({ classes, onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            "title": ""
-        }
+            title: "",
+        },
     });
 
     return (

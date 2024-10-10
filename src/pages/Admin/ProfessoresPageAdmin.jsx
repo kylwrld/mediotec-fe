@@ -1,8 +1,8 @@
+import TeacherController from "@/components/teacher/teacher-controller";
+import TeacherFormEdit from "@/components/teacher/teacher-form-edit";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomDataTable from "@/components/ui/custom-data-table";
-import TeacherController from "@/components/teacher/teacher-controller";
-import TeacherFormEdit from "@/components/teacher/teacher-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import {
     getCoreRowModel,
@@ -26,8 +26,8 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
 import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
@@ -103,7 +103,9 @@ function getColumns(state, setState) {
                                     <TeacherFormEdit
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
-                                            if (obj.birth_date) {obj.birth_date = formatDate(new Date(obj.birth_date))}
+                                            if (obj.birth_date) {
+                                                obj.birth_date = formatDate(new Date(obj.birth_date));
+                                            }
                                             const res = await patchRequest(
                                                 `https://mediotec-be.onrender.com/teacher/${row.original.id}/`,
                                                 obj
@@ -178,7 +180,7 @@ function getColumns(state, setState) {
         },
     ];
 
-    return columns
+    return columns;
 }
 
 function ProfessoresPageAdmin() {
@@ -196,7 +198,7 @@ function ProfessoresPageAdmin() {
     });
 
     const { getRequest } = useContext(AuthContext);
-    const columns = getColumns(teachers, setTeachers)
+    const columns = getColumns(teachers, setTeachers);
 
     const table = useReactTable({
         columns,

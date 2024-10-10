@@ -1,15 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import ClassController from "@/components/class/class-controller";
+import { Button } from "@/components/ui/button";
 import CustomDataTable from "@/components/ui/custom-data-table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import AuthContext from "@/context/AuthContext";
 import {
     getCoreRowModel,
@@ -18,12 +9,12 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function getColumns() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -39,7 +30,11 @@ function getColumns() {
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="capitalize" onClick={() => navigate(`/turma/${row.original.id}`)}>{row.getValue("name")}</div>,
+            cell: ({ row }) => (
+                <div className="capitalize" onClick={() => navigate(`/turma/${row.original.id}`)}>
+                    {row.getValue("name")}
+                </div>
+            ),
         },
         {
             accessorKey: "degree",
@@ -56,14 +51,14 @@ function getColumns() {
         },
     ];
 
-    return columns
+    return columns;
 }
 
 function TurmasPageTeacher() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const { decodeToken } = useContext(AuthContext);
-    const user = decodeToken()
+    const user = decodeToken();
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -75,7 +70,7 @@ function TurmasPageTeacher() {
     });
 
     const { getRequest } = useContext(AuthContext);
-    const columns = getColumns()
+    const columns = getColumns();
 
     const table = useReactTable({
         columns,

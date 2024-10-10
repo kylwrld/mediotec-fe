@@ -1,20 +1,10 @@
 "use client";
 
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
 import { Pencil, Pin, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/custom-table-announcement";
 
-import { useContext, useState } from "react";
-import AnnouncementController from "./announcement-controller";
-import AuthContext from "@/context/AuthContext";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -27,9 +17,10 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import SubjectFormEdit from "@/components/subject/subject-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
+import { useContext } from "react";
 import AnnouncementFormEdit from "./announcement-form-edit";
 
 export default function AnnouncementDataTable({ table, controller, classes, state, setState }) {
@@ -69,7 +60,8 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                 <DialogTitle>Editar aviso</DialogTitle>
                                                             </DialogHeader>
                                                             <div className="grid gap-4 py-4">
-                                                                <AnnouncementFormEdit classes={classes}
+                                                                <AnnouncementFormEdit
+                                                                    classes={classes}
                                                                     onSubmit={async (obj) => {
                                                                         obj = deleteUndefinedKeys(obj);
                                                                         const res = await patchRequest(

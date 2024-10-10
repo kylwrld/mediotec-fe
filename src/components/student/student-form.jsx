@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
@@ -35,7 +35,7 @@ const phoneSchema = z.object({
 
 const formSchema = z.object({
     name: z.string({ required_error: "Por favor preencha com um nome." }).min(3, {
-        "message":"Nome precisa ter no mínimo 3 caracteres."
+        message: "Nome precisa ter no mínimo 3 caracteres.",
     }),
     email: z
         .string({
@@ -71,11 +71,11 @@ function StudentForm({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name:"",
-            email:"",
+            name: "",
+            email: "",
             password: "",
             phone: [{ ddd: "", number: "" }],
-            parent: {name: "", cpf: ""}
+            parent: { name: "", cpf: "" },
         },
     });
 

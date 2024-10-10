@@ -5,14 +5,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatDate } from "@/lib/utils";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import StudentForm from "./student-form";
-import AuthContext from "@/context/AuthContext";
 
-function StudentControllerClass({ table, addStudent, newStudentButton=false }) {
+function StudentControllerClass({ table, addStudent, newStudentButton = false }) {
     const [_class, setClass] = useState({});
     const { id } = useParams();
     const { toast } = useToast();
@@ -50,7 +50,7 @@ function StudentControllerClass({ table, addStudent, newStudentButton=false }) {
                 title: "Estudante criado com sucesso.",
             });
             attachClass(student.id, id);
-            addStudent(student)
+            addStudent(student);
         } else {
             toast({
                 variant: "destructive",
@@ -92,7 +92,7 @@ function StudentControllerClass({ table, addStudent, newStudentButton=false }) {
             </div>
 
             <div className="flex gap-2">
-                { newStudentButton  ? (
+                {newStudentButton ? (
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">

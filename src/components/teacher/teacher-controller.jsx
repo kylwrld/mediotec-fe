@@ -7,13 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { formatDate } from "@/lib/utils";
 import { useContext, useState } from "react";
 import TeacherForm from "./teacher-form";
-import AuthContext from "@/context/AuthContext";
-import { formatDate } from "@/lib/utils";
 
-function TeacherController({ table, addTeacher, classes, newTeacherButton=false, attachClassButton=false, attachSubjectButton=false }) {
+function TeacherController({
+    table,
+    addTeacher,
+    classes,
+    newTeacherButton = false,
+    attachClassButton = false,
+    attachSubjectButton = false,
+}) {
     const [_class, setClass] = useState({});
     const [teacherSubject, setTeacherSubject] = useState({});
     const [teacherSubjects, setTeacherSubjects] = useState([]);
@@ -25,7 +32,9 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
 
     async function fetchTeacherSubject() {
         const teacher_id = table.getSelectedRowModel().rows[0].original.id;
-        const data = await (await getRequest(`https://mediotec-be.onrender.com/teacher/${teacher_id}/subjects/`)).json();
+        const data = await (
+            await getRequest(`https://mediotec-be.onrender.com/teacher/${teacher_id}/subjects/`)
+        ).json();
         setTeacherSubjects(data.teacher);
     }
 
@@ -77,13 +86,13 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
         user.birth_date = formatDate(new Date(user.birth_date));
         user.type = "TEACHER";
         const res = await postRequest("https://mediotec-be.onrender.com/signup/", user);
-        const teacher = await res.json()
+        const teacher = await res.json();
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Professor criado com sucesso.",
             });
-            addTeacher(teacher)
+            addTeacher(teacher);
         } else {
             toast({
                 variant: "destructive",
@@ -132,16 +141,18 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
                                     <SelectContent>
                                         {subjects
                                             ? subjects.map((subject, index) => (
-                                                <SelectItem key={index} value={subject.id.toString()}>
-                                                    {subject.name}
-                                                </SelectItem>
-                                            ))
+                                                  <SelectItem key={index} value={subject.id.toString()}>
+                                                      {subject.name}
+                                                  </SelectItem>
+                                              ))
                                             : null}
                                     </SelectContent>
                                 </Select>
 
                                 <Button
-                                    onClick={() => attachSubject(table.getSelectedRowModel().rows[0].original.id, subject)}>
+                                    onClick={() =>
+                                        attachSubject(table.getSelectedRowModel().rows[0].original.id, subject)
+                                    }>
                                     Enviar
                                 </Button>
                             </div>
@@ -152,7 +163,9 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
                 {attachClassButton ? (
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2" onClick={fetchTeacherSubject}>
+                            <Button
+                                className="text-[10px] md:text-sm bg-orange-600 gap-2"
+                                onClick={fetchTeacherSubject}>
                                 <UsersRound size={20} />
                                 Atribuir a uma turma
                             </Button>
@@ -169,10 +182,10 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
                                     <SelectContent>
                                         {classes
                                             ? classes.map((class_year, index) => (
-                                                <SelectItem key={index} value={class_year._class.id.toString()}>
-                                                    {class_year._class.name}
-                                                </SelectItem>
-                                            ))
+                                                  <SelectItem key={index} value={class_year._class.id.toString()}>
+                                                      {class_year._class.name}
+                                                  </SelectItem>
+                                              ))
                                             : null}
                                     </SelectContent>
                                 </Select>
@@ -200,7 +213,7 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
                     </Dialog>
                 ) : null}
 
-                { newTeacherButton ? (
+                {newTeacherButton ? (
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
@@ -213,7 +226,7 @@ function TeacherController({ table, addTeacher, classes, newTeacherButton=false,
                                 <DialogTitle>Novo professor</DialogTitle>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
-                                <TeacherForm onSubmit={onSubmit}/>
+                                <TeacherForm onSubmit={onSubmit} />
                             </div>
                         </DialogContent>
                     </Dialog>

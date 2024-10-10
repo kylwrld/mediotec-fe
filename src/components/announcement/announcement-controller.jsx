@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import AnnouncementForm from "./announcement-form";
+import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useContext } from "react";
-import AuthContext from "@/context/AuthContext";
+import AnnouncementForm from "./announcement-form";
 
 function AnnouncementController({ table, addAnnouncement, classes }) {
     const { toast } = useToast();
@@ -17,13 +17,13 @@ function AnnouncementController({ table, addAnnouncement, classes }) {
 
     async function onSubmit(announcement) {
         const res = await postRequest("https://mediotec-be.onrender.com/announcement/", announcement);
-        const data = await res.json()
+        const data = await res.json();
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Aviso criado com sucesso",
             });
-            addAnnouncement(data.announcement)
+            addAnnouncement(data.announcement);
         } else {
             toast({
                 variant: "destructive",
@@ -62,8 +62,7 @@ function AnnouncementController({ table, addAnnouncement, classes }) {
 
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button
-                        className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                    <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
                         <CirclePlus size={20} />
                         Novo aviso
                     </Button>
