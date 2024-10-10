@@ -68,6 +68,12 @@ function StudentController({ table, classes, addStudent, newStudentButton=false,
                     onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
                     className="max-w-sm text-[10px] md:text-sm"
                 />
+                <Input
+                    placeholder="Filtrar nome da turma..."
+                    value={table.getColumn("class_year")?.getFilterValue() ?? ""}
+                    onChange={(event) => table.getColumn("class_year")?.setFilterValue(event.target.value)}
+                    className="max-w-sm text-[10px] md:text-sm"
+                />
                 <Select
                     onValueChange={(value) => {
                         table.getColumn("degree")?.setFilterValue(value);

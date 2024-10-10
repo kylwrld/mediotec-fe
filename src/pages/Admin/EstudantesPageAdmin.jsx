@@ -12,6 +12,7 @@ import {
 import StudentController from "@/components/ui/student/student-controller";
 import AuthContext from "@/context/AuthContext";
 import {
+    filterFns,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
@@ -79,6 +80,12 @@ function getColumns(students, setStudents) {
             accessorKey: "email",
             header: "Email",
             cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        },
+        {
+            accessorKey: "class_year",
+            header: "Turma",
+            cell: ({ row }) => <div>{row.original.class_year?._class.name || "Sem turma"}</div>,
+            filterFn: (row, columnId, filterValue) => row.original.class_year != null && row.original.class_year._class.name.toLowerCase().includes(filterValue)
         },
         {
             accessorKey: "degree",
@@ -209,7 +216,6 @@ function EstudantesPageAdmin() {
 
     const { getRequest } = useContext(AuthContext);
     const columns = getColumns(students, setStudents);
-
     const studentsTable = useReactTable({
         columns,
         data: students,
