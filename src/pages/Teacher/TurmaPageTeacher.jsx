@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import StudentControllerClass from "@/components/ui/student/student-controller-class";
+import StudentControllerClass from "@/components/student/student-controller-class";
 import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { mergeLists } from "@/lib/utils";
@@ -18,86 +18,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
 
-const LOOKUP = {
-    NANA: "ND",
-    NAPA: "ND",
-    PANA: "ND",
-    NAA: "ND",
-    ANA: "ND",
-    PAPA: "D",
-    PAA: "D",
-    APA: "D",
-    AA: "D",
-};
-
-const columns = [
-    {
-        accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0">
-                    Nome
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-    },
-    {
-        accessorKey: "degree",
-        header: ({ column }) => {
-            return (
-                <div className="flex justify-end">
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        className="justify-end p-0">
-                        Ano
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            );
-        },
-        cell: ({ row }) => {
-            const degree = parseFloat(row.getValue("degree"));
-
-            return <div className="text-right font-medium">{degree ? degree : 0}</div>;
-        },
-        filterFn: "includesString",
-    },
-];
-
-function TurmaPageTeacher() {
-    const { id } = useParams();
-    const { postRequest } = useContext(AuthContext);
-
-    const [classYear, setClassYear] = useState();
-    const [students, setStudents] = useState([]);
-    const [grades, setGrades] = useState([]);
-    const [selectedStudent, setSelectedStudent] = useState(null);
-    const [defaultGrades, setDefaultGrades] = useState([]);
-
-    const { decodeToken, getRequest } = useContext(AuthContext);
-    const user = decodeToken();
-    const { toast } = useToast();
-
-    const [sorting, setSorting] = useState([]);
-    const [columnFilters, setColumnFilters] = useState([]);
-    const [columnVisibility, setColumnVisibility] = useState({});
-    const [rowSelection, setRowSelection] = useState({});
-    const [pagination, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 10,
-    });
-
+function getGradeColumns(grades, setGrades) {
     const gradesColumns = [
         {
             accessorKey: "teacher_subject",
@@ -155,6 +76,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -189,6 +111,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -224,6 +147,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -253,6 +177,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -287,6 +212,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -322,6 +248,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -351,6 +278,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -385,6 +313,7 @@ function TurmaPageTeacher() {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
+                            <SelectItem value=" ">-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -399,6 +328,81 @@ function TurmaPageTeacher() {
             cell: ({ row }) => <div className="capitalize text-center">{row.original.cf_3 || "-"}</div>,
         },
     ];
+
+    return gradesColumns
+}
+
+const columns = [
+    {
+        accessorKey: "name",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0">
+                    Nome
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    },
+    {
+        accessorKey: "email",
+        header: "Email",
+        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+        accessorKey: "degree",
+        header: ({ column }) => {
+            return (
+                <div className="flex justify-end">
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="justify-end p-0">
+                        Ano
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            );
+        },
+        cell: ({ row }) => {
+            const degree = parseFloat(row.getValue("degree"));
+
+            return <div className="text-right font-medium">{degree ? degree : 0}</div>;
+        },
+        filterFn: "includesString",
+    },
+];
+
+
+
+function TurmaPageTeacher() {
+    const { id } = useParams();
+    const { postRequest } = useContext(AuthContext);
+
+    const [classYear, setClassYear] = useState();
+    const [students, setStudents] = useState([]);
+    const [grades, setGrades] = useState([]);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [defaultGrades, setDefaultGrades] = useState([]);
+
+    const { decodeToken, getRequest } = useContext(AuthContext);
+    const user = decodeToken();
+    const { toast } = useToast();
+
+    const [sorting, setSorting] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([]);
+    const [columnVisibility, setColumnVisibility] = useState({});
+    const [rowSelection, setRowSelection] = useState({});
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    const gradesColumns = getGradeColumns(grades, setGrades);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -502,11 +506,14 @@ function TurmaPageTeacher() {
         });
 
         const res = await postRequest("http://127.0.0.1:8000/grade/", { grade: data });
+        const dataObj = await res.json()
         if (res.ok) {
             toast({
                 variant: "success",
                 title: "Conceito atribuído com sucesso",
             });
+
+            setGrades(mergeLists(grades, dataObj.grade))
         } else {
             toast({
                 variant: "destructive",

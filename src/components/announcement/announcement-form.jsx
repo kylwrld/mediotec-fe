@@ -12,12 +12,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
-import { useContext } from "react";
-import AuthContext from "@/context/AuthContext";
 
 const formSchema = z.object({
-    title: z.string({ required_error: "Por favor preencha com um título." }),
+    title: z.string({ required_error: "Por favor preencha com um título." }).min(3, {
+        message: "Título precisa ter pelo menos 3 caracteres.",
+      }),
     body: z.string({
         required_error: "Por favor preencha com algum conteúdo.",
     }),
@@ -28,6 +27,9 @@ const formSchema = z.object({
 function AnnouncementForm({ classes, onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            "title": ""
+        }
     });
 
     return (

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import ClassController from "@/components/ui/class/class-controller";
-import ClassDataTable from "@/components/ui/class/class-data-table";
+import ClassController from "@/components/class/class-controller";
+import ClassDataTable from "@/components/class/class-data-table";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import {
     DropdownMenu,
@@ -35,66 +35,8 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import ClassFormEdit from "@/components/ui/class/class-form-edit";
+import ClassFormEdit from "@/components/class/class-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
-
-const columns = [
-    {
-        accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0">
-                    Nome
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-    },
-    {
-        accessorKey: "degree",
-        header: "Ano",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("degree")}</div>,
-    },
-    {
-        accessorKey: "type",
-        header: () => <div className="text-right">Curso</div>,
-        cell: ({ row }) => {
-            return <div className="text-right font-medium">{row.getValue("type") || "Sem tipo"}</div>;
-        },
-        filterFn: "includesString",
-    },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            const payment = row.original;
-
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0 w-full justify-end">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-                            Copy payment ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
-        },
-    },
-];
 
 function getColumns(state, setState) {
     const { toast } = useToast();

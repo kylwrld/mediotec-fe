@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import ClassController from "@/components/ui/class/class-controller";
+import ClassController from "@/components/class/class-controller";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import {
     DropdownMenu,

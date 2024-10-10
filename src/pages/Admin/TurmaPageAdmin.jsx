@@ -1,12 +1,12 @@
-import StudentsDataTable from "@/components/ui/student/student-data-table";
+import StudentsDataTable from "@/components/student/student-data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import GradeDataTable from "@/components/ui/grade/grade-data-table";
+import GradeDataTable from "@/components/grade/grade-data-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import StudentControllerClass from "@/components/ui/student/student-controller-class";
+import StudentControllerClass from "@/components/student/student-controller-class";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -32,6 +32,25 @@ const LOOKUP = {
     AA: "D",
 };
 
+const WEIGHT = {
+    NA: 0,
+    PA: 1,
+    NA: 2
+}
+
+
+function calculateMU(n1, n2, n3) {
+    // if (n3) {
+
+    // }
+    console.log(n1, n2)
+    if (n1 && n2) {
+        console.log("a")
+        const n = LOOKUP[n1+n2]
+        return n
+    }
+}
+
 const gradesColumns = [
     {
         accessorKey: "teacher_subject",
@@ -51,7 +70,7 @@ const gradesColumns = [
     {
         accessorKey: "mu_1",
         header: "Menção da Unidade",
-        cell: ({ row }) => <div className="capitalize text-center">{row.original.mu_1 || "-"}</div>,
+        cell: ({ row }) => <div className="capitalize text-center">{calculateMU(row.original.av1_1, row.original.av2_1)}</div>,
     },
     {
         accessorKey: "noa_1",

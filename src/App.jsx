@@ -6,7 +6,8 @@ import OnlyAdminRoute from "./components/PrivateRoutes/OnlyAdminRoute";
 import Redirect from "./components/PrivateRoutes/Redirect";
 import TeacherOrAdminRoute from "./components/PrivateRoutes/TeacherOrAdminRoute";
 import { AuthProvider } from "./context/AuthContext";
-import DisciplinasPage from "./pages/Admin/DisciplinasPage";
+import DisciplinaPageAdmin from "./pages/Admin/DisciplinaPageAdmin";
+import DisciplinasPageAdmin from "./pages/Admin/DisciplinasPageAdmin";
 import EstudantesPageAdmin from "./pages/Admin/EstudantesPageAdmin";
 import ProfessoresPageAdmin from "./pages/Admin/ProfessoresPageAdmin";
 import TurmaPageAdmin from "./pages/Admin/TurmaPageAdmin";
@@ -27,9 +28,17 @@ export default function App() {
                 <Route path="/" element={<MainLayout />}>
                     <Route path="/" element={<TeacherOrAdminRoute />}>
                         <Route path="/estudante/:id" element={<EstudantePage />}></Route>
-                        <Route path="/estudantes" element={<Redirect teacher={<EstudantesPageTeacher />} admin={<EstudantesPageAdmin />} />}></Route>
-                        <Route path="/turma/:id" element={<Redirect teacher={<TurmaPageTeacher />} admin={<TurmaPageAdmin />} />}></Route>
-                        <Route path="/turmas" element={<Redirect teacher={<TurmasPageTeacher />} admin={<TurmasPageAdmin />} />}></Route>
+                        <Route
+                            path="/estudantes"
+                            element={
+                                <Redirect teacher={<EstudantesPageTeacher />} admin={<EstudantesPageAdmin />} />
+                            }></Route>
+                        <Route
+                            path="/turma/:id"
+                            element={<Redirect teacher={<TurmaPageTeacher />} admin={<TurmaPageAdmin />} />}></Route>
+                        <Route
+                            path="/turmas"
+                            element={<Redirect teacher={<TurmasPageTeacher />} admin={<TurmasPageAdmin />} />}></Route>
                         <Route path="/avisos" element={<AvisosPage />}></Route>
 
                         <Route path="/faltas" element={<FaltasPage />}></Route>
@@ -37,7 +46,8 @@ export default function App() {
                     </Route>
                     <Route path="/" element={<OnlyAdminRoute />}>
                         <Route path="/professores" element={<ProfessoresPageAdmin />}></Route>
-                        <Route path="/disciplinas" element={<DisciplinasPage />}></Route>
+                        <Route path="/disciplinas" element={<DisciplinasPageAdmin />}></Route>
+                        <Route path="/disciplina/:id" element={<DisciplinaPageAdmin />}></Route>
                     </Route>
                 </Route>
                 <Route path="/login" element={<LoginPage />}></Route>

@@ -4,7 +4,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import SubjectDataTable from "@/components/ui/subject/subject-data-table";
+import SubjectDataTable from "@/components/subject/subject-data-table";
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
@@ -20,7 +20,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 
-import SubjectController from "@/components/ui/subject/subject-controller";
+import SubjectController from "@/components/subject/subject-controller";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import AuthContext from "@/context/AuthContext";
 import {
@@ -36,13 +36,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import SubjectFormEdit from "@/components/ui/subject/subject-form-edit";
+import SubjectFormEdit from "@/components/subject/subject-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 
 function getColumns(state, setState) {
     const { toast } = useToast();
     const { deleteRequest, patchRequest } = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const columns = [
         {
@@ -67,7 +69,7 @@ function getColumns(state, setState) {
         {
             accessorKey: "name",
             header: "Nome",
-            cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+            cell: ({ row }) => <div className="capitalize" onClick={() => navigate(`/disciplina/${row.original.id}`)}>{row.getValue("name")}</div>,
         },
         {
             id: "actions",
@@ -168,7 +170,7 @@ function getColumns(state, setState) {
 }
 
 
-function DisciplinasPage() {
+function DisciplinasPageAdmin() {
     const [subjects, setSubjects] = useState([]);
     const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -238,4 +240,4 @@ function DisciplinasPage() {
     );
 }
 
-export default DisciplinasPage;
+export default DisciplinasPageAdmin;

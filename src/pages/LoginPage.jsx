@@ -59,54 +59,59 @@ function LoginPage() {
                 <div className="flex justify-center items-center w-1/2 h-full rounded-l-xl bg-[radial-gradient(circle,rgba(106,151,255,1)_10%,rgba(0,80,255,1)_80%)] hidden lg:flex">
                     <img
                         className="w-3/5"
-                        src="\src\assets\mediotec boneco.svg"
+                        src="\src\assets\mediotec-boneco.svg"
                         alt=""
                     />
                 </div>
-                <div className="flex justify-center items-center w-full lg:w-1/2 h-full border border-gray-300 rounded-lg lg:rounded-l-none lg:rounded-r-xl bg-white">
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-8 px-2 md:px-20 xl:px-32 w-full"
-                        >
-                            <h1 className="text-4xl text-center">Login</h1>
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input
+                <div className="flex items-center flex-col w-full lg:w-1/2 h-full border border-gray-300 rounded-lg lg:rounded-l-none lg:rounded-r-xl bg-white">
+                    <div className="w-1/4 m-20">
+                        <img src="\src\assets\mediotec-mobile.webp" className="" alt="Logo do Mediotec" />
+                    </div>
+                    <div className="flex grow w-full">
+                        <Form {...form}>
+                            <form
+                                onSubmit={form.handleSubmit(onSubmit)}
+                                className="space-y-8 px-2 md:px-20 xl:px-32 w-full"
+                            >
+                                <h1 className="text-4xl text-center">Login</h1>
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input
 
-                                                placeholder="Digite seu email"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Senha</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Digite sua senha"
-                                                type="password"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="submit">Enviar</Button>
-                        </form>
-                    </Form>
+                                                    placeholder="Digite seu email"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Senha</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Digite sua senha"
+                                                    type="password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button type="submit">Enviar</Button>
+                            </form>
+                        </Form>
+                    </div>
                 </div>
             </div>
         </div>

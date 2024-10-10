@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomDataTable from "@/components/ui/custom-data-table";
-import TeacherController from "@/components/ui/teacher/teacher-controller";
-import TeacherFormEdit from "@/components/ui/teacher/teacher-form-edit";
+import TeacherController from "@/components/teacher/teacher-controller";
+import TeacherFormEdit from "@/components/teacher/teacher-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import {
     getCoreRowModel,
@@ -28,6 +28,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import AuthContext from "@/context/AuthContext";
+
 function getColumns(state, setState) {
     const { toast } = useToast();
     const { deleteRequest, patchRequest } = useContext(AuthContext);
@@ -243,6 +244,9 @@ function ProfessoresPageAdmin() {
                     table={table}
                     addTeacher={(teacher) => setTeachers([...teachers, teacher])}
                     classes={classes}
+                    newTeacherButton
+                    attachClassButton
+                    attachSubjectButton
                 />
             </CustomDataTable>
         </div>

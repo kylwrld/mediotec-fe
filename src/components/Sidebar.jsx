@@ -31,7 +31,8 @@ function Sidebar({ links }) {
     return (
         <aside className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">
             <div className="flex justify-center items-center h-24 hidden md:flex">
-                <img className="" src="\src\assets\mediotec (6).svg" alt="" />
+                <img className="" src="\src\assets\mediotec-branca.svg" alt="" />
+                {/* <img src="\src\assets\mediotec-mobile.webp" className="w-2/4 pt-6" alt="Logo do Mediotec" /> */}
             </div>
             <div className="flex flex-col justify-between h-full">
                 <nav className="flex flex-col w-full pl-5 pt-16 gap-2">

@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import SubjectFormEdit from "@/components/ui/subject/subject-form-edit";
+import SubjectFormEdit from "@/components/subject/subject-form-edit";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import AnnouncementFormEdit from "./announcement-form-edit";
 

@@ -1,4 +1,4 @@
-import AnnouncementDataTable from "@/components/ui/announcement/announcement-data-table";
+import AnnouncementDataTable from "@/components/announcement/announcement-data-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useContext, useEffect, useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import AnnouncementController from "@/components/ui/announcement/announcement-controller";
+import AnnouncementController from "@/components/announcement/announcement-controller";
 import AuthContext from "@/context/AuthContext";
 
 const columns = [

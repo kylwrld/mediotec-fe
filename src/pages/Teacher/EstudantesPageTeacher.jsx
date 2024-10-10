@@ -9,7 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import StudentController from "@/components/ui/student/student-controller";
+import StudentController from "@/components/student/student-controller";
 import AuthContext from "@/context/AuthContext";
 import {
     getCoreRowModel,

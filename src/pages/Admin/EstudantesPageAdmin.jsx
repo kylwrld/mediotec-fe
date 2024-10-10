@@ -9,7 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import StudentController from "@/components/ui/student/student-controller";
+import StudentController from "@/components/student/student-controller";
 import AuthContext from "@/context/AuthContext";
 import {
     filterFns,
@@ -34,8 +34,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import StudentForm from "@/components/ui/student/student-form";
-import StudentFormEdit from "@/components/ui/student/student-form-edit";
+import StudentForm from "@/components/student/student-form";
+import StudentFormEdit from "@/components/student/student-form-edit";
 import { deleteUndefinedKeys, formatDate, mergeObjs } from "@/lib/utils";
 
 function getColumns(students, setStudents) {
