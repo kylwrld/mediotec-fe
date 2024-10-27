@@ -330,7 +330,7 @@ function TimeScheduleView() {
 
     useEffect(() => {
         const fetchClassYears = async () => {
-            const res = await getRequest(`mascate-be.onrender.com/class_year/`);
+            const res = await getRequest(`https://mediotec-fe.onrender.com/class_year/`);
             const data = await res.json();
             setClassYears(data.class_years);
         };
@@ -352,9 +352,9 @@ function TimeScheduleView() {
     }, []);
 
     async function onSelectClassYear(classYear) {
-        const res = await getRequest(`mascate-be.onrender.com/all_teacher_subject_class/${classYear.id}/`);
+        const res = await getRequest(`https://mediotec-fe.onrender.com/all_teacher_subject_class/${classYear.id}/`);
         const data = await res.json();
-        const timeScheduleRequest = await getRequest(`mascate-be.onrender.com/time_schedule/?class_year=${classYear.id}`);
+        const timeScheduleRequest = await getRequest(`https://mediotec-fe.onrender.com/time_schedule/?class_year=${classYear.id}`);
         const timeSchedulesData = await timeScheduleRequest.json();
         setSelectedClassYear(classYear);
         setClassYearTeacherSubjects(data.class_year_teacher_subjects);
@@ -423,7 +423,7 @@ function TimeScheduleView() {
             };
         });
 
-        const res = await postRequest(`mascate-be.onrender.com/time_schedule/`, { time_schedules });
+        const res = await postRequest(`https://mediotec-fe.onrender.com/time_schedule/`, { time_schedules });
         const data = await res.json();
 
         setTimeSchedules(

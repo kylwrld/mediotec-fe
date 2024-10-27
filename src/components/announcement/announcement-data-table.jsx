@@ -65,7 +65,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                     onSubmit={async (obj) => {
                                                                         obj = deleteUndefinedKeys(obj);
                                                                         const res = await patchRequest(
-                                                                            `mascate-be.onrender.com/announcement/${row.original.id}/`,
+                                                                            `https://mediotec-fe.onrender.com/announcement/${row.original.id}/`,
                                                                             obj
                                                                         );
                                                                         if (res.ok) {
@@ -115,7 +115,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                     className="bg-red-600 hover:bg-red-800"
                                                                     onClick={async () => {
                                                                         const res = await deleteRequest(
-                                                                            `mascate-be.onrender.com/announcement/${row.original.id}/`
+                                                                            `https://mediotec-fe.onrender.com/announcement/${row.original.id}/`
                                                                         );
                                                                         if (res.ok) {
                                                                             toast({

@@ -126,7 +126,7 @@ function getColumns(students, setStudents) {
                                                 student.birth_date = formatDate(new Date(student.birth_date));
                                             }
                                             const res = await patchRequest(
-                                                `mascate-be.onrender.com/student/${row.original.id}/`,
+                                                `https://mediotec-fe.onrender.com/student/${row.original.id}/`,
                                                 student
                                             );
                                             if (res.ok) {
@@ -173,7 +173,7 @@ function getColumns(students, setStudents) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `mascate-be.onrender.com/student/${row.original.id}/`
+                                                `https://mediotec-fe.onrender.com/student/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -242,14 +242,14 @@ function EstudantesPageAdmin() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest("mascate-be.onrender.com/student/");
+            const response = await getRequest("https://mediotec-fe.onrender.com/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("mascate-be.onrender.com/class_year/");
+            const response = await getRequest("https://mediotec-fe.onrender.com/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

@@ -87,7 +87,7 @@ function getColumns(state, setState) {
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
                                             const res = await patchRequest(
-                                                `mascate-be.onrender.com/subject/${row.original.id}/`,
+                                                `https://mediotec-fe.onrender.com/subject/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -134,7 +134,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `mascate-be.onrender.com/subject/${row.original.id}/`
+                                                `https://mediotec-fe.onrender.com/subject/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -203,13 +203,13 @@ function DisciplinasPageAdmin() {
 
     useEffect(() => {
         const fetchSubjects = async () => {
-            const response = await getRequest("mascate-be.onrender.com/subject/");
+            const response = await getRequest("https://mediotec-fe.onrender.com/subject/");
             const data = await response.json();
             setSubjects(data.subjects);
         };
 
         const fetchTeachers = async () => {
-            const response = await getRequest("mascate-be.onrender.com/teacher/");
+            const response = await getRequest("https://mediotec-fe.onrender.com/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
         };

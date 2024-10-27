@@ -72,7 +72,7 @@ export function AuthProvider({ children }) {
     }
 
     async function postLogin(userObject) {
-        const res = await fetch("mascate-be.onrender.com/login/", {
+        const res = await fetch("https://mediotec-fe.onrender.com/login/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userObject),
