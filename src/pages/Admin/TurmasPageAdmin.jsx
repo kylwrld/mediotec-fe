@@ -88,7 +88,7 @@ function getColumns(state, setState) {
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
                                             const res = await patchRequest(
-                                                `https://mediotec-fe.onrender.com/class/${row.original.id}/`,
+                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -135,7 +135,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-fe.onrender.com/class/${row.original.id}/`
+                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -203,7 +203,7 @@ function TurmasPageAdmin() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/class/");
+            const response = await getRequest("https://mediotec-be.onrender.com/class/");
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);

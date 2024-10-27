@@ -103,14 +103,14 @@ function EstudantesPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/student/");
+            const response = await getRequest("https://mediotec-be.onrender.com/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/class_year/");
+            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

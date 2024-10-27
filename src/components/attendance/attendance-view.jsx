@@ -83,7 +83,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
     useEffect(() => {
         const date = formatDate(new Date());
         const fetchAttendances = async () => {
-            const res = await getRequest(`https://mediotec-fe.onrender.com/attendance/${classYear._class.id}/${selectedTeacherSubject}/?date=${date}`)
+            const res = await getRequest(`https://mediotec-be.onrender.com/attendance/${classYear._class.id}/${selectedTeacherSubject}/?date=${date}`)
             const data = await res.json()
             const attendanceList = students.map((student) => {
                 return {
@@ -110,7 +110,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
 
     async function onSubmit(attendances) {
         const attendancesData = {attendances, class_year: classYear.id, teacher_subject: selectedTeacherSubject}
-        const res = await postRequest("https://mediotec-fe.onrender.com/attendance/", attendancesData)
+        const res = await postRequest("https://mediotec-be.onrender.com/attendance/", attendancesData)
         const data = await res.json()
         if (res.ok) {
             toast({

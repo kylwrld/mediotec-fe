@@ -92,13 +92,13 @@ function AvisosPage() {
 
     useEffect(() => {
         const fetchAnnouncements = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/announcement/");
+            const response = await getRequest("https://mediotec-be.onrender.com/announcement/");
             const data = await response.json();
             setAnnouncements(data.announcements);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/class_year/");
+            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

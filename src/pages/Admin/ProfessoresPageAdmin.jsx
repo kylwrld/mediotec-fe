@@ -107,7 +107,7 @@ function getColumns(state, setState) {
                                                 obj.birth_date = formatDate(new Date(obj.birth_date));
                                             }
                                             const res = await patchRequest(
-                                                `https://mediotec-fe.onrender.com/teacher/${row.original.id}/`,
+                                                `https://mediotec-be.onrender.com/teacher/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -154,7 +154,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-fe.onrender.com/teacher/${row.original.id}/`
+                                                `https://mediotec-be.onrender.com/teacher/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -223,13 +223,13 @@ function ProfessoresPageAdmin() {
 
     useEffect(() => {
         const fetchTeachers = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/teacher/");
+            const response = await getRequest("https://mediotec-be.onrender.com/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
             setLoading(false);
         };
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-fe.onrender.com/class_year/");
+            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

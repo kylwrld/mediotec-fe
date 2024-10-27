@@ -406,7 +406,7 @@ function TurmaPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest(`https://mediotec-fe.onrender.com/student_class/${id}/2024/`);
+            const response = await getRequest(`https://mediotec-be.onrender.com/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             // setSelectedStudent(data.students[0]?.id || null);
@@ -414,9 +414,9 @@ function TurmaPageTeacher() {
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            // const response = await getRequest(`https://mediotec-fe.onrender.com/teacher/${user.id}/subjects/`);
+            // const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${user.id}/subjects/`);
             // TODO: Change year variable to be dinamic
-            const response = await getRequest(`https://mediotec-fe.onrender.com/teacher/${id}/${2024}/${user.id}`);
+            const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${id}/${2024}/${user.id}`);
             const data = await response.json();
             setTeacherSubjects(data.teacher_subject)
             // setSelectedSubject(data.teacher_subject[0].id ?? null)
@@ -449,7 +449,7 @@ function TurmaPageTeacher() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await getRequest(`https://mediotec-fe.onrender.com/grade/${student_id}/2024/`);
+        const response = await getRequest(`https://mediotec-be.onrender.com/grade/${student_id}/2024/`);
         const data = await response.json();
         // colocando as notas nas disciplinas certas
         setGrades(mergeLists(defaultGrades, data.grades, (item, first_list_item) => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name));
@@ -510,7 +510,7 @@ function TurmaPageTeacher() {
             });
         });
 
-        const res = await postRequest("https://mediotec-fe.onrender.com/grade/", { grade: data });
+        const res = await postRequest("https://mediotec-be.onrender.com/grade/", { grade: data });
         const dataObj = await res.json();
         if (res.ok) {
             toast({
