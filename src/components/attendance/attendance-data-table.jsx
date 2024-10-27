@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 
-function CustomDataTable({ table, children, rowOnClick, pagination }) {
+function AttendanceDataTable({ table, children }) {
     return (
         <div className="w-full">
             {children}
@@ -29,11 +28,7 @@ function CustomDataTable({ table, children, rowOnClick, pagination }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell
-                                            key={cell.id}
-                                            className="p-4"
-                                            // Redirect
-                                            onClick={() => (rowOnClick ? rowOnClick(row) : null)}>
+                                        <TableCell key={cell.id} className="p-4">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -49,31 +44,8 @@ function CustomDataTable({ table, children, rowOnClick, pagination }) {
                     </TableBody>
                 </Table>
             </div>
-            {
-                pagination ? (
-                    <div className="flex items-center justify-end space-x-2 py-4">
-                        <div className="space-x-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => table.previousPage()}
-                                disabled={!table.getCanPreviousPage()}>
-                                Anterior
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => table.nextPage()}
-                                disabled={!table.getCanNextPage()}>
-                                Próximo
-                            </Button>
-                        </div>
-                    </div>
-
-                ) : null
-            }
         </div>
     );
 }
 
-export default CustomDataTable;
+export default AttendanceDataTable;

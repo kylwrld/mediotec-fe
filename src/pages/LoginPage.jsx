@@ -43,6 +43,12 @@ function LoginPage() {
                 description: "Redirecionando para página de estudantes.",
             });
             navigate("/estudantes");
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Não foi possível realizar o login",
+                description: "Tente novamente.",
+            });
         }
     }
 

@@ -75,7 +75,7 @@ function getColumns(state, setState) {
                         {/* edit */}
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                <Button aria-label="Editar turma" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                     <Pencil size={18} />
                                 </Button>
                             </DialogTrigger>
@@ -88,7 +88,7 @@ function getColumns(state, setState) {
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
                                             const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`,
+                                                `http://127.0.0.1:8000/class/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -118,7 +118,7 @@ function getColumns(state, setState) {
                         {/* delete */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                <Button aria-label="Remover turma" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                     <Trash2 size={18} />
                                 </Button>
                             </AlertDialogTrigger>
@@ -135,7 +135,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`
+                                                `http://127.0.0.1:8000/class/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -203,7 +203,7 @@ function TurmasPageAdmin() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class/");
+            const response = await getRequest("http://127.0.0.1:8000/class/");
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);
@@ -214,7 +214,7 @@ function TurmasPageAdmin() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
-            <CustomDataTable table={table}>
+            <CustomDataTable table={table} pagination>
                 <ClassController table={table} addClass={(_class) => setClasses([...classes, _class])} newClassButton />
             </CustomDataTable>
         </div>

@@ -9,13 +9,13 @@ import { AuthProvider } from "./context/AuthContext";
 import DisciplinaPageAdmin from "./pages/Admin/DisciplinaPageAdmin";
 import DisciplinasPageAdmin from "./pages/Admin/DisciplinasPageAdmin";
 import EstudantesPageAdmin from "./pages/Admin/EstudantesPageAdmin";
+import HorariosPageAdmin from "./pages/Admin/HorariosPageAdmin";
 import ProfessoresPageAdmin from "./pages/Admin/ProfessoresPageAdmin";
 import TurmaPageAdmin from "./pages/Admin/TurmaPageAdmin";
 import TurmasPageAdmin from "./pages/Admin/TurmasPageAdmin";
 import AvisosPage from "./pages/AvisosPage";
 import EstudantePage from "./pages/EstudantePage";
 import FaltasPage from "./pages/FaltasPage";
-import HorariosPage from "./pages/HorariosPage";
 import LoginPage from "./pages/LoginPage";
 import EstudantesPageTeacher from "./pages/Teacher/EstudantesPageTeacher";
 import TurmaPageTeacher from "./pages/Teacher/TurmaPageTeacher";
@@ -42,9 +42,9 @@ export default function App() {
                         <Route path="/avisos" element={<AvisosPage />}></Route>
 
                         <Route path="/faltas" element={<FaltasPage />}></Route>
-                        <Route path="/horarios" element={<HorariosPage />}></Route>
                     </Route>
                     <Route path="/" element={<OnlyAdminRoute />}>
+                        <Route path="/horarios" element={<HorariosPageAdmin />}></Route>
                         <Route path="/professores" element={<ProfessoresPageAdmin />}></Route>
                         <Route path="/disciplinas" element={<DisciplinasPageAdmin />}></Route>
                         <Route path="/disciplina/:id" element={<DisciplinaPageAdmin />}></Route>

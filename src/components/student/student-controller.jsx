@@ -25,7 +25,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
 
         if (data.student.length === 0 || typeof data._class !== "string") return;
 
-        const res = await postRequest("https://mediotec-be.onrender.com/student_class/", data);
+        const res = await postRequest("http://127.0.0.1:8000/student_class/", data);
 
         if (res.ok) {
             toast({
@@ -43,7 +43,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
 
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        const res = await postRequest("https://mediotec-be.onrender.com/signup/student/", user);
+        const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
         const student = await res.json();
         if (res.ok) {
             toast({
@@ -78,7 +78,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
                     onValueChange={(value) => {
                         table.getColumn("degree")?.setFilterValue(value);
                     }}>
-                    <SelectTrigger className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
+                    <SelectTrigger aria-label="Filtra estudante pelo ano" className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
                         <SelectValue placeholder="Filtrar ano" />
                     </SelectTrigger>
                     <SelectContent>
@@ -101,7 +101,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
                 {attachClassButton ? (
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                            <Button aria-label="Atribui estudante a uma turma" className="text-[10px] md:text-sm bg-orange-600 gap-2">
                                 <UsersRound size={20} />
                                 Atribuir a uma turma
                             </Button>
@@ -112,7 +112,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
                             </DialogHeader>
                             <div className="flex flex-col gap-3">
                                 <Select onValueChange={(value) => setClass(value)}>
-                                    <SelectTrigger className="text-muted-foreground">
+                                    <SelectTrigger aria-label="Seleciona uma turma" className="text-muted-foreground">
                                         <SelectValue placeholder="Selecione uma turma" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -135,7 +135,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
 
                 {newStudentButton ? (
                     <Dialog>
-                        <DialogTrigger asChild>
+                        <DialogTrigger aria-label="Adiciona novo estudante" asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
                                 <CirclePlus size={20} />
                                 Novo estudante

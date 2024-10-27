@@ -33,14 +33,14 @@ function TeacherController({
     async function fetchTeacherSubject() {
         const teacher_id = table.getSelectedRowModel().rows[0].original.id;
         const data = await (
-            await getRequest(`https://mediotec-be.onrender.com/teacher/${teacher_id}/subjects/`)
+            await getRequest(`http://127.0.0.1:8000/teacher/${teacher_id}/subjects/`)
         ).json();
         setTeacherSubjects(data.teacher);
     }
 
     async function fetchSubjects() {
         if (subjects.length == 0) {
-            const data = await (await getRequest("https://mediotec-be.onrender.com/subject/")).json();
+            const data = await (await getRequest("http://127.0.0.1:8000/subject/")).json();
             setSubjects(data.subjects);
         }
     }
@@ -48,8 +48,8 @@ function TeacherController({
     async function attachSubject(teacher_id, subject_id) {
         const data = {};
         data.teacher = teacher_id;
-        data.subject = subject_id;
-        const res = await postRequest("https://mediotec-be.onrender.com/teacher_subject/", data);
+        data.subject = [subject_id];
+        const res = await postRequest("http://127.0.0.1:8000/teacher_subject/", data);
 
         if (res.ok) {
             toast({
@@ -68,7 +68,7 @@ function TeacherController({
         const data = {};
         data.teacher_subject = teacherSubject_id;
         data._class = class_id;
-        const res = await postRequest("https://mediotec-be.onrender.com/class_year_teacher_subject/", data);
+        const res = await postRequest("http://127.0.0.1:8000/class_year_teacher_subject/", data);
         if (res.ok) {
             toast({
                 variant: "success",
@@ -85,7 +85,7 @@ function TeacherController({
     async function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
         user.type = "TEACHER";
-        const res = await postRequest("https://mediotec-be.onrender.com/signup/", user);
+        const res = await postRequest("http://127.0.0.1:8000/signup/", user);
         const teacher = await res.json();
         if (res.ok) {
             toast({
@@ -123,7 +123,7 @@ function TeacherController({
             <div className="flex gap-2">
                 {attachSubjectButton ? (
                     <Dialog>
-                        <DialogTrigger asChild>
+                        <DialogTrigger aria-label="Atribui disciplina a um professor" asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2" onClick={fetchSubjects}>
                                 <UsersRound size={20} />
                                 Atribuir uma disciplina
@@ -164,6 +164,7 @@ function TeacherController({
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button
+                                aria-label="Atribui uma turma a um professor"
                                 className="text-[10px] md:text-sm bg-orange-600 gap-2"
                                 onClick={fetchTeacherSubject}>
                                 <UsersRound size={20} />
@@ -191,7 +192,7 @@ function TeacherController({
                                 </Select>
 
                                 <Select onValueChange={(value) => setTeacherSubject(value)}>
-                                    <SelectTrigger className="text-muted-foreground">
+                                    <SelectTrigger aria-label="Seleciona uma disciplina" className="text-muted-foreground">
                                         <SelectValue placeholder="Selecione uma disciplina" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -215,7 +216,7 @@ function TeacherController({
 
                 {newTeacherButton ? (
                     <Dialog>
-                        <DialogTrigger asChild>
+                        <DialogTrigger aria-label="Adiciona novo professor" asChild>
                             <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
                                 <CirclePlus size={20} />
                                 Novo professor

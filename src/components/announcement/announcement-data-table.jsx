@@ -51,7 +51,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                 <div>
                                                     <Dialog>
                                                         <DialogTrigger asChild>
-                                                            <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                                            <Button aria-label="Editar aviso" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                                                 <Pencil size={18} />
                                                             </Button>
                                                         </DialogTrigger>
@@ -65,7 +65,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                     onSubmit={async (obj) => {
                                                                         obj = deleteUndefinedKeys(obj);
                                                                         const res = await patchRequest(
-                                                                            `https://mediotec-be.onrender.com/announcement/${row.original.id}/`,
+                                                                            `http://127.0.0.1:8000/announcement/${row.original.id}/`,
                                                                             obj
                                                                         );
                                                                         if (res.ok) {
@@ -95,7 +95,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                     {/* delete */}
                                                     <AlertDialog>
                                                         <AlertDialogTrigger asChild>
-                                                            <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                                            <Button aria-label="Remover aviso" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                                                 <Trash2 size={18} />
                                                             </Button>
                                                         </AlertDialogTrigger>
@@ -115,7 +115,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                     className="bg-red-600 hover:bg-red-800"
                                                                     onClick={async () => {
                                                                         const res = await deleteRequest(
-                                                                            `https://mediotec-be.onrender.com/announcement/${row.original.id}/`
+                                                                            `http://127.0.0.1:8000/announcement/${row.original.id}/`
                                                                         );
                                                                         if (res.ok) {
                                                                             toast({

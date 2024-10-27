@@ -43,14 +43,14 @@ function getColumns(state, setState) {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
+                    aria-label="Seleciona todos"
                 />
             ),
             cell: ({ row }) => (
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
+                    aria-label="Seleciona linha"
                 />
             ),
             enableSorting: false,
@@ -74,7 +74,7 @@ function getColumns(state, setState) {
                         {/* edit */}
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                <Button aria-label="Editar disciplina" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                     <Pencil size={18} />
                                 </Button>
                             </DialogTrigger>
@@ -87,7 +87,7 @@ function getColumns(state, setState) {
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
                                             const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/subject/${row.original.id}/`,
+                                                `http://127.0.0.1:8000/subject/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -117,7 +117,7 @@ function getColumns(state, setState) {
                         {/* delete */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                <Button aria-label="Remover disciplina" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                     <Trash2 size={18} />
                                 </Button>
                             </AlertDialogTrigger>
@@ -134,7 +134,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/subject/${row.original.id}/`
+                                                `http://127.0.0.1:8000/subject/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -203,13 +203,13 @@ function DisciplinasPageAdmin() {
 
     useEffect(() => {
         const fetchSubjects = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/subject/");
+            const response = await getRequest("http://127.0.0.1:8000/subject/");
             const data = await response.json();
             setSubjects(data.subjects);
         };
 
         const fetchTeachers = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/teacher/");
+            const response = await getRequest("http://127.0.0.1:8000/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
         };
@@ -223,7 +223,7 @@ function DisciplinasPageAdmin() {
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Disciplinas</h1>
             <div>
-                <CustomDataTable table={table}>
+                <CustomDataTable table={table} pagination>
                     <SubjectController
                         table={table}
                         addSubject={(subject) => setSubjects([...subjects, subject])}

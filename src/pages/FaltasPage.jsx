@@ -2,7 +2,9 @@ import React from 'react'
 
 function FaltasPage() {
   return (
-    <div>FaltasPage</div>
+    <div className="h-full">
+        <h1 className="text-4xl text-blue-600 font-bold">Presença</h1>
+    </div>
   )
 }
 

@@ -1,7 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/ui/mobile-nav";
 import AuthContext from "@/context/AuthContext";
-import { BookOpen, GraduationCap, Megaphone, UserRound, UsersRound } from "lucide-react";
+import { BookOpen, CalendarRange, GraduationCap, Megaphone, UserRound, UsersRound } from "lucide-react";
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -11,6 +11,7 @@ const linksAdmin = [
     { url: "/professores", icon: <GraduationCap />, content: "Professores" },
     { url: "/disciplinas", icon: <BookOpen />, content: "Disciplinas" },
     { url: "/avisos", icon: <Megaphone />, content: "Avisos" },
+    { url: "/horarios", icon: <CalendarRange />, content: "Horário" },
 ];
 
 const linksTeacher = [

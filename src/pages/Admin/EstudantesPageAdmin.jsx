@@ -38,14 +38,14 @@ function getColumns(students, setStudents) {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
+                    aria-label="Seleciona todos"
                 />
             ),
             cell: ({ row }) => (
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
+                    aria-label="Seleciona linha"
                 />
             ),
             enableSorting: false,
@@ -110,7 +110,7 @@ function getColumns(students, setStudents) {
                         {/* edit */}
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                <Button aria-label="Editar estudante" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                     <Pencil size={18} />
                                 </Button>
                             </DialogTrigger>
@@ -126,7 +126,7 @@ function getColumns(students, setStudents) {
                                                 student.birth_date = formatDate(new Date(student.birth_date));
                                             }
                                             const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/student/${row.original.id}/`,
+                                                `http://127.0.0.1:8000/student/${row.original.id}/`,
                                                 student
                                             );
                                             if (res.ok) {
@@ -156,7 +156,7 @@ function getColumns(students, setStudents) {
                         {/* delete */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                <Button aria-label="Remover estudante" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                     <Trash2 size={18} />
                                 </Button>
                             </AlertDialogTrigger>
@@ -173,7 +173,7 @@ function getColumns(students, setStudents) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/student/${row.original.id}/`
+                                                `http://127.0.0.1:8000/student/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -242,14 +242,14 @@ function EstudantesPageAdmin() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/student/");
+            const response = await getRequest("http://127.0.0.1:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
@@ -261,7 +261,7 @@ function EstudantesPageAdmin() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Estudantes</h1>
-            <CustomDataTable table={studentsTable}>
+            <CustomDataTable table={studentsTable} pagination>
                 <StudentController
                     table={studentsTable}
                     classes={classes}

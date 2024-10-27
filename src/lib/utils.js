@@ -7,6 +7,7 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
+// type = '%Y-%m-%d'
 export function formatDate(date) {
     var d = new Date(date),
         month = "" + (d.getMonth() + 1),
@@ -19,9 +20,22 @@ export function formatDate(date) {
     return [year, month, day].join("-");
 }
 
-export function mergeLists(first_list, second_list) {
+// deprecated
+// export function mergeLists(first_list, second_list) {
+//     return first_list.map(first_list_item => {
+//         const found = second_list.find(item => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name);
+//         return found ? found : first_list_item
+//     });
+// }
+
+// merges the first list with the second one
+// puts items found in the second list into the first one
+// takes a function that compares an element of the second list with the first one
+export function mergeLists(first_list, second_list, condition) {
     return first_list.map(first_list_item => {
-        const found = second_list.find(item => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name);
+        const found = second_list.find(item => {
+            return condition(item, first_list_item)
+        });
         return found ? found : first_list_item
     });
 }

@@ -91,7 +91,7 @@ function getColumns(state, setState) {
                         {/* edit */}
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                <Button aria-label="Editar professor" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                     <Pencil size={18} />
                                 </Button>
                             </DialogTrigger>
@@ -107,7 +107,7 @@ function getColumns(state, setState) {
                                                 obj.birth_date = formatDate(new Date(obj.birth_date));
                                             }
                                             const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/teacher/${row.original.id}/`,
+                                                `http://127.0.0.1:8000/teacher/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -137,7 +137,7 @@ function getColumns(state, setState) {
                         {/* delete */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                <Button aria-label="Remover professor" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                     <Trash2 size={18} />
                                 </Button>
                             </AlertDialogTrigger>
@@ -154,7 +154,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/teacher/${row.original.id}/`
+                                                `http://127.0.0.1:8000/teacher/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -223,13 +223,13 @@ function ProfessoresPageAdmin() {
 
     useEffect(() => {
         const fetchTeachers = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/teacher/");
+            const response = await getRequest("http://127.0.0.1:8000/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
             setLoading(false);
         };
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
@@ -241,7 +241,7 @@ function ProfessoresPageAdmin() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Professores</h1>
-            <CustomDataTable table={table}>
+            <CustomDataTable table={table} pagination>
                 <TeacherController
                     table={table}
                     addTeacher={(teacher) => setTeachers([...teachers, teacher])}

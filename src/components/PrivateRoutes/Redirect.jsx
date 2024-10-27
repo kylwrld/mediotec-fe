@@ -5,7 +5,7 @@ import AuthContext from "../../context/AuthContext";
 function Redirect({ teacher, admin }) {
     const { decodeToken } = useContext(AuthContext);
     const user = decodeToken();
-    return user?.type == "TEACHER" ? teacher : user?.type == "ADMIN" ? admin : <Navigate to="/login" />;
+    return user?.type == "TEACHER" ? teacher : user?.type == "ADMIN" ? admin : <Navigate to="/login" replace />;
 }
 
 export default Redirect;

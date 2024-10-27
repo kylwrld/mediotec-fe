@@ -18,14 +18,14 @@ const columns = [
             <Checkbox
                 checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
+                aria-label="Seleciona todos"
             />
         ),
         cell: ({ row }) => (
             <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
+                aria-label="Seleciona linha"
             />
         ),
         enableSorting: false,
@@ -92,13 +92,13 @@ function AvisosPage() {
 
     useEffect(() => {
         const fetchAnnouncements = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/announcement/");
+            const response = await getRequest("http://127.0.0.1:8000/announcement/");
             const data = await response.json();
             setAnnouncements(data.announcements);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

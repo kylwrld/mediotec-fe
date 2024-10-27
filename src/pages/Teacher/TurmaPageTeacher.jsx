@@ -17,6 +17,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
+import AttendanceView from "@/components/attendance/attendance-view";
 
 function getGradeColumns(grades, setGrades) {
     const gradesColumns = [
@@ -46,7 +47,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -76,7 +77,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -147,7 +148,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -177,7 +178,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -212,7 +213,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -248,7 +249,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -278,7 +279,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -313,7 +314,7 @@ function getGradeColumns(grades, setGrades) {
                             />
                         </SelectTrigger>
                         <SelectContent className="flex justify-center items-center">
-                            <SelectItem value=" ">-</SelectItem>
+                            <SelectItem value={null}>-</SelectItem>
                             <SelectItem value="NA">NA</SelectItem>
                             <SelectItem value="PA">PA</SelectItem>
                             <SelectItem value="A">A</SelectItem>
@@ -384,6 +385,7 @@ function TurmaPageTeacher() {
     const [classYear, setClassYear] = useState();
     const [students, setStudents] = useState([]);
     const [grades, setGrades] = useState([]);
+    const [teacherSubjects, setTeacherSubjects] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [defaultGrades, setDefaultGrades] = useState([]);
 
@@ -404,16 +406,21 @@ function TurmaPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/student_class/${id}/2024/`);
+            const response = await getRequest(`http://127.0.0.1:8000/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
-            setSelectedStudent(data.students[0]?.id || null);
+            // setSelectedStudent(data.students[0]?.id || null);
+            setSelectedStudent(data.students[0].id ?? null);
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${user.id}/subjects/`);
+            // const response = await getRequest(`http://127.0.0.1:8000/teacher/${user.id}/subjects/`);
+            // TODO: Change year variable to be dinamic
+            const response = await getRequest(`http://127.0.0.1:8000/teacher/${id}/${2024}/${user.id}`);
             const data = await response.json();
-            const gradesList = data.teacher.map((obj) => {
+            setTeacherSubjects(data.teacher_subject)
+            // setSelectedSubject(data.teacher_subject[0].id ?? null)
+            const gradesList = data.teacher_subject.map((obj) => {
                 return {
                     teacher_subject: { id: obj.id, subject: { name: obj.subject.name } },
                     av1_1: null,
@@ -442,10 +449,10 @@ function TurmaPageTeacher() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await getRequest(`https://mediotec-be.onrender.com/grade/${student_id}/2024/`);
+        const response = await getRequest(`http://127.0.0.1:8000/grade/${student_id}/2024/`);
         const data = await response.json();
         // colocando as notas nas disciplinas certas
-        setGrades(mergeLists(defaultGrades, data.grades));
+        setGrades(mergeLists(defaultGrades, data.grades, (item, first_list_item) => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name));
     }
 
     const studentsTable = useReactTable({
@@ -503,7 +510,7 @@ function TurmaPageTeacher() {
             });
         });
 
-        const res = await postRequest("https://mediotec-be.onrender.com/grade/", { grade: data });
+        const res = await postRequest("http://127.0.0.1:8000/grade/", { grade: data });
         const dataObj = await res.json();
         if (res.ok) {
             toast({
@@ -511,7 +518,7 @@ function TurmaPageTeacher() {
                 title: "Conceito atribuído com sucesso",
             });
 
-            setGrades(mergeLists(grades, dataObj.grade));
+            setGrades(mergeLists(grades, dataObj.grade, (item, first_list_item) => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name));
         } else {
             toast({
                 variant: "destructive",
@@ -543,11 +550,14 @@ function TurmaPageTeacher() {
                         <TabsTrigger value="grades" className="w-full" onClick={() => fetchGrades(selectedStudent)}>
                             Conceitos
                         </TabsTrigger>
+                        <TabsTrigger value="attendance" className="w-full">
+                            Presença
+                        </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="students">
                         {students?.length > 0 ? (
-                            <CustomDataTable table={studentsTable}>
+                            <CustomDataTable table={studentsTable} pagination>
                                 <StudentControllerClass table={studentsTable} />
                             </CustomDataTable>
                         ) : null}
@@ -561,7 +571,7 @@ function TurmaPageTeacher() {
                                     setSelectedStudent(value);
                                 }}
                                 defaultValue={selectedStudent}>
-                                <SelectTrigger className="text-muted-foreground">
+                                <SelectTrigger aria-label="Seleciona aluno" className="text-muted-foreground">
                                     <SelectValue placeholder="Selecione um aluno" />
                                 </SelectTrigger>
 
@@ -584,6 +594,16 @@ function TurmaPageTeacher() {
                             Salvar conceitos
                         </Button>
                     </TabsContent>
+
+                    <TabsContent value="attendance">
+                        <AttendanceView
+                            classYear={classYear}
+                            students={students}
+                            teacherSubjects={teacherSubjects}
+                        />
+
+                    </TabsContent>
+
                 </Tabs>
             </div>
         </div>

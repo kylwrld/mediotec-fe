@@ -95,7 +95,7 @@ function TurmasPageTeacher() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${user.id}/classes/`);
+            const response = await getRequest(`http://127.0.0.1:8000/teacher/${user.id}/classes/`);
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);
@@ -106,7 +106,7 @@ function TurmasPageTeacher() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Turmas</h1>
-            <CustomDataTable table={table}>
+            <CustomDataTable table={table} pagination>
                 <ClassController table={table} />
             </CustomDataTable>
         </div>

@@ -18,7 +18,7 @@ function ClassController({ table, addClass, newClassButton = false }) {
     const { postRequest } = useContext(AuthContext);
 
     async function onSubmit(_class) {
-        const res = await postRequest("https://mediotec-be.onrender.com/class/", _class);
+        const res = await postRequest("http://127.0.0.1:8000/class/", _class);
         const data = await res.json();
         if (res.ok) {
             toast({
@@ -47,7 +47,7 @@ function ClassController({ table, addClass, newClassButton = false }) {
                     onValueChange={(value) => {
                         table.getColumn("type")?.setFilterValue(value);
                     }}>
-                    <SelectTrigger className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
+                    <SelectTrigger aria-label="Seleciona um curso" className="w-[180px] text-muted-foreground text-[10px] md:text-sm">
                         <SelectValue placeholder="Filtrar tipo" />
                     </SelectTrigger>
                     <SelectContent>
@@ -68,7 +68,7 @@ function ClassController({ table, addClass, newClassButton = false }) {
             {newClassButton ? (
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                        <Button aria-label="Adiciona nova turma" className="text-[10px] md:text-sm bg-orange-600 gap-2">
                             <CirclePlus size={20} />
                             Nova turma
                         </Button>

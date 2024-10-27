@@ -103,14 +103,14 @@ function EstudantesPageTeacher() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/student/");
+            const response = await getRequest("http://127.0.0.1:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
@@ -122,7 +122,7 @@ function EstudantesPageTeacher() {
     return (
         <div className="h-full">
             <h1 className="text-4xl text-blue-600 font-bold">Estudantes</h1>
-            <CustomDataTable table={studentsTable}>
+            <CustomDataTable table={studentsTable} pagination>
                 <StudentController table={studentsTable} classes={classes} />
             </CustomDataTable>
         </div>
