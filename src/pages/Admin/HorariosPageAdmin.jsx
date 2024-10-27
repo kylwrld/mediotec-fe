@@ -1,4 +1,4 @@
-import TimeScheduleView from "@/components/timeSchedule/timeschedule-view";
+import TimeScheduleView from "@/components/timeSchedule/timeSchedule-view";
 import React from "react";
 
 function HorariosPageAdmin() {
