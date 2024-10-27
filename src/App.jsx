@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom";
 
 import { Toaster } from "@/components/ui/toaster";
 import MainLayout from "@/layouts/MainLayout";
@@ -24,7 +24,7 @@ import TurmasPageTeacher from "./pages/Teacher/TurmasPageTeacher";
 export default function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
-            <Route path="/">
+            <Route>
                 <Route path="/" element={<MainLayout />}>
                     <Route path="/" element={<TeacherOrAdminRoute />}>
                         <Route path="/estudante/:id" element={<EstudantePage />}></Route>
@@ -51,6 +51,7 @@ export default function App() {
                     </Route>
                 </Route>
                 <Route path="/login" element={<LoginPage />}></Route>
+                <Route index element={<Navigate to="/estudantes" />}></Route>
             </Route>
         )
     );
