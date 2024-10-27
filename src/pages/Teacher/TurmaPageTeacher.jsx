@@ -590,7 +590,7 @@ function TurmaPageTeacher() {
                         </div>
 
                         <CustomDataTable table={gradesTable}></CustomDataTable>
-                        <Button className="bg-orange-600" onClick={() => submitGrades(grades)}>
+                        <Button className="bg-orange-600 mt-4" onClick={() => submitGrades(grades)}>
                             Salvar conceitos
                         </Button>
                     </TabsContent>

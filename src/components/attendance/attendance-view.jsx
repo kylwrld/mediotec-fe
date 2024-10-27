@@ -156,7 +156,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
             <div className="flex justify-center items-center w-full">
                 <div className="w-4/5 md:w-3/5">
                     <CustomDataTable table={attendanceTable}></CustomDataTable>
-                    <Button className="bg-orange-600" onClick={() => onSubmit(attendances)}>
+                    <Button className="bg-orange-600 mt-4" onClick={() => onSubmit(attendances)}>
                         Salvar presença
                     </Button>
                 </div>
