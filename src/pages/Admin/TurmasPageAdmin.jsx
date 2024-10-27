@@ -88,7 +88,7 @@ function getColumns(state, setState) {
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
                                             const res = await patchRequest(
-                                                `http://127.0.0.1:8000/class/${row.original.id}/`,
+                                                `mascate-be.onrender.com/class/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -135,7 +135,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `http://127.0.0.1:8000/class/${row.original.id}/`
+                                                `mascate-be.onrender.com/class/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -203,7 +203,7 @@ function TurmasPageAdmin() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest("http://127.0.0.1:8000/class/");
+            const response = await getRequest("mascate-be.onrender.com/class/");
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);

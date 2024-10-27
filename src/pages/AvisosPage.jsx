@@ -92,13 +92,13 @@ function AvisosPage() {
 
     useEffect(() => {
         const fetchAnnouncements = async () => {
-            const response = await getRequest("http://127.0.0.1:8000/announcement/");
+            const response = await getRequest("mascate-be.onrender.com/announcement/");
             const data = await response.json();
             setAnnouncements(data.announcements);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("http://127.0.0.1:8000/class_year/");
+            const response = await getRequest("mascate-be.onrender.com/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
