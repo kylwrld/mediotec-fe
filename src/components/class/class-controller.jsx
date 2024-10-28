@@ -51,8 +51,8 @@ function ClassController({ table, addClass, newClassButton = false }) {
                         <SelectValue placeholder="Filtrar tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="informatica">Informática</SelectItem>
-                        <SelectItem value="logistica">Logística</SelectItem>
+                        <SelectItem value="Informática">Informática</SelectItem>
+                        <SelectItem value="Logística">Logística</SelectItem>
                     </SelectContent>
                 </Select>
 
