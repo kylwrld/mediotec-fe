@@ -126,7 +126,7 @@ function getColumns(students, setStudents) {
                                                 student.birth_date = formatDate(new Date(student.birth_date));
                                             }
                                             const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/student/${row.original.id}/`,
+                                                `http://127.0.0.1:8000/student/${row.original.id}/`,
                                                 student
                                             );
                                             if (res.ok) {
@@ -173,7 +173,7 @@ function getColumns(students, setStudents) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/student/${row.original.id}/`
+                                                `http://127.0.0.1:8000/student/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -242,14 +242,14 @@ function EstudantesPageAdmin() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/student/");
+            const response = await getRequest("http://127.0.0.1:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://127.0.0.1:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };

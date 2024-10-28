@@ -71,7 +71,7 @@ function getColumns(state, setState) {
 }
 
 function AttendanceView({ classYear, students, teacherSubjects }) {
-    const [selectedTeacherSubject, setSelectedTeacherSubject] = useState(teacherSubjects[0].id);
+    const [selectedTeacherSubject, setSelectedTeacherSubject] = useState(teacherSubjects[0]?.id);
     const [attendances, setAttendances] = useState([]);
     const [defaultAttendances, setDefaultAttendances] = useState([]);
 
@@ -83,7 +83,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
     useEffect(() => {
         const date = formatDate(new Date());
         const fetchAttendances = async () => {
-            const res = await getRequest(`https://mediotec-be.onrender.com/attendance/${classYear._class.id}/${selectedTeacherSubject}/?date=${date}`)
+            const res = await getRequest(`http://127.0.0.1:8000/attendance/${classYear._class.id}/${selectedTeacherSubject}/?date=${date}`)
             const data = await res.json()
             const attendanceList = students.map((student) => {
                 return {
@@ -110,7 +110,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
 
     async function onSubmit(attendances) {
         const attendancesData = {attendances, class_year: classYear.id, teacher_subject: selectedTeacherSubject}
-        const res = await postRequest("https://mediotec-be.onrender.com/attendance/", attendancesData)
+        const res = await postRequest("http://127.0.0.1:8000/attendance/", attendancesData)
         const data = await res.json()
         if (res.ok) {
             toast({
@@ -141,7 +141,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
                 </SelectTrigger>
 
                 <SelectContent>
-                    {teacherSubjects ? (
+                    {teacherSubjects.length > 0 ? (
                         teacherSubjects.map((teacherSubject) => (
                             <SelectItem key={teacherSubject.id} value={teacherSubject.id}>
                                 {teacherSubject.subject.name}

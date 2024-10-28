@@ -91,12 +91,12 @@ function DisciplinaPageAdmin() {
 
     useEffect(() => {
         const fetchSubject = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/subject/${id}/`);
+            const response = await getRequest(`http://127.0.0.1:8000/subject/${id}/`);
             const data = await response.json();
             setSubject(data);
         };
         const fetchTeacherSubjects = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/subject/${id}/teachers/`);
+            const response = await getRequest(`http://127.0.0.1:8000/subject/${id}/teachers/`);
             const data = await response.json();
             setTeacherSubjects(data.teacher_subject);
             setTeachers(data.teacher_subject.map((teacher_subject) => teacher_subject.teacher))

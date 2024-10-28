@@ -23,7 +23,7 @@ function StudentControllerClass({ table, addStudent, newStudentButton = false })
 
         if (data.student.length === 0 || typeof data._class !== "string") return;
 
-        const res = await postRequest("https://mediotec-be.onrender.com/student_class/", data);
+        const res = await postRequest("http://127.0.0.1:8000/student_class/", data);
 
         if (res.ok) {
             toast({
@@ -41,7 +41,7 @@ function StudentControllerClass({ table, addStudent, newStudentButton = false })
 
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        const res = await postRequest("https://mediotec-be.onrender.com/signup/student/", user);
+        const res = await postRequest("http://127.0.0.1:8000/signup/student/", user);
         const student = await res.json();
 
         if (res.ok) {
