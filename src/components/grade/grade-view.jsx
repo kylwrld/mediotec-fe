@@ -15,6 +15,7 @@ import CustomDataTable from "../ui/custom-data-table";
 function GradeView({ students, teacherSubjects, classYear }) {
     const [loading, setLoading] = useState(true);
     const [selectedStudent, setSelectedStudent] = useState(students[0].id);
+    const [defaultGrades, setDefaultGrades] = useState([])
     const [grades, setGrades] = useState([]);
 
     const { getRequest, postRequest } = useContext(AuthContext);
@@ -58,7 +59,7 @@ function GradeView({ students, teacherSubjects, classYear }) {
                 cf_3: null,
             };
         });
-        setGrades(gradesList);
+        setDefaultGrades(gradesList)
 
         // TODO: students can be empty
         fetchGrades(students[0].id, gradesList);
@@ -126,7 +127,7 @@ function GradeView({ students, teacherSubjects, classYear }) {
             <div className="flex gap-5 w-fit my-5">
                 <Select
                     onValueChange={(value) => {
-                        fetchGrades(value, grades);
+                        fetchGrades(value, defaultGrades);
                         setSelectedStudent(value);
                     }}
                     defaultValue={selectedStudent}>
