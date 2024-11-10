@@ -60,13 +60,13 @@ function LoginPage() {
         <div className="h-full p-4 md:px-16 md:py-10 bg-slate-300">
             <div className="h-full flex drop-shadow-md">
                 <div className="flex justify-center items-center w-1/2 h-full rounded-l-xl bg-[radial-gradient(circle,rgba(106,151,255,1)_10%,rgba(0,80,255,1)_80%)] hidden lg:flex">
-                    <img className="w-3/5" src="https://svgshare.com/i/1BNB.svg" alt="Boneco do Mediotec" />
+                    <img className="w-3/5" src="https://ibb.co/zN4XjzT" alt="Boneco do Mediotec" />
                 </div>
                 <div className="flex items-center flex-col w-full lg:w-1/2 h-full border border-gray-300 rounded-lg lg:rounded-l-none lg:rounded-r-xl bg-white">
                     {loading ? (<Spinner />) : (
                         <>
                             <div className="w-1/4 m-20">
-                                <img src="https://svgshare.com/i/1BNW.svg" className="" alt="Logo do Mediotec" />
+                                <img src="https://ibb.co/prnbtSr" className="" alt="Logo do Mediotec" />
                             </div>
                             <div className="flex grow w-full">
                                 <Form {...form}>

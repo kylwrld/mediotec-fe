@@ -21,7 +21,7 @@ function Sidebar({ links }) {
     return (
         <aside className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">
             <div className="flex justify-center items-center h-24 hidden md:flex">
-                <img className="" src="https://svgshare.com/i/1BMj.svg" alt="Logo branca do Mediotec" />
+                <img className="" src="https://ibb.co/4ZPkNfR" alt="Logo branca do Mediotec" />
                 {/* <img src="\src\assets\mediotec-mobile.webp" className="w-2/4 pt-6" alt="Logo do Mediotec" /> */}
             </div>
             <div className="flex flex-col justify-between h-full">
