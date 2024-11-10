@@ -88,7 +88,7 @@ function getColumns(state, setState) {
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
                                             const res = await putRequest(
-                                                `http://192.168.1.9:8000/subject/${row.original.id}/`,
+                                                `subject/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -135,7 +135,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `http://192.168.1.9:8000/subject/${row.original.id}/`
+                                                `subject/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -204,13 +204,13 @@ function DisciplinasPageAdmin() {
 
     useEffect(() => {
         const fetchSubjects = async () => {
-            const response = await getRequest("http://192.168.1.9:8000/subject/");
+            const response = await getRequest("subject/");
             const data = await response.json();
             setSubjects(data.subjects);
         };
 
         const fetchTeachers = async () => {
-            const response = await getRequest("http://192.168.1.9:8000/teacher/");
+            const response = await getRequest("teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
             setLoading(false);

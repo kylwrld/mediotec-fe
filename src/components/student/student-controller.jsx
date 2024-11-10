@@ -25,7 +25,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
 
         if (data.student.length === 0 || typeof data._class !== "string") return;
 
-        const res = await postRequest("http://192.168.1.9:8000/student_class/", data);
+        const res = await postRequest("student_class/", data);
 
         if (res.ok) {
             toast({
@@ -61,7 +61,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
             form.append("image", user.image[0])
         }
 
-        const res = await postRequest("http://192.168.1.9:8000/signup/student/", form, false, false);
+        const res = await postRequest("signup/student/", form, false, false);
         const student = await res.json();
 
         if (res.ok) {

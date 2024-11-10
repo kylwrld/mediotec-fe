@@ -332,7 +332,7 @@ function TimeScheduleView() {
 
     useEffect(() => {
         const fetchClassYears = async () => {
-            const res = await getRequest(`http://192.168.1.9:8000/class_year/`);
+            const res = await getRequest(`class_year/`);
             const data = await res.json();
             setClassYears(data.class_years);
             setLoading(false)
@@ -357,9 +357,9 @@ function TimeScheduleView() {
     // fetch timeSchedule
     async function onSelectClassYear(classYear) {
         setLoading(true);
-        const res = await getRequest(`http://192.168.1.9:8000/all_teacher_subject_class/${classYear.id}/`);
+        const res = await getRequest(`all_teacher_subject_class/${classYear.id}/`);
         const data = await res.json();
-        const timeScheduleRequest = await getRequest(`http://192.168.1.9:8000/time_schedule/?class_year=${classYear.id}`);
+        const timeScheduleRequest = await getRequest(`time_schedule/?class_year=${classYear.id}`);
         const timeSchedulesData = await timeScheduleRequest.json();
         setSelectedClassYear(classYear);
         setClassYearTeacherSubjects(data.class_year_teacher_subjects);
@@ -430,7 +430,7 @@ function TimeScheduleView() {
             };
         });
 
-        const res = await postRequest(`http://192.168.1.9:8000/time_schedule/`, { time_schedules });
+        const res = await postRequest(`time_schedule/`, { time_schedules });
         const data = await res.json();
 
         setTimeSchedules(

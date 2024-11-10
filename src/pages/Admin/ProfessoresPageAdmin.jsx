@@ -108,7 +108,7 @@ function getColumns(state, setState) {
                                                 obj.birth_date = formatDate(new Date(obj.birth_date));
                                             }
                                             const res = await putRequest(
-                                                `http://192.168.1.9:8000/teacher/${row.original.id}/`,
+                                                `teacher/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -155,7 +155,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `http://192.168.1.9:8000/teacher/${row.original.id}/`
+                                                `teacher/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -224,12 +224,12 @@ function ProfessoresPageAdmin() {
 
     useEffect(() => {
         const fetchTeachers = async () => {
-            const response = await getRequest("http://192.168.1.9:8000/teacher/");
+            const response = await getRequest("teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
         };
         const fetchClasses = async () => {
-            const response = await getRequest("http://192.168.1.9:8000/class_year/");
+            const response = await getRequest("class_year/");
             const data = await response.json();
             setClasses(data.class_years);
             setLoading(false);

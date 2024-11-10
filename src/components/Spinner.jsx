@@ -8,7 +8,7 @@ const BLUE = "#2563eb"
 
 function Spinner({ size=40 }) {
   return (
-    <div className='flex flex-1 justify-center items-center h-full bg-transparent'>
+    <div className='flex justify-center items-center h-full bg-transparent'>
         <MoonLoader size={size} speedMultiplier={0.9} color={BLUE} />
     </div>
   )

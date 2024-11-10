@@ -96,7 +96,7 @@ function TurmasPageTeacher() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest(`http://192.168.1.9:8000/teacher/${user.id}/classes/`);
+            const response = await getRequest(`teacher/${user.id}/classes/`);
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);

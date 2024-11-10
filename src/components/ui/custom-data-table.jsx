@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 
-function CustomDataTable({ table, children, rowOnClick, pagination }) {
+const CustomDataTable = ({ table, children, rowOnClick, pagination }) => {
     return (
         <div className="w-full">
             {children}
@@ -26,7 +26,9 @@ function CustomDataTable({ table, children, rowOnClick, pagination }) {
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row, index) => (
+                                // cor sim cor nao
+                                // className={index%2==0 ? "bg-slate-100" : ""}
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell

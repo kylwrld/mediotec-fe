@@ -1,6 +1,8 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useState } from "react";
 
+const BACKEND_API_URL = "http://mediotec-be.onrender.com/"
+
 const AuthContext = createContext();
 export default AuthContext;
 
@@ -19,7 +21,7 @@ export function AuthProvider({ children }) {
             "Authorization": "Bearer " + tokens.access
         }
 
-        const res = await fetch(url, {
+        const res = await fetch(BACKEND_API_URL + url, {
             method: "POST",
             headers,
             body: stringify ? JSON.stringify(obj) : obj,
@@ -33,7 +35,7 @@ export function AuthProvider({ children }) {
     }
 
     async function getRequest(url) {
-        const res = await fetch(url, {
+        const res = await fetch(BACKEND_API_URL + url, {
             method: "GET",
             headers: { "Authorization": "Bearer " + tokens.access },
         });
@@ -46,7 +48,7 @@ export function AuthProvider({ children }) {
     }
 
     async function deleteRequest(url) {
-        const res = await fetch(url, {
+        const res = await fetch(BACKEND_API_URL + url, {
             method: "DELETE",
             headers: { "Authorization": "Bearer " + tokens.access },
         });
@@ -67,7 +69,7 @@ export function AuthProvider({ children }) {
         }
 
 
-        const res = await fetch(url, {
+        const res = await fetch(BACKEND_API_URL + url, {
             method: "PUT",
             headers,
             body: stringify ? JSON.stringify(obj) : obj,
@@ -81,7 +83,7 @@ export function AuthProvider({ children }) {
     }
 
     async function postLogin(userObject) {
-        const res = await fetch("http://192.168.1.9:8000/login/", {
+        const res = await fetch(BACKEND_API_URL + "login/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userObject),
