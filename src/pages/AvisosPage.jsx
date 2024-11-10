@@ -1,5 +1,6 @@
 import AnnouncementController from "@/components/announcement/announcement-controller";
 import AnnouncementDataTable from "@/components/announcement/announcement-data-table";
+import Spinner from "@/components/Spinner";
 import { Checkbox } from "@/components/ui/checkbox";
 import AuthContext from "@/context/AuthContext";
 import {
@@ -91,22 +92,24 @@ function AvisosPage() {
     });
 
     useEffect(() => {
-        const fetchAnnouncements = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/announcement/");
-            const data = await response.json();
-            setAnnouncements(data.announcements);
-        };
-
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://192.168.1.9:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
         };
+        const fetchAnnouncements = async () => {
+            const response = await getRequest("http://192.168.1.9:8000/announcement/");
+            const data = await response.json();
+            setAnnouncements(data.announcements);
+            setLoading(false);
+        };
+
 
         fetchClasses();
         fetchAnnouncements();
-        setLoading(false);
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

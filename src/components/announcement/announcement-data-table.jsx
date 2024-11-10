@@ -25,7 +25,7 @@ import AnnouncementFormEdit from "./announcement-form-edit";
 
 export default function AnnouncementDataTable({ table, controller, classes, state, setState }) {
     const { toast } = useToast();
-    const { deleteRequest, patchRequest } = useContext(AuthContext);
+    const { deleteRequest, putRequest } = useContext(AuthContext);
 
     return (
         <div className="w-full">
@@ -64,8 +64,8 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                     classes={classes}
                                                                     onSubmit={async (obj) => {
                                                                         obj = deleteUndefinedKeys(obj);
-                                                                        const res = await patchRequest(
-                                                                            `https://mediotec-be.onrender.com/announcement/${row.original.id}/`,
+                                                                        const res = await putRequest(
+                                                                            `http://192.168.1.9:8000/announcement/${row.original.id}/`,
                                                                             obj
                                                                         );
                                                                         if (res.ok) {
@@ -115,7 +115,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                     className="bg-red-600 hover:bg-red-800"
                                                                     onClick={async () => {
                                                                         const res = await deleteRequest(
-                                                                            `https://mediotec-be.onrender.com/announcement/${row.original.id}/`
+                                                                            `http://192.168.1.9:8000/announcement/${row.original.id}/`
                                                                         );
                                                                         if (res.ok) {
                                                                             toast({

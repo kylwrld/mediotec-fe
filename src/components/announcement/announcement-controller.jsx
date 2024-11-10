@@ -16,7 +16,7 @@ function AnnouncementController({ table, addAnnouncement, classes }) {
     const { postRequest } = useContext(AuthContext);
 
     async function onSubmit(announcement) {
-        const res = await postRequest("https://mediotec-be.onrender.com/announcement/", announcement);
+        const res = await postRequest("http://192.168.1.9:8000/announcement/", announcement);
         const data = await res.json();
         if (res.ok) {
             toast({

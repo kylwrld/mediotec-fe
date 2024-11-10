@@ -28,10 +28,11 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/Spinner";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
-    const { deleteRequest, patchRequest } = useContext(AuthContext);
+    const { deleteRequest, putRequest } = useContext(AuthContext);
 
     const columns = [
         {
@@ -106,8 +107,8 @@ function getColumns(state, setState) {
                                             if (obj.birth_date) {
                                                 obj.birth_date = formatDate(new Date(obj.birth_date));
                                             }
-                                            const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/teacher/${row.original.id}/`,
+                                            const res = await putRequest(
+                                                `http://192.168.1.9:8000/teacher/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -154,7 +155,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/teacher/${row.original.id}/`
+                                                `http://192.168.1.9:8000/teacher/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -223,20 +224,22 @@ function ProfessoresPageAdmin() {
 
     useEffect(() => {
         const fetchTeachers = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/teacher/");
+            const response = await getRequest("http://192.168.1.9:8000/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
-            setLoading(false);
         };
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
+            const response = await getRequest("http://192.168.1.9:8000/class_year/");
             const data = await response.json();
             setClasses(data.class_years);
+            setLoading(false);
         };
 
         fetchTeachers();
         fetchClasses();
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

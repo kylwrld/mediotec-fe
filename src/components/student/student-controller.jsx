@@ -25,7 +25,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
 
         if (data.student.length === 0 || typeof data._class !== "string") return;
 
-        const res = await postRequest("https://mediotec-be.onrender.com/student_class/", data);
+        const res = await postRequest("http://192.168.1.9:8000/student_class/", data);
 
         if (res.ok) {
             toast({
@@ -41,10 +41,29 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
         }
     }
 
+    // name
+    // email
+    // password
+    // birth_date
+    // parent
+    // phone
+    // image
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        const res = await postRequest("https://mediotec-be.onrender.com/signup/student/", user);
+        const form = new FormData()
+        form.append("name", user.name)
+        form.append("email", user.email)
+        form.append("password", user.password)
+        form.append("birth_date", user.birth_date)
+        form.append("parent", JSON.stringify(user.parent))
+        form.append("phone", JSON.stringify(user.phone))
+        if (user.image.length > 0){
+            form.append("image", user.image[0])
+        }
+
+        const res = await postRequest("http://192.168.1.9:8000/signup/student/", form, false, false);
         const student = await res.json();
+
         if (res.ok) {
             toast({
                 variant: "success",

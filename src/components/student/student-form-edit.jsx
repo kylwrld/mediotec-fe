@@ -20,12 +20,15 @@ const formSchema = z.object({
     email: z.string().email("Esse email não é válido.").optional(),
     password: z.string().min(3).optional(),
     birth_date: z.date().optional(),
+    image: z.instanceof(FileList).optional(),
 });
 
 function StudentFormEdit({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema.partial()),
     });
+
+    const fileRef = form.register("image");
 
     return (
         <Form {...form}>
@@ -116,6 +119,22 @@ function StudentFormEdit({ onSubmit }) {
                             <FormMessage />
                         </FormItem>
                     )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => {
+                        return (
+                            <FormItem>
+                                <FormLabel>Foto do estudante</FormLabel>
+                                <FormControl>
+                                    <Input type="file" placeholder="Imagem do aluno" {...fileRef} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        );
+                    }}
                 />
 
                 <div className="flex gap-2">

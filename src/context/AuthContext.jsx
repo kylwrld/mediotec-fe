@@ -11,14 +11,18 @@ export function AuthProvider({ children }) {
             : null
     );
 
-    async function postRequest(url, obj) {
+    async function postRequest(url, obj, stringify=true, json=true) {
+        const headers = json ? {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + tokens.access
+        } : {
+            "Authorization": "Bearer " + tokens.access
+        }
+
         const res = await fetch(url, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + tokens.access
-            },
-            body: JSON.stringify(obj),
+            headers,
+            body: stringify ? JSON.stringify(obj) : obj,
         });
 
         if (res.status === 401) {
@@ -54,14 +58,19 @@ export function AuthProvider({ children }) {
         return res
     }
 
-    async function patchRequest(url, obj) {
+    async function putRequest(url, obj, stringify=true, json=true) {
+        const headers = json ? {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + tokens.access
+        } : {
+            "Authorization": "Bearer " + tokens.access
+        }
+
+
         const res = await fetch(url, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + tokens.access
-            },
-            body: JSON.stringify(obj),
+            headers,
+            body: stringify ? JSON.stringify(obj) : obj,
         });
 
         if (res.status === 401) {
@@ -72,7 +81,7 @@ export function AuthProvider({ children }) {
     }
 
     async function postLogin(userObject) {
-        const res = await fetch("https://mediotec-be.onrender.com/login/", {
+        const res = await fetch("http://192.168.1.9:8000/login/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userObject),
@@ -108,7 +117,7 @@ export function AuthProvider({ children }) {
         postLogin,
         getRequest,
         deleteRequest,
-        patchRequest,
+        putRequest,
         logout,
     };
 

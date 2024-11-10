@@ -18,6 +18,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
 import AttendanceView from "@/components/attendance/attendance-view";
+import Spinner from "@/components/Spinner";
 
 function getGradeColumns(grades, setGrades) {
     const gradesColumns = [
@@ -379,20 +380,13 @@ const columns = [
 ];
 
 function TurmaPageTeacher() {
-    const { id } = useParams();
-    const { postRequest } = useContext(AuthContext);
-
+    const [loading, setLoading] = useState(true)
     const [classYear, setClassYear] = useState();
     const [students, setStudents] = useState([]);
     const [grades, setGrades] = useState([]);
     const [teacherSubjects, setTeacherSubjects] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [defaultGrades, setDefaultGrades] = useState([]);
-
-    const { decodeToken, getRequest } = useContext(AuthContext);
-    const user = decodeToken();
-    const { toast } = useToast();
-
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
@@ -402,11 +396,17 @@ function TurmaPageTeacher() {
         pageSize: 10,
     });
 
+    const { id } = useParams();
+    const { decodeToken, getRequest, postRequest } = useContext(AuthContext);
+    const user = decodeToken();
+    const { toast } = useToast();
+
+
     const gradesColumns = getGradeColumns(grades, setGrades);
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/student_class/${id}/2024/`);
+            const response = await getRequest(`http://192.168.1.9:8000/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             // setSelectedStudent(data.students[0]?.id || null);
@@ -414,9 +414,9 @@ function TurmaPageTeacher() {
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            // const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${user.id}/subjects/`);
+            // const response = await getRequest(`http://192.168.1.9:8000/teacher/${user.id}/subjects/`);
             // TODO: Change year variable to be dinamic
-            const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${id}/${2024}/${user.id}`);
+            const response = await getRequest(`http://192.168.1.9:8000/teacher/${id}/${2024}/${user.id}`);
             const data = await response.json();
             setTeacherSubjects(data.teacher_subject)
             // setSelectedSubject(data.teacher_subject[0].id ?? null)
@@ -442,6 +442,7 @@ function TurmaPageTeacher() {
             });
             setGrades(gradesList);
             setDefaultGrades(gradesList);
+            setLoading(false)
         };
 
         fetchStudents();
@@ -449,7 +450,7 @@ function TurmaPageTeacher() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await getRequest(`https://mediotec-be.onrender.com/grade/${student_id}/2024/`);
+        const response = await getRequest(`http://192.168.1.9:8000/grade/${student_id}/2024/`);
         const data = await response.json();
         // colocando as notas nas disciplinas certas
         setGrades(mergeLists(defaultGrades, data.grades, (item, first_list_item) => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name));
@@ -510,7 +511,7 @@ function TurmaPageTeacher() {
             });
         });
 
-        const res = await postRequest("https://mediotec-be.onrender.com/grade/", { grade: data });
+        const res = await postRequest("http://192.168.1.9:8000/grade/", { grade: data });
         const dataObj = await res.json();
         if (res.ok) {
             toast({
@@ -526,6 +527,8 @@ function TurmaPageTeacher() {
             });
         }
     }
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

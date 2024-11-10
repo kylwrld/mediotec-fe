@@ -2,7 +2,7 @@
 
 Frontend do Projeto Integrador do curso de Análise e Desenvolvimento de Sistemas da faculdade Senac
 
-disponível em https://mediotec-be.onrender.com/login
+disponível em http://192.168.1.9:8000/login
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project

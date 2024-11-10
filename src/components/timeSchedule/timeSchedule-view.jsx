@@ -13,6 +13,7 @@ import {
 import AuthContext from "@/context/AuthContext";
 import { mergeLists, mergeObjs } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "../Spinner";
 
 function getColumns(state, setState, classYearTeacherSubjects) {
     const columns = [
@@ -51,7 +52,7 @@ function getColumns(state, setState, classYearTeacherSubjects) {
                                             <div>
                                                 {row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name}
                                             </div>
-                                            <div className="text-xs text-black/70">
+                                            <div className="text-[10px] md:text-xs text-black/70">
                                                 {row.original.monday_class_year_teacher_subject?.teacher_subject.teacher.name}
                                             </div>
                                         </div>
@@ -313,6 +314,7 @@ function TimeScheduleView() {
     const [classYearTeacherSubjects, setClassYearTeacherSubjects] = useState(null);
     const [selectedClassYear, setSelectedClassYear] = useState({});
     const [defaultTimeSchedule, setDefaultTimeSchedule] = useState([]);
+    const [loading, setLoading] = useState(true);
     // const [teacherSubjectsAlreadyTaken, setTeacherSubjectsAlreadyTaken] = useState(ALREADY_TAKEN)
 
     const { toast } = useToast();
@@ -330,9 +332,10 @@ function TimeScheduleView() {
 
     useEffect(() => {
         const fetchClassYears = async () => {
-            const res = await getRequest(`https://mediotec-be.onrender.com/class_year/`);
+            const res = await getRequest(`http://192.168.1.9:8000/class_year/`);
             const data = await res.json();
             setClassYears(data.class_years);
+            setLoading(false)
         };
         const defaultTimeScheduleTemp = Array.from({ length: MAX_TIMESCHEDULES }, () => ({})).map((item, index) => {
             item.hour = SHIFT_MORNING[index][0];
@@ -351,10 +354,12 @@ function TimeScheduleView() {
         fetchClassYears();
     }, []);
 
+    // fetch timeSchedule
     async function onSelectClassYear(classYear) {
-        const res = await getRequest(`https://mediotec-be.onrender.com/all_teacher_subject_class/${classYear.id}/`);
+        setLoading(true);
+        const res = await getRequest(`http://192.168.1.9:8000/all_teacher_subject_class/${classYear.id}/`);
         const data = await res.json();
-        const timeScheduleRequest = await getRequest(`https://mediotec-be.onrender.com/time_schedule/?class_year=${classYear.id}`);
+        const timeScheduleRequest = await getRequest(`http://192.168.1.9:8000/time_schedule/?class_year=${classYear.id}`);
         const timeSchedulesData = await timeScheduleRequest.json();
         setSelectedClassYear(classYear);
         setClassYearTeacherSubjects(data.class_year_teacher_subjects);
@@ -406,9 +411,11 @@ function TimeScheduleView() {
                 );
             })
         );
+        setLoading(false);
     }
 
     async function onSubmit(time_schedules) {
+        setLoading(true)
         time_schedules = time_schedules.map((item) => {
             return {
                 id: item?.id,
@@ -423,7 +430,7 @@ function TimeScheduleView() {
             };
         });
 
-        const res = await postRequest(`https://mediotec-be.onrender.com/time_schedule/`, { time_schedules });
+        const res = await postRequest(`http://192.168.1.9:8000/time_schedule/`, { time_schedules });
         const data = await res.json();
 
         setTimeSchedules(
@@ -444,7 +451,10 @@ function TimeScheduleView() {
                 title: "Não foi possível atribuir horário",
             });
         }
+        setLoading(false)
     }
+
+    if (loading) return <Spinner />
 
     return (
         <>

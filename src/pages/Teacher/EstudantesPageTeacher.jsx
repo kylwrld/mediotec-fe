@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner";
 import StudentController from "@/components/student/student-controller";
 import { Button } from "@/components/ui/button";
 import CustomDataTable from "@/components/ui/custom-data-table";
@@ -102,22 +103,23 @@ function EstudantesPageTeacher() {
     });
 
     useEffect(() => {
+        const fetchClasses = async () => {
+            const response = await getRequest("http://192.168.1.9:8000/class_year/");
+            const data = await response.json();
+            setClasses(data.class_years);
+        };
         const fetchStudents = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/student/");
+            const response = await getRequest("http://192.168.1.9:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
-        const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
-            const data = await response.json();
-            setClasses(data.class_years);
-        };
-
         fetchClasses();
         fetchStudents();
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

@@ -1,5 +1,6 @@
 import ClassController from "@/components/class/class-controller";
 import ClassFormEdit from "@/components/class/class-form-edit";
+import Spinner from "@/components/Spinner";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,7 +31,7 @@ import { useNavigate } from "react-router-dom";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
-    const { deleteRequest, patchRequest } = useContext(AuthContext);
+    const { deleteRequest, putRequest } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const columns = [
@@ -87,8 +88,8 @@ function getColumns(state, setState) {
                                     <ClassFormEdit
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
-                                            const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`,
+                                            const res = await putRequest(
+                                                `http://192.168.1.9:8000/class/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -135,7 +136,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/class/${row.original.id}/`
+                                                `http://192.168.1.9:8000/class/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -165,9 +166,8 @@ function getColumns(state, setState) {
 }
 
 function TurmasPageAdmin() {
-    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [classes, setClasses] = useState([]);
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
@@ -203,13 +203,15 @@ function TurmasPageAdmin() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class/");
+            const response = await getRequest("http://192.168.1.9:8000/class/");
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);
         };
         fetchClasses();
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

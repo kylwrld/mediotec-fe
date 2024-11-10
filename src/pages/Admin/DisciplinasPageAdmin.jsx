@@ -30,10 +30,11 @@ import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import Spinner from "@/components/Spinner";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
-    const { deleteRequest, patchRequest } = useContext(AuthContext);
+    const { deleteRequest, putRequest } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const columns = [
@@ -86,8 +87,8 @@ function getColumns(state, setState) {
                                     <SubjectFormEdit
                                         onSubmit={async (obj) => {
                                             obj = deleteUndefinedKeys(obj);
-                                            const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/subject/${row.original.id}/`,
+                                            const res = await putRequest(
+                                                `http://192.168.1.9:8000/subject/${row.original.id}/`,
                                                 obj
                                             );
                                             if (res.ok) {
@@ -134,7 +135,7 @@ function getColumns(state, setState) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/subject/${row.original.id}/`
+                                                `http://192.168.1.9:8000/subject/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -203,21 +204,23 @@ function DisciplinasPageAdmin() {
 
     useEffect(() => {
         const fetchSubjects = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/subject/");
+            const response = await getRequest("http://192.168.1.9:8000/subject/");
             const data = await response.json();
             setSubjects(data.subjects);
         };
 
         const fetchTeachers = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/teacher/");
+            const response = await getRequest("http://192.168.1.9:8000/teacher/");
             const data = await response.json();
             setTeachers(data.teachers);
+            setLoading(false);
         };
 
         fetchSubjects();
         fetchTeachers();
-        setLoading(false);
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

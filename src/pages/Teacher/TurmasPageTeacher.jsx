@@ -1,4 +1,5 @@
 import ClassController from "@/components/class/class-controller";
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import AuthContext from "@/context/AuthContext";
@@ -95,13 +96,15 @@ function TurmasPageTeacher() {
 
     useEffect(() => {
         const fetchClasses = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/teacher/${user.id}/classes/`);
+            const response = await getRequest(`http://192.168.1.9:8000/teacher/${user.id}/classes/`);
             const data = await response.json();
             setClasses(data.classes);
             setLoading(false);
         };
         fetchClasses();
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

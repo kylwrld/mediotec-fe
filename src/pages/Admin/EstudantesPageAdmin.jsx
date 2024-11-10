@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner";
 import StudentController from "@/components/student/student-controller";
 import StudentFormEdit from "@/components/student/student-form-edit";
 import {
@@ -30,7 +31,7 @@ import { useContext, useEffect, useState } from "react";
 
 function getColumns(students, setStudents) {
     const { toast } = useToast();
-    const { deleteRequest, patchRequest } = useContext(AuthContext);
+    const { deleteRequest, putRequest } = useContext(AuthContext);
     const columns = [
         {
             id: "select",
@@ -110,7 +111,9 @@ function getColumns(students, setStudents) {
                         {/* edit */}
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button aria-label="Editar estudante" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                <Button
+                                    aria-label="Editar estudante"
+                                    className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                     <Pencil size={18} />
                                 </Button>
                             </DialogTrigger>
@@ -125,9 +128,26 @@ function getColumns(students, setStudents) {
                                             if (student.birth_date) {
                                                 student.birth_date = formatDate(new Date(student.birth_date));
                                             }
-                                            const res = await patchRequest(
-                                                `https://mediotec-be.onrender.com/student/${row.original.id}/`,
-                                                student
+
+                                            const form = new FormData();
+                                            for (var key in student) {
+                                                if (key == "image") {
+                                                    if (student[key].length > 0) {
+                                                        const image = student[key][0]
+                                                        form.append(key, image);
+                                                    }
+                                                } else if (typeof student[key] === "object"){
+                                                    form.append(key, JSON.stringify(student[key]));
+                                                } else {
+                                                    form.append(key, student[key])
+                                                };
+                                            }
+
+                                            const res = await putRequest(
+                                                `http://192.168.1.9:8000/student/${row.original.id}/`,
+                                                form,
+                                                false,
+                                                false
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -156,7 +176,9 @@ function getColumns(students, setStudents) {
                         {/* delete */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button aria-label="Remover estudante" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                <Button
+                                    aria-label="Remover estudante"
+                                    className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                     <Trash2 size={18} />
                                 </Button>
                             </AlertDialogTrigger>
@@ -173,7 +195,7 @@ function getColumns(students, setStudents) {
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
                                             const res = await deleteRequest(
-                                                `https://mediotec-be.onrender.com/student/${row.original.id}/`
+                                                `http://192.168.1.9:8000/student/${row.original.id}/`
                                             );
                                             if (res.ok) {
                                                 toast({
@@ -241,22 +263,24 @@ function EstudantesPageAdmin() {
     });
 
     useEffect(() => {
+        const fetchClasses = async () => {
+            const response = await getRequest("http://192.168.1.9:8000/class_year/");
+            const data = await response.json();
+            setClasses(data.class_years);
+        };
+
         const fetchStudents = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/student/");
+            const response = await getRequest("http://192.168.1.9:8000/student/");
             const data = await response.json();
             setStudents(data.students);
             setLoading(false);
         };
 
-        const fetchClasses = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/class_year/");
-            const data = await response.json();
-            setClasses(data.class_years);
-        };
-
         fetchClasses();
         fetchStudents();
     }, []);
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

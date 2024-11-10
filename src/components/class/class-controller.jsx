@@ -18,7 +18,7 @@ function ClassController({ table, addClass, newClassButton = false }) {
     const { postRequest } = useContext(AuthContext);
 
     async function onSubmit(_class) {
-        const res = await postRequest("https://mediotec-be.onrender.com/class/", _class);
+        const res = await postRequest("http://192.168.1.9:8000/class/", _class);
         const data = await res.json();
         if (res.ok) {
             toast({

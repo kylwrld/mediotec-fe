@@ -16,6 +16,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
+import Spinner from "@/components/Spinner";
 
 const gradesColumns = [
     {
@@ -148,13 +149,12 @@ const columns = [
 ];
 
 function TurmaPageAdmin() {
-    const { id } = useParams();
+    const [loading, setLoading] = useState(true);
     const [classYear, setClassYear] = useState();
     const [students, setStudents] = useState([]);
     const [grades, setGrades] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [defaultGrades, setDefaultGrades] = useState([]);
-
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
@@ -164,18 +164,19 @@ function TurmaPageAdmin() {
         pageSize: 10,
     });
 
+    const { id } = useParams();
     const { getRequest } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/student_class/${id}/2024/`);
+            const response = await getRequest(`http://192.168.1.9:8000/student_class/${id}/2024/`);
             const data = await response.json();
             setStudents(data.students);
             setSelectedStudent(data.students[0]?.id || null);
             setClassYear(data);
         };
         const fetchSubjects = async () => {
-            const response = await getRequest("https://mediotec-be.onrender.com/subject/");
+            const response = await getRequest("http://192.168.1.9:8000/subject/");
             const data = await response.json();
             const gradesList = data.subjects.map((subject) => {
                 return {
@@ -199,6 +200,7 @@ function TurmaPageAdmin() {
             });
             setGrades(gradesList);
             setDefaultGrades(gradesList);
+            setLoading(false)
         };
 
         fetchStudents();
@@ -206,7 +208,7 @@ function TurmaPageAdmin() {
     }, []);
 
     async function fetchGrades(student_id) {
-        const response = await getRequest(`https://mediotec-be.onrender.com/grade/${student_id}/2024/`);
+        const response = await getRequest(`http://192.168.1.9:8000/grade/${student_id}/2024/`);
         const data = await response.json();
         setGrades(mergeLists(defaultGrades, data.grades, (item, first_list_item) => item.teacher_subject.subject.name === first_list_item.teacher_subject.subject.name));
     }
@@ -240,6 +242,8 @@ function TurmaPageAdmin() {
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
     });
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">

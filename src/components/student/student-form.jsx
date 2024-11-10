@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 
+const MAX_FILE_SIZE = 500_000;
+
 const phoneSchema = z.object({
     ddd: z
         .string()
@@ -62,6 +64,7 @@ const formSchema = z.object({
         // .regex(/[0-9]+\.[0-9]+\.[0-9]+-[0-9]{2}/, { message: "CPF precisa estar no padrão XXX.XXX.XXX-XX" }),
     }),
     phone: z.array(phoneSchema),
+    image: z.instanceof(FileList).optional()
 });
 
 function StudentForm({ onSubmit }) {
@@ -78,6 +81,8 @@ function StudentForm({ onSubmit }) {
             parent: { name: "", cpf: "" },
         },
     });
+
+    const fileRef = form.register("image");
 
     return (
         <Form {...form}>
@@ -196,6 +201,22 @@ function StudentForm({ onSubmit }) {
                             <FormMessage />
                         </FormItem>
                     )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => {
+                        return (
+                            <FormItem>
+                                <FormLabel>Foto do estudante</FormLabel>
+                                <FormControl>
+                                    <Input type="file" placeholder="Imagem do aluno" {...fileRef} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        );
+                    }}
                 />
 
                 {(form.watch("phone") || []).map((phone, index) => {

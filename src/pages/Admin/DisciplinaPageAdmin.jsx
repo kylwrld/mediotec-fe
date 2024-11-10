@@ -14,6 +14,7 @@ import TeacherController from "@/components/teacher/teacher-controller";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import Spinner from "@/components/Spinner";
 
 function getColumns(state, setState) {
     const columns = [
@@ -74,8 +75,9 @@ function getColumns(state, setState) {
 function DisciplinaPageAdmin() {
     const { id } = useParams();
     const [subject, setSubject] = useState({});
-    const [teacherSubjects, setTeacherSubjects] = useState([]);
+    // const [teacherSubjects, setTeacherSubjects] = useState([]);
     const [teachers, setTeachers] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -91,15 +93,16 @@ function DisciplinaPageAdmin() {
 
     useEffect(() => {
         const fetchSubject = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/subject/${id}/`);
+            const response = await getRequest(`http://192.168.1.9:8000/subject/${id}/`);
             const data = await response.json();
             setSubject(data);
         };
         const fetchTeacherSubjects = async () => {
-            const response = await getRequest(`https://mediotec-be.onrender.com/subject/${id}/teachers/`);
+            const response = await getRequest(`http://192.168.1.9:8000/subject/${id}/teachers/`);
             const data = await response.json();
-            setTeacherSubjects(data.teacher_subject);
+            // setTeacherSubjects(data.teacher_subject);
             setTeachers(data.teacher_subject.map((teacher_subject) => teacher_subject.teacher))
+            setLoading(false)
         }
 
         fetchSubject();
@@ -128,6 +131,8 @@ function DisciplinaPageAdmin() {
             pagination,
         },
     });
+
+    if (loading) return <Spinner />
 
     return (
         <div className="h-full">
