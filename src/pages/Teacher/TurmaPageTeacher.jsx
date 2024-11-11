@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import AttendanceView from "@/components/attendance/attendance-view";
-import GradeView from "@/components/grade/grade-view";
+import GradeViewTeacher from "@/components/grade/grade-view-teacher";
 import Spinner from "@/components/Spinner";
 import StudentControllerClass from "@/components/student/student-controller-class";
 import { Button } from "@/components/ui/button";
@@ -111,8 +111,8 @@ function TurmaPageTeacher() {
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
+        // onColumnVisibilityChange: setColumnVisibility,
+        // onRowSelectionChange: setRowSelection,
         onPaginationChange: setPagination,
         state: {
             sorting,
@@ -160,14 +160,10 @@ function TurmaPageTeacher() {
                     </TabsContent>
 
                     <TabsContent value="grades" className="flex-1">
-                        <GradeView
-                            students={students}
-                            teacherSubjects={teacherSubjects}
-                            classYear={classYear}
-                        />
+                        <GradeViewTeacher students={students} teacherSubjects={teacherSubjects} classYear={classYear} />
                     </TabsContent>
 
-                    <TabsContent value="attendance">
+                    <TabsContent value="attendance" className="flex-1">
                         <AttendanceView classYear={classYear} students={students} teacherSubjects={teacherSubjects} />
                     </TabsContent>
                 </Tabs>

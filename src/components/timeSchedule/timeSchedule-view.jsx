@@ -331,12 +331,6 @@ function TimeScheduleView() {
     });
 
     useEffect(() => {
-        const fetchClassYears = async () => {
-            const res = await getRequest(`class_year/`);
-            const data = await res.json();
-            setClassYears(data.class_years);
-            setLoading(false)
-        };
         const defaultTimeScheduleTemp = Array.from({ length: MAX_TIMESCHEDULES }, () => ({})).map((item, index) => {
             item.hour = SHIFT_MORNING[index][0];
             item.minute = SHIFT_MORNING[index][1];
@@ -348,6 +342,16 @@ function TimeScheduleView() {
             item.class_year = null;
             return item;
         });
+        const fetchClassYears = async () => {
+            const res = await getRequest(`class_year/`);
+            const data = await res.json();
+            setClassYears(data.class_years);
+
+            // class_year can by empty
+            setSelectedClassYear(data.class_years[0])
+            onSelectClassYear(data.class_years[0], defaultTimeScheduleTemp)
+            setLoading(false)
+        };
         setTimeSchedules(defaultTimeScheduleTemp);
         setDefaultTimeSchedule(defaultTimeScheduleTemp);
 
@@ -355,7 +359,7 @@ function TimeScheduleView() {
     }, []);
 
     // fetch timeSchedule
-    async function onSelectClassYear(classYear) {
+    async function onSelectClassYear(classYear, defaultTimeSchedule) {
         setLoading(true);
         const res = await getRequest(`all_teacher_subject_class/${classYear.id}/`);
         const data = await res.json();
@@ -391,18 +395,6 @@ function TimeScheduleView() {
                 }
             );
         }
-
-        // newTimeSchedule.forEach(item => {
-        //     const time = item.hour.toString() + item.minute.toString()
-        //     item.monday_class_year_teacher_subject != null ? (teacherSubjectsAlreadyTaken[time]["SEGUNDA"]).push(item.monday_class_year_teacher_subject) : null
-        //     item.tuesday_class_year_teacher_subject != null ? (teacherSubjectsAlreadyTaken[time]["TERCA"]).push(item.tuesday_class_year_teacher_subject) : null
-        //     item.wednesday_class_year_teacher_subject != null ? (teacherSubjectsAlreadyTaken[time]["QUARTA"]).push(item.wednesday_class_year_teacher_subject) : null
-        //     item.thursday_class_year_teacher_subject != null ? (teacherSubjectsAlreadyTaken[time]["QUINTA"]).push(item.thursday_class_year_teacher_subject) : null
-        //     item.friday_class_year_teacher_subject != null ? (teacherSubjectsAlreadyTaken[time]["SEXTA"]).push(item.friday_class_year_teacher_subject) : null
-
-        // });
-        // console.log(teacherSubjectsAlreadyTaken)
-        // setTeacherSubjectsAlreadyTaken(teacherSubjectsAlreadyTaken)
 
         setTimeSchedules(
             mergeLists(newTimeSchedule, timeSchedulesData.time_schedules, (item_first_list, item_second_list) => {
@@ -459,7 +451,7 @@ function TimeScheduleView() {
     return (
         <>
             <div className="flex gap-5 w-fit my-5">
-                <Select onValueChange={onSelectClassYear}>
+                <Select onValueChange={onSelectClassYear} defaultValue={selectedClassYear}>
                     <SelectTrigger className="text-muted-foreground" aria-label="Seleciona uma turma">
                         <SelectValue placeholder="Selecione uma turma" />
                     </SelectTrigger>

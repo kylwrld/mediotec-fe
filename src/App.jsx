@@ -20,6 +20,7 @@ import LoginPage from "./pages/LoginPage";
 import EstudantesPageTeacher from "./pages/Teacher/EstudantesPageTeacher";
 import TurmaPageTeacher from "./pages/Teacher/TurmaPageTeacher";
 import TurmasPageTeacher from "./pages/Teacher/TurmasPageTeacher";
+import ProfessorPageTeacher from "./pages/Teacher/ProfessorPageTeacher";
 
 export default function App() {
     const router = createBrowserRouter(
@@ -39,6 +40,9 @@ export default function App() {
                         <Route
                             path="/turmas"
                             element={<Redirect teacher={<TurmasPageTeacher />} admin={<TurmasPageAdmin />} />}></Route>
+                        <Route
+                            path="/professor/:id"
+                            element={<Redirect teacher={<ProfessorPageTeacher />} />}></Route>
                         <Route path="/avisos" element={<AvisosPage />}></Route>
 
                         <Route path="/faltas" element={<FaltasPage />}></Route>
