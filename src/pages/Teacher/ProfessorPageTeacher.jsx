@@ -4,19 +4,26 @@ import { useParams } from "react-router-dom";
 import GradeViewAdmin from "@/components/grade/grade-view-admin";
 import StudentControllerClass from "@/components/student/student-controller-class";
 import CustomDataTable from "@/components/ui/custom-data-table";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "@/context/AuthContext";
+import Spinner from "@/components/Spinner";
 
 function ProfessorPageTeacher() {
     const [loading, setLoading] = useState(true);
 
     const { id } = useParams();
+    const { getRequest } = useContext(AuthContext)
 
     useEffect(() => {
         const fetchData = async () => {
-
+            const response = await getRequest(`teacher/${id}/time_schedule/`)
+            const data = await response.json()
+            setLoading(false)
         }
-
+        fetchData()
     }, [])
+
+    if (loading) return <Spinner />;
 
     return (
         <div className="h-full">
@@ -37,7 +44,7 @@ function ProfessorPageTeacher() {
                     <TabsTrigger value="turmas" className="w-full">
                         Turmas
                     </TabsTrigger>
-                    <TabsTrigger value="horarios" className="w-full" onClick={() => fetchGrades(selectedStudent)}>
+                    <TabsTrigger value="horarios" className="w-full">
                         Horarios
                     </TabsTrigger>
                 </TabsList>
