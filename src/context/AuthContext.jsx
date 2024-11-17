@@ -1,10 +1,11 @@
 import { jwtDecode } from "jwt-decode";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-const BACKEND_API_URL = "https://mediotec-be.onrender.com/"
-// const BACKEND_API_URL = "http://127.0.0.1:8000/"
+// const BACKEND_API_URL = "https://mediotec-be.onrender.com/"
+const BACKEND_API_URL = "http://127.0.0.1:8000/"
 
 const AuthContext = createContext();
+const useAuthContext = () => useContext(AuthContext);
 export default AuthContext;
 
 export function AuthProvider({ children }) {

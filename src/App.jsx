@@ -21,6 +21,7 @@ import EstudantesPageTeacher from "./pages/Teacher/EstudantesPageTeacher";
 import TurmaPageTeacher from "./pages/Teacher/TurmaPageTeacher";
 import TurmasPageTeacher from "./pages/Teacher/TurmasPageTeacher";
 import ProfessorPageTeacher from "./pages/Teacher/ProfessorPageTeacher";
+import AdminsPageAdmin from "./pages/Admin/AdminsPageAdmin";
 
 export default function App() {
     const router = createBrowserRouter(
@@ -52,6 +53,7 @@ export default function App() {
                         <Route path="/professores" element={<ProfessoresPageAdmin />}></Route>
                         <Route path="/disciplinas" element={<DisciplinasPageAdmin />}></Route>
                         <Route path="/disciplina/:id" element={<DisciplinaPageAdmin />}></Route>
+                        <Route path="/admins" element={<AdminsPageAdmin />}></Route>
                     </Route>
                 </Route>
                 <Route path="/login" element={<LoginPage />}></Route>

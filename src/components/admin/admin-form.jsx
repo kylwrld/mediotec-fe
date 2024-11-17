@@ -38,7 +38,7 @@ const formSchema = z.object({
     image: z.instanceof(FileList).optional(),
 });
 
-function TeacherForm({ onSubmit }) {
+function AdminForm({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -60,9 +60,9 @@ function TeacherForm({ onSubmit }) {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Nome do professor(a)</FormLabel>
+                            <FormLabel>Nome do coordenador(a)</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o nome do professor(a)" {...field} />
+                                <Input placeholder="Digite o nome do coordenador(a)" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -76,7 +76,7 @@ function TeacherForm({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o email do professor(a)" {...field} />
+                                <Input placeholder="Digite o email do coordenador(a)" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -90,7 +90,7 @@ function TeacherForm({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Senha</FormLabel>
                             <FormControl>
-                                <Input type="password" placeholder="Digite a senha do professor(a)" {...field} />
+                                <Input type="password" placeholder="Digite a senha do coordenador(a)" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -134,7 +134,7 @@ function TeacherForm({ onSubmit }) {
                                 </PopoverContent>
                             </Popover>
                             <FormDescription>
-                                A data de nascimento é usada para calcular a idade do professor(a).
+                                A data de nascimento é usada para calcular a idade do coordenador(a).
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -147,9 +147,9 @@ function TeacherForm({ onSubmit }) {
                     render={({ field }) => {
                         return (
                             <FormItem>
-                                <FormLabel>Foto do professor(a)</FormLabel>
+                                <FormLabel>Foto do coordenador(a)</FormLabel>
                                 <FormControl>
-                                    <Input type="file" accept="image/*" placeholder="Imagem do professor(a)" {...fileRef} />
+                                    <Input type="file" accept="image/*" placeholder="Imagem do coordenador(a)" {...fileRef} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -165,4 +165,4 @@ function TeacherForm({ onSubmit }) {
     );
 }
 
-export default TeacherForm;
+export default AdminForm;

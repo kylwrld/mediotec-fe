@@ -394,7 +394,7 @@ function TimeScheduleView() {
             // class_year can by empty
             setSelectedClassYear(data.class_years[0]);
             onSelectClassYear(data.class_years[0], defaultTimeScheduleTemp);
-            setLoading(false);
+            // setLoading(false);
         };
         setTimeSchedules(defaultTimeScheduleTemp);
         setDefaultTimeSchedule(defaultTimeScheduleTemp);

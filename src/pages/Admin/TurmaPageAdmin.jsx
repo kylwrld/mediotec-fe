@@ -16,6 +16,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, Dot } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const columns = [
     {
@@ -31,7 +32,15 @@ const columns = [
                 </Button>
             );
         },
-        cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+        cell: ({ row }) => (
+            <div className="capitalize flex items-center gap-2">
+                <Avatar>
+                    <AvatarImage src={row.original.image} />
+                    <AvatarFallback>-</AvatarFallback>
+                </Avatar>
+                {row.getValue("name")}
+            </div>
+        ),
     },
     {
         accessorKey: "email",

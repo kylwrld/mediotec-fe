@@ -48,11 +48,9 @@ export function mergeObjs(first_obj, second_obj) {
 }
 
 export function deleteUndefinedKeys(obj) {
-    Object.keys(obj).forEach((key) => key in obj && typeof obj[key] === "undefined" ? delete obj[key] : null)
+    Object.keys(obj).forEach((key) => key in obj && typeof obj[key] === "undefined" || (obj[key] instanceof FileList && obj[key].length == 0) ? delete obj[key] : null)
     return obj
 }
-
-
 
 /**
  * given an array of arrays, checks if
@@ -91,6 +89,28 @@ export function appendFieldsUserForm(fields) {
     return form
 }
 
+export function changeStateOnEdit(state, setState, row, obj) {
+    const newState = []
+
+    const fileReader = new FileReader;
+    for (let stateObj of state) {
+        if (stateObj.id != row.original.id) {
+            newState.push(stateObj)
+        } else if (obj["image"]) {
+            fileReader.onload = () => {
+                newState.push({...stateObj, image: fileReader.result})
+                setState(newState)
+            }
+            fileReader.readAsDataURL(obj["image"][0])
+        } else {
+            const mergedObj = mergeObjs(stateObj, obj)
+            newState.push(mergedObj)
+        }
+    }
+
+    return newState
+}
+
 
 export const MAX_TIMESCHEDULES = 8;
 export const SHIFT_MORNING = [
@@ -113,3 +133,35 @@ export const SHIFT_AFTERNOON = [
     [19, 10],
     [20, 0],
 ];
+
+/**
+ * Calculates the difference between two dates
+ * @param date1 {Date}
+ * @param date2 {Date}
+ */
+export const dateDiff = (date1, date2) => {
+    const diff = date1 - date2;
+    const seconds = Math.floor(diff / 1000)
+    const minutes = Math.floor(diff / (1000 * 60))
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const weeks = Math.floor(diff / (1000 * 60 * 60 * 24 * 7))
+    const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44))
+    const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25))
+
+    if (seconds < 60) {
+        return seconds == 1 ? "1 segundo" : seconds + " segundos"
+    } else if (minutes < 60) {
+        return minutes == 1 ? "1 minuto" : minutes + " minutos"
+    } else if (hours < 25) {
+        return hours == 1 ? "1 hora" : hours + " horas"
+    } else if (days < 8) {
+        return days == 1 ? "1 dia" : days + " dias"
+    } else if (weeks < 31) {
+        return weeks == 1 ? "1 semana" : weeks + " semanas"
+    } else if (months < 13) {
+        return months == 1 ? "1 mês" : months + " meses"
+    }
+
+    return years == 1 ?  "1 ano" : years + " anos"
+}

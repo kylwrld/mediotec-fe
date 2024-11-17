@@ -19,8 +19,9 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
+import { dateDiff, deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import { useContext } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import AnnouncementFormEdit from "./announcement-form-edit";
 
 export default function AnnouncementDataTable({ table, controller, classes, state, setState }) {
@@ -40,10 +41,14 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                     <td className="flex flex-col h-fit p-4 border rounded-md">
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
+                                                <Avatar>
+                                                    <AvatarImage src={row.original.image} />
+                                                    <AvatarFallback>-</AvatarFallback>
+                                                </Avatar>
                                                 <div className="flex flex-col">
                                                     <p className="font-bold">{row.original.user.name}</p>
                                                     <span className="text-muted-foreground">
-                                                        {new Date(row.original.created_at).toLocaleString("pt-BR")}
+                                                        {dateDiff(new Date(), new Date(row.original.created_at)) + " atrás"}
                                                     </span>
                                                 </div>
                                             </div>
@@ -51,7 +56,9 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                 <div>
                                                     <Dialog>
                                                         <DialogTrigger asChild>
-                                                            <Button aria-label="Editar aviso" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                                            <Button
+                                                                aria-label="Editar aviso"
+                                                                className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                                                 <Pencil size={18} />
                                                             </Button>
                                                         </DialogTrigger>
@@ -95,7 +102,9 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                     {/* delete */}
                                                     <AlertDialog>
                                                         <AlertDialogTrigger asChild>
-                                                            <Button aria-label="Remover aviso" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                                            <Button
+                                                                aria-label="Remover aviso"
+                                                                className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                                                 <Trash2 size={18} />
                                                             </Button>
                                                         </AlertDialogTrigger>

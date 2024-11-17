@@ -53,9 +53,9 @@ function TeacherFormEdit({ onSubmit }) {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Nome do professor</FormLabel>
+                            <FormLabel>Nome do professor(a)</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o nome do professor" {...field} />
+                                <Input placeholder="Digite o nome do professor(a)" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -69,7 +69,7 @@ function TeacherFormEdit({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o email do professor" {...field} />
+                                <Input placeholder="Digite o email do professor(a)" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -83,7 +83,7 @@ function TeacherFormEdit({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Senha</FormLabel>
                             <FormControl>
-                                <Input type="password" placeholder="Digite a senha do professor" {...field} />
+                                <Input type="password" placeholder="Digite a senha do professor(a)" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -127,7 +127,7 @@ function TeacherFormEdit({ onSubmit }) {
                                 </PopoverContent>
                             </Popover>
                             <FormDescription>
-                                A data de nascimento é usada para calcular a idade do professor.
+                                A data de nascimento é usada para calcular a idade do professor(a).
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -140,9 +140,9 @@ function TeacherFormEdit({ onSubmit }) {
                     render={({ field }) => {
                         return (
                             <FormItem>
-                                <FormLabel>Foto do estudante</FormLabel>
+                                <FormLabel>Foto do professor(a)</FormLabel>
                                 <FormControl>
-                                    <Input type="file" accept="image/*" placeholder="Imagem do aluno" {...fileRef} />
+                                    <Input type="file" accept="image/*" placeholder="Imagem do professor(a)" {...fileRef} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

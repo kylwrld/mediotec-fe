@@ -3,7 +3,7 @@ import TeacherFormEdit from "@/components/teacher/teacher-form-edit";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomDataTable from "@/components/ui/custom-data-table";
-import { appendFieldsUserForm, deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
+import { appendFieldsUserForm, changeStateOnEdit, deleteUndefinedKeys, formatDate, mergeObjs } from "@/lib/utils";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -30,6 +30,7 @@ import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import Spinner from "@/components/Spinner";
 import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
@@ -78,7 +79,15 @@ function getColumns(state, setState) {
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="capitalize" onClick={() => navigate(`/professor/${row.original.id}`)}>{row.getValue("name")}</div>,
+            cell: ({ row }) => (
+                <div className="capitalize flex items-center gap-2">
+                    <Avatar>
+                        <AvatarImage src={row.original.image} alt="@shadcn" />
+                        <AvatarFallback>-</AvatarFallback>
+                    </Avatar>
+                    {row.getValue("name")}
+                </div>
+            ),
         },
         {
             accessorKey: "email",
@@ -111,7 +120,6 @@ function getColumns(state, setState) {
                                             }
 
                                             const form = appendFieldsUserForm(obj);
-                                            console.log("aqui2")
 
                                             // const form = new FormData();
                                             // for (var key in obj) {
@@ -138,13 +146,14 @@ function getColumns(state, setState) {
                                                     variant: "success",
                                                     title: "Professor editado com sucesso",
                                                 });
-                                                setState(
-                                                    state.map((stateObj) =>
-                                                        stateObj.id !== row.original.id
-                                                            ? stateObj
-                                                            : mergeObjs(stateObj, obj)
-                                                    )
-                                                );
+                                                changeStateOnEdit(state, setState, row, obj)
+                                                // setState(
+                                                //     state.map((stateObj) =>
+                                                //         stateObj.id !== row.original.id
+                                                //             ? stateObj
+                                                //             : mergeObjs(stateObj, obj)
+                                                //     )
+                                                // );
                                             } else {
                                                 toast({
                                                     variant: "destructive",
