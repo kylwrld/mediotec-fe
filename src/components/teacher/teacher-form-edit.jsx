@@ -33,12 +33,15 @@ const formSchema = z.object({
     birth_date: z.date({
         required_error: "Por favor especifique a data de nascimento.",
     }),
+    image: z.instanceof(FileList).optional(),
 });
 
 function TeacherFormEdit({ onSubmit }) {
     const form = useForm({
         resolver: zodResolver(formSchema.partial()),
     });
+
+    const fileRef = form.register("image");
 
     return (
         <Form {...form}>
@@ -129,6 +132,22 @@ function TeacherFormEdit({ onSubmit }) {
                             <FormMessage />
                         </FormItem>
                     )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => {
+                        return (
+                            <FormItem>
+                                <FormLabel>Foto do estudante</FormLabel>
+                                <FormControl>
+                                    <Input type="file" accept="image/*" placeholder="Imagem do aluno" {...fileRef} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        );
+                    }}
                 />
 
                 <div className="flex gap-2">

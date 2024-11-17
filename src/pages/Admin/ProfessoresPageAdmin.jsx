@@ -3,7 +3,7 @@ import TeacherFormEdit from "@/components/teacher/teacher-form-edit";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomDataTable from "@/components/ui/custom-data-table";
-import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
+import { appendFieldsUserForm, deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -109,9 +109,29 @@ function getColumns(state, setState) {
                                             if (obj.birth_date) {
                                                 obj.birth_date = formatDate(new Date(obj.birth_date));
                                             }
+
+                                            const form = appendFieldsUserForm(obj);
+                                            console.log("aqui2")
+
+                                            // const form = new FormData();
+                                            // for (var key in obj) {
+                                            //     if (key == "image") {
+                                            //         if (obj[key].length > 0) {
+                                            //             const image = obj[key][0]
+                                            //             form.append(key, image);
+                                            //         }
+                                            //     } else if (typeof obj[key] === "object"){
+                                            //         form.append(key, JSON.stringify(obj[key]));
+                                            //     } else {
+                                            //         form.append(key, obj[key])
+                                            //     };
+                                            // }
+
                                             const res = await putRequest(
                                                 `teacher/${row.original.id}/`,
-                                                obj
+                                                form,
+                                                false,
+                                                false
                                             );
                                             if (res.ok) {
                                                 toast({

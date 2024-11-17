@@ -70,6 +70,27 @@ export function containsArray(arr, value) {
     return false
 }
 
+/**
+ *  @param {object} fields
+ *  @returns {FormData}
+ */
+export function appendFieldsUserForm(fields) {
+    const form = new FormData();
+    for (var key in fields) {
+        if (key == "image") {
+            if (fields[key].length > 0) {
+                const image = fields[key][0]
+                form.append(key, image);
+            }
+        } else if (typeof fields[key] === "object"){
+            form.append(key, JSON.stringify(fields[key]));
+        } else {
+            form.append(key, fields[key])
+        };
+    }
+    return form
+}
+
 
 export const MAX_TIMESCHEDULES = 8;
 export const SHIFT_MORNING = [
