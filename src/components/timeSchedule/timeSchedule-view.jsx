@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import CustomDataTable from "../ui/custom-data-table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Button } from "../ui/button";
-import CustomTimeScheduleDataTable from "./timeSchedule-data-table";
+import AuthContext from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { MAX_TIMESCHEDULES, mergeLists, SHIFT_AFTERNOON, SHIFT_MORNING } from "@/lib/utils";
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -10,10 +8,11 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import AuthContext from "@/context/AuthContext";
-import { mergeLists, mergeObjs } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
+import { useContext, useEffect, useState } from "react";
 import Spinner from "../Spinner";
+import { Button } from "../ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import CustomTimeScheduleDataTable from "./timeSchedule-data-table";
 
 function getColumns(state, setState, classYearTeacherSubjects) {
     const columns = [
@@ -44,20 +43,29 @@ function getColumns(state, setState, classYearTeacherSubjects) {
                         }}>
                         <SelectTrigger
                             className="text-[10px] md:text-sm border-0 shadow-none justify-center p-0 h-fit"
-                            withoutIcon aria-label="Seleciona uma disciplina">
+                            withoutIcon
+                            aria-label="Seleciona uma disciplina">
                             <SelectValue
                                 placeholder={
                                     row.original.monday_class_year_teacher_subject != null ? (
                                         <div className="flex flex-col">
                                             <div>
-                                                {row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name}
+                                                {
+                                                    row.original.monday_class_year_teacher_subject?.teacher_subject
+                                                        .subject.name
+                                                }
                                             </div>
                                             <div className="text-[10px] md:text-xs text-black/70">
-                                                {row.original.monday_class_year_teacher_subject?.teacher_subject.teacher.name}
+                                                {
+                                                    row.original.monday_class_year_teacher_subject?.teacher_subject
+                                                        .teacher.name
+                                                }
                                             </div>
                                         </div>
-                                    // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
-                                    ) : "-"
+                                    ) : (
+                                        // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
+                                        "-"
+                                    )
                                 }
                                 className="text-center"
                             />
@@ -99,20 +107,29 @@ function getColumns(state, setState, classYearTeacherSubjects) {
                         }}>
                         <SelectTrigger
                             className="text-[10px] md:text-sm border-0 shadow-none justify-center p-0 h-fit"
-                            withoutIcon aria-label="Seleciona uma disciplina">
+                            withoutIcon
+                            aria-label="Seleciona uma disciplina">
                             <SelectValue
                                 placeholder={
                                     row.original.tuesday_class_year_teacher_subject != null ? (
                                         <div className="flex flex-col">
                                             <div>
-                                                {row.original.tuesday_class_year_teacher_subject?.teacher_subject.subject.name}
+                                                {
+                                                    row.original.tuesday_class_year_teacher_subject?.teacher_subject
+                                                        .subject.name
+                                                }
                                             </div>
                                             <div className="text-xs text-black/70">
-                                                {row.original.tuesday_class_year_teacher_subject?.teacher_subject.teacher.name}
+                                                {
+                                                    row.original.tuesday_class_year_teacher_subject?.teacher_subject
+                                                        .teacher.name
+                                                }
                                             </div>
                                         </div>
-                                    // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
-                                    ) : "-"
+                                    ) : (
+                                        // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
+                                        "-"
+                                    )
                                 }
                                 className="text-center"
                             />
@@ -154,20 +171,29 @@ function getColumns(state, setState, classYearTeacherSubjects) {
                         }}>
                         <SelectTrigger
                             className="text-[10px] md:text-sm border-0 shadow-none justify-center p-0 h-fit"
-                            withoutIcon aria-label="Seleciona uma disciplina">
+                            withoutIcon
+                            aria-label="Seleciona uma disciplina">
                             <SelectValue
                                 placeholder={
                                     row.original.wednesday_class_year_teacher_subject != null ? (
                                         <div className="flex flex-col">
                                             <div>
-                                                {row.original.wednesday_class_year_teacher_subject?.teacher_subject.subject.name}
+                                                {
+                                                    row.original.wednesday_class_year_teacher_subject?.teacher_subject
+                                                        .subject.name
+                                                }
                                             </div>
                                             <div className="text-xs text-black/70">
-                                                {row.original.wednesday_class_year_teacher_subject?.teacher_subject.teacher.name}
+                                                {
+                                                    row.original.wednesday_class_year_teacher_subject?.teacher_subject
+                                                        .teacher.name
+                                                }
                                             </div>
                                         </div>
-                                    // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
-                                    ) : "-"
+                                    ) : (
+                                        // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
+                                        "-"
+                                    )
                                 }
                                 className="text-center"
                             />
@@ -209,20 +235,29 @@ function getColumns(state, setState, classYearTeacherSubjects) {
                         }}>
                         <SelectTrigger
                             className="text-[10px] md:text-sm border-0 shadow-none justify-center p-0 h-fit"
-                            withoutIcon aria-label="Seleciona uma disciplina">
+                            withoutIcon
+                            aria-label="Seleciona uma disciplina">
                             <SelectValue
                                 placeholder={
                                     row.original.thursday_class_year_teacher_subject != null ? (
                                         <div className="flex flex-col">
                                             <div>
-                                                {row.original.thursday_class_year_teacher_subject?.teacher_subject.subject.name}
+                                                {
+                                                    row.original.thursday_class_year_teacher_subject?.teacher_subject
+                                                        .subject.name
+                                                }
                                             </div>
                                             <div className="text-xs text-black/70">
-                                                {row.original.thursday_class_year_teacher_subject?.teacher_subject.teacher.name}
+                                                {
+                                                    row.original.thursday_class_year_teacher_subject?.teacher_subject
+                                                        .teacher.name
+                                                }
                                             </div>
                                         </div>
-                                    // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
-                                    ) : "-"
+                                    ) : (
+                                        // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
+                                        "-"
+                                    )
                                 }
                                 className="text-center"
                             />
@@ -264,20 +299,29 @@ function getColumns(state, setState, classYearTeacherSubjects) {
                         }}>
                         <SelectTrigger
                             className="text-[10px] md:text-sm border-0 shadow-none justify-center p-0 h-fit"
-                            withoutIcon aria-label="Seleciona uma disciplina">
+                            withoutIcon
+                            aria-label="Seleciona uma disciplina">
                             <SelectValue
                                 placeholder={
                                     row.original.friday_class_year_teacher_subject != null ? (
                                         <div className="flex flex-col">
                                             <div>
-                                                {row.original.friday_class_year_teacher_subject?.teacher_subject.subject.name}
+                                                {
+                                                    row.original.friday_class_year_teacher_subject?.teacher_subject
+                                                        .subject.name
+                                                }
                                             </div>
                                             <div className="text-xs text-black/70">
-                                                {row.original.friday_class_year_teacher_subject?.teacher_subject.teacher.name}
+                                                {
+                                                    row.original.friday_class_year_teacher_subject?.teacher_subject
+                                                        .teacher.name
+                                                }
                                             </div>
                                         </div>
-                                    // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
-                                    ) : "-"
+                                    ) : (
+                                        // row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name ?? "-"
+                                        "-"
+                                    )
                                 }
                                 className="text-center"
                             />
@@ -348,9 +392,9 @@ function TimeScheduleView() {
             setClassYears(data.class_years);
 
             // class_year can by empty
-            setSelectedClassYear(data.class_years[0])
-            onSelectClassYear(data.class_years[0], defaultTimeScheduleTemp)
-            setLoading(false)
+            setSelectedClassYear(data.class_years[0]);
+            onSelectClassYear(data.class_years[0], defaultTimeScheduleTemp);
+            setLoading(false);
         };
         setTimeSchedules(defaultTimeScheduleTemp);
         setDefaultTimeSchedule(defaultTimeScheduleTemp);
@@ -407,7 +451,7 @@ function TimeScheduleView() {
     }
 
     async function onSubmit(time_schedules) {
-        setLoading(true)
+        setLoading(true);
         time_schedules = time_schedules.map((item) => {
             return {
                 id: item?.id,
@@ -443,15 +487,17 @@ function TimeScheduleView() {
                 title: "Não foi possível atribuir horário",
             });
         }
-        setLoading(false)
+        setLoading(false);
     }
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner />;
 
     return (
         <>
             <div className="flex gap-5 w-fit my-5">
-                <Select onValueChange={onSelectClassYear} defaultValue={selectedClassYear}>
+                <Select
+                    onValueChange={(value) => onSelectClassYear(value, defaultTimeSchedule)}
+                    defaultValue={selectedClassYear}>
                     <SelectTrigger className="text-muted-foreground" aria-label="Seleciona uma turma">
                         <SelectValue placeholder="Selecione uma turma" />
                     </SelectTrigger>
@@ -482,140 +528,3 @@ function TimeScheduleView() {
 }
 
 export default TimeScheduleView;
-
-// const ALREADY_TAKEN = {
-//     "70": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "750": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "840": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "100": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1050": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1140": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1230": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1320": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1340": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1430": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1520": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1640": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1730": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1820": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "1910": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-//     "20": {
-//         "SEGUNDA": [],
-//         "TERCA": [],
-//         "QUARTA": [],
-//         "QUINTA": [],
-//         "SEXTA": [],
-//     },
-// }
-
-const MAX_TIMESCHEDULES = 8;
-const SHIFT_MORNING = [
-    [7, 0],
-    [7, 50],
-    [8, 40],
-    [10, 0],
-    [10, 50],
-    [11, 40],
-    [12, 30],
-    [13, 20],
-];
-const SHIFT_AFTERNOON = [
-    [13, 40],
-    [14, 30],
-    [15, 20],
-    [16, 40],
-    [17, 30],
-    [18, 20],
-    [19, 10],
-    [20, 0],
-];

@@ -51,3 +51,44 @@ export function deleteUndefinedKeys(obj) {
     Object.keys(obj).forEach((key) => key in obj && typeof obj[key] === "undefined" ? delete obj[key] : null)
     return obj
 }
+
+
+
+/**
+ * given an array of arrays, checks if
+ * a value exists in that array
+ * @param {Array} arr
+ * @param {Array} value
+ * @returns {boolean}
+ */
+export function containsArray(arr, value) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i][0] == value[0] && arr[i][1] == value[1]) {
+            return true
+        }
+    }
+    return false
+}
+
+
+export const MAX_TIMESCHEDULES = 8;
+export const SHIFT_MORNING = [
+    [7, 0],
+    [7, 50],
+    [8, 40],
+    [10, 0],
+    [10, 50],
+    [11, 40],
+    [12, 30],
+    [13, 20],
+];
+export const SHIFT_AFTERNOON = [
+    [13, 40],
+    [14, 30],
+    [15, 20],
+    [16, 40],
+    [17, 30],
+    [18, 20],
+    [19, 10],
+    [20, 0],
+];

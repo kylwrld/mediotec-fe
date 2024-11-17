@@ -29,9 +29,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import Spinner from "@/components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
+    const navigate = useNavigate()
     const { deleteRequest, putRequest } = useContext(AuthContext);
 
     const columns = [
@@ -76,7 +78,7 @@ function getColumns(state, setState) {
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+            cell: ({ row }) => <div className="capitalize" onClick={() => navigate(`/professor/${row.original.id}`)}>{row.getValue("name")}</div>,
         },
         {
             accessorKey: "email",

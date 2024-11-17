@@ -12,11 +12,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({ links }) {
     const { decodeToken, logout } = useContext(AuthContext);
     const user = decodeToken();
     const profile = user?.type == "ADMIN" ? "Coordenação" : "Professor";
+    const navigate = useNavigate();
 
     return (
         <aside className="flex flex-col h-full w-60 lg:w-72 bg-blue-600 text-white">
@@ -41,7 +43,7 @@ function Sidebar({ links }) {
                         <DropdownMenuContent>
                             <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="font-medium">Perfil</DropdownMenuItem>
+                            { user?.type == "TEACHER" ? (<DropdownMenuItem className="font-medium" onClick={() => navigate(`professor/${user.id}`)}>Perfil</DropdownMenuItem>) : null }
                             <DropdownMenuItem className="font-medium" onClick={() => logout()}>
                                 Sair
                             </DropdownMenuItem>
