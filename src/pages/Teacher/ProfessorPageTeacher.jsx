@@ -31,6 +31,11 @@ function ProfessorPageTeacher() {
     }, [])
 
     if (loading) return <Spinner />;
+    if (!teacher.name) return <div>Não encontrado</div>
+
+
+    console.log(teacher)
+
 
     return (
         <div className="flex flex-col h-full">

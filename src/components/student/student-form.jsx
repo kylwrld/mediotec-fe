@@ -211,7 +211,7 @@ function StudentForm({ onSubmit }) {
                             <FormItem>
                                 <FormLabel>Foto do estudante</FormLabel>
                                 <FormControl>
-                                    <Input type="file" placeholder="Imagem do aluno" {...fileRef} />
+                                    <Input type="file" accept="image/*" placeholder="Imagem do aluno" {...fileRef} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

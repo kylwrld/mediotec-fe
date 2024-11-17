@@ -84,8 +84,17 @@ function TeacherController({
 
     async function onSubmit(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        user.type = "TEACHER";
-        const res = await postRequest("signup/", user);
+        const form = new FormData()
+        form.append("name", user.name)
+        form.append("email", user.email)
+        form.append("password", user.password)
+        form.append("birth_date", user.birth_date)
+        form.append("type", "TEACHER")
+        if (user.image.length > 0){
+            form.append("image", user.image[0])
+        }
+
+        const res = await postRequest("signup/", form, false, false);
         const teacher = await res.json();
         if (res.ok) {
             toast({
