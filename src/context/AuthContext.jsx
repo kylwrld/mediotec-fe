@@ -91,9 +91,8 @@ export function AuthProvider({ children }) {
             body: JSON.stringify(userObject),
         });
 
-        const data = await res.json();
-
         if (res.ok) {
+            const data = await res.json();
             setTokens(data);
             localStorage.setItem("tokens", JSON.stringify(data));
         }

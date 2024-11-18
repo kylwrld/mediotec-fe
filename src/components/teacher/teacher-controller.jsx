@@ -129,7 +129,7 @@ function TeacherController({
                 </Button>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
                 {attachSubjectButton ? (
                     <Dialog>
                         <DialogTrigger aria-label="Atribui disciplina a um professor" asChild>

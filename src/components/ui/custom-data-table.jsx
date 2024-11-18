@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 
+// PLEASE REMEMBER TO TURN THIS COMPONENT INTO A COMPOUND COMPONENT
+
 const CustomDataTable = ({ table, children, rowOnClick, pagination }) => {
     return (
         <div className="w-full">

@@ -47,9 +47,11 @@ function LoginPage() {
             });
             navigate("/estudantes");
         } else {
+            const data = await res.json()
             toast({
                 variant: "destructive",
-                title: "Não foi possível realizar o login",
+                // title: "Não foi possível realizar o login",
+                title: data.detail,
                 description: "Tente novamente.",
             });
         }
@@ -60,7 +62,7 @@ function LoginPage() {
         <div className="h-full p-4 md:px-16 md:py-10 bg-slate-300">
             <div className="h-full flex drop-shadow-md">
                 <div className="flex justify-center items-center w-1/2 h-full rounded-l-xl bg-[radial-gradient(circle,rgba(106,151,255,1)_10%,rgba(0,80,255,1)_80%)] hidden lg:flex">
-                    <img className="w-3/5" src="https://i.ibb.co/SJ3tWz4/mediotec-boneco.png" alt="Boneco do Mediotec" />
+                    <img loading='eager' className="w-3/5" src="https://i.ibb.co/SJ3tWz4/mediotec-boneco.png" alt="Boneco do Mediotec" />
                 </div>
                 <div className="flex items-center flex-col w-full lg:w-1/2 h-full border border-gray-300 rounded-lg lg:rounded-l-none lg:rounded-r-xl bg-white">
                     {loading ? (<Spinner />) : (

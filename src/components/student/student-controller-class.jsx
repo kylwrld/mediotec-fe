@@ -41,7 +41,18 @@ function StudentControllerClass({ table, addStudent, newStudentButton = false })
 
     async function onSubmitNewStudent(user) {
         user.birth_date = formatDate(new Date(user.birth_date));
-        const res = await postRequest("signup/student/", user);
+        const form = new FormData()
+        form.append("name", user.name)
+        form.append("email", user.email)
+        form.append("password", user.password)
+        form.append("birth_date", user.birth_date)
+        form.append("parent", JSON.stringify(user.parent))
+        form.append("phone", JSON.stringify(user.phone))
+        if (user.image.length > 0){
+            form.append("image", user.image[0])
+        }
+
+        const res = await postRequest("signup/student/", form, false, false);
         const student = await res.json();
 
         if (res.ok) {
