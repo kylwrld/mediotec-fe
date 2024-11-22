@@ -53,7 +53,7 @@ function ProfessorPageTeacher() {
                         Turmas
                     </TabsTrigger>
                     <TabsTrigger value="time-schedule" className="w-full">
-                        Horarios
+                        Horários
                     </TabsTrigger>
                 </TabsList>
 
