@@ -108,7 +108,7 @@ export function changeStateOnEdit(state, setState, row, obj) {
         }
     }
 
-    return newState
+    setState(newState)
 }
 
 
