@@ -14,7 +14,7 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const formSchema = z.object({
-    title: z.string({ required_error: "Por favor preencha com um título." }),
+    title: z.string({ required_error: "Por favor preencha com um título." }).max(70, {message: "Título não pode ultrapassar 70 caracteres."}),
     body: z.string({
         required_error: "Por favor preencha com algum conteúdo.",
     }),

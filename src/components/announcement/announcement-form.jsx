@@ -16,7 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 const formSchema = z.object({
     title: z.string({ required_error: "Por favor preencha com um título." }).min(3, {
         message: "Título precisa ter pelo menos 3 caracteres.",
-    }),
+    }).max(70, {message: "Título não pode ultrapassar 70 caracteres."}),
     body: z.string({
         required_error: "Por favor preencha com algum conteúdo.",
     }),

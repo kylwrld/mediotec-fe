@@ -42,7 +42,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
                                                 <Avatar>
-                                                    <AvatarImage src={row.original.image} />
+                                                    <AvatarImage src={row.original.user.image} />
                                                     <AvatarFallback>-</AvatarFallback>
                                                 </Avatar>
                                                 <div className="flex flex-col">
