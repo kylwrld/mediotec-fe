@@ -151,9 +151,12 @@ function TurmaPageAdmin() {
                         <TabsTrigger value="students" className="w-full">
                             Estudantes
                         </TabsTrigger>
-                        <TabsTrigger value="grades" className="w-full">
-                            Conceitos
-                        </TabsTrigger>
+
+                        {students?.length > 0 ? (
+                            <TabsTrigger value="grades" className="w-full">
+                                Conceitos
+                            </TabsTrigger>
+                        ) : null}
                     </TabsList>
 
                     <TabsContent value="students">
@@ -171,9 +174,12 @@ function TurmaPageAdmin() {
                         ) : null}
                     </TabsContent>
 
-                    <TabsContent value="grades" className="flex-1">
-                        <GradeViewAdmin students={students} subjects={subjects} />
-                    </TabsContent>
+                    {students?.length > 0 ? (
+                        <TabsContent value="grades" className="flex-1">
+                            <GradeViewAdmin students={students} subjects={subjects} />
+                        </TabsContent>
+                    ) : null}
+
                 </Tabs>
             </div>
         </div>

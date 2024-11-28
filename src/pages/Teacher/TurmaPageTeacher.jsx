@@ -154,12 +154,18 @@ function TurmaPageTeacher() {
                         <TabsTrigger value="students" className="w-full">
                             Estudantes
                         </TabsTrigger>
-                        <TabsTrigger value="grades" className="w-full">
-                            Conceitos
-                        </TabsTrigger>
-                        <TabsTrigger value="attendance" className="w-full">
-                            Presença
-                        </TabsTrigger>
+
+
+                        {students?.length > 0 ? (
+                            <>
+                                <TabsTrigger value="grades" className="w-full">
+                                    Conceitos
+                                </TabsTrigger>
+                                <TabsTrigger value="attendance" className="w-full">
+                                    Presença
+                                </TabsTrigger>
+                            </>
+                        ) : null}
                     </TabsList>
 
                     <TabsContent value="students">
@@ -168,13 +174,18 @@ function TurmaPageTeacher() {
                         </CustomDataTable>
                     </TabsContent>
 
-                    <TabsContent value="grades" className="flex-1">
-                        <GradeViewTeacher students={students} teacherSubjects={teacherSubjects} classYear={classYear} />
-                    </TabsContent>
+                    {students?.length > 0 ? (
+                        <>
+                            <TabsContent value="grades" className="flex-1">
+                                <GradeViewTeacher students={students} teacherSubjects={teacherSubjects} classYear={classYear} />
+                            </TabsContent>
 
-                    <TabsContent value="attendance" className="flex-1">
-                        <AttendanceView classYear={classYear} students={students} teacherSubjects={teacherSubjects} />
-                    </TabsContent>
+                            <TabsContent value="attendance" className="flex-1">
+                                <AttendanceView classYear={classYear} students={students} teacherSubjects={teacherSubjects} />
+                            </TabsContent>
+                        </>
+                    ) : null}
+
                 </Tabs>
             </div>
         </div>
