@@ -30,7 +30,7 @@ function getColumns(state, setState) {
                 return (
                     <div className="capitalize text-center">
                         <Button
-                            className={`w-[150px] ${isPresent ? "bg-transparent shadow-none" : "bg-orange-600"}`}
+                            className={`w-[150px] ${isPresent ? "bg-slate-200 shadow-none" : "bg-orange-600"}`}
                             onClick={() => {
                                 const newState = state.map((value) => {
                                     if (value.student.id == row.original.student.id) {
@@ -52,7 +52,7 @@ function getColumns(state, setState) {
                 return (
                     <div className="capitalize text-center">
                         <Button
-                            className={`w-[150px] ${isPresent ? "bg-orange-600" : "bg-transparent  shadow-none"}`}
+                            className={`w-[150px] ${isPresent ? "bg-orange-600" : "bg-slate-200 shadow-none"}`}
                             onClick={() => {
                                 const newState = state.map((value) => {
                                     if (value.student.id == row.original.student.id) {
