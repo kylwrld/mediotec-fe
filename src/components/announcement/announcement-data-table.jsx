@@ -23,10 +23,16 @@ import { dateDiff, deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import { useContext } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import AnnouncementFormEdit from "./announcement-form-edit";
+import { useNavigate } from "react-router-dom";
 
 export default function AnnouncementDataTable({ table, controller, classes, state, setState }) {
 
     const { deleteRequest, putRequest } = useContext(AuthContext);
+    const navigate = useNavigate()
+
+    function onClick(row) {
+        navigate(`/aviso/${row.original.id}`)
+    }
 
     return (
         <div className="w-full">
@@ -38,7 +44,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                                    <td className="flex flex-col h-fit p-4 border rounded-md">
+                                    <td className="flex flex-col h-fit p-4 border rounded-md" onClick={() => onClick(row)}>
                                         <div className="flex justify-between items-center">
                                             <div className="flex gap-2 items-center">
                                                 <Avatar>
@@ -55,7 +61,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className="flex gap-5">
+                                            <div className="flex gap-5" onClick={(e) => e.stopPropagation()}>
                                                 <div>
                                                     <Dialog>
                                                         <DialogTrigger asChild>
@@ -132,7 +138,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                                                         if (res.ok) {
                                                                             toast({
                                                                                 variant: "success",
-                                                                                title: "Turma removida com sucesso",
+                                                                                title: "Aviso removida com sucesso",
                                                                             });
                                                                             setState(
                                                                                 state.filter(
