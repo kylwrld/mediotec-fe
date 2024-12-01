@@ -48,10 +48,12 @@ function getColumns(state, setState) {
                 );
             },
             cell: ({ row }) => (
-                <div className="capitalize flex items-center gap-2">
+                <div className="capitalize flex items-center gap-3">
                     <Avatar>
                         <AvatarImage src={row.original.image} />
-                        <AvatarFallback>-</AvatarFallback>
+                        <AvatarFallback>
+                            <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                        </AvatarFallback>
                     </Avatar>
                     {row.getValue("name")}
                 </div>
@@ -103,7 +105,7 @@ function getColumns(state, setState) {
                                                     title: "Professor editado com sucesso",
                                                 });
 
-                                                changeStateOnEdit(state, setState, row, obj)
+                                                changeStateOnEdit(state, setState, row, obj);
 
                                                 // if (obj["image"]) {
                                                 //     changeStateOnEdit(state, setState, row, obj)

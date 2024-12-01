@@ -35,7 +35,7 @@ function TeacherController({
         const data = await (
             await getRequest(`teacher/${teacher_id}/subjects/`)
         ).json();
-        setTeacherSubjects(data.teacher);
+        setTeacherSubjects(data.teacher_subjects);
     }
 
     async function fetchSubjects() {

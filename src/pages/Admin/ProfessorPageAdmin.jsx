@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 import Spinner from "@/components/Spinner";
 import ClassViewTeacher from "@/components/class/class-view-teacher";
 import TimeScheduleViewTeacher from "@/components/timeSchedule/timeSchedule-view-teacher";
@@ -8,18 +9,17 @@ import AuthContext from "@/context/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import SubjectView from "@/components/subject/subject-view";
 
-function ProfessorPageTeacher() {
+function ProfessorPageAdmin() {
     const [loading, setLoading] = useState(true);
     const [teacher, setTeacher] = useState({})
     const { id } = useParams();
-    const { getRequest, decodeToken } = useContext(AuthContext)
-    const user = decodeToken();
+    const { getRequest } = useContext(AuthContext)
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await getRequest(`teacher/${id}/time_schedule/`)
+            // const response = await getRequest(`teacher/${id}/time_schedule/`)
             const teacherResponse = await getRequest(`teacher/${id}`)
-            const data = await response.json()
+            // const data = await response.json()
             const teacherData = await teacherResponse.json()
             setTeacher(teacherData)
             setLoading(false)
@@ -28,7 +28,6 @@ function ProfessorPageTeacher() {
     }, [])
 
     if (loading) return <Spinner />;
-    if (user.id != id) return <Navigate to="/estudantes" />
     if (!teacher.name) return <div>Não encontrado</div>
 
     return (
@@ -61,7 +60,6 @@ function ProfessorPageTeacher() {
                     <TabsTrigger value="time-schedule" className="w-full">
                         Horários
                     </TabsTrigger>
-
                     <TabsTrigger value="subjects" className="w-full">
                         Disciplinas
                     </TabsTrigger>
@@ -83,4 +81,4 @@ function ProfessorPageTeacher() {
     );
 }
 
-export default ProfessorPageTeacher;
+export default ProfessorPageAdmin;

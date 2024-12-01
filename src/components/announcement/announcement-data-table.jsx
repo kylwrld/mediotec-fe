@@ -43,12 +43,15 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                             <div className="flex gap-2 items-center">
                                                 <Avatar>
                                                     <AvatarImage src={row.original.user.image} />
-                                                    <AvatarFallback>-</AvatarFallback>
+                                                    <AvatarFallback>
+                                                        <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                                                    </AvatarFallback>
                                                 </Avatar>
                                                 <div className="flex flex-col">
                                                     <p className="font-bold">{row.original.user.name}</p>
                                                     <span className="text-muted-foreground">
-                                                        {dateDiff(new Date(), new Date(row.original.created_at)) + " atrás"}
+                                                        {dateDiff(new Date(), new Date(row.original.created_at)) +
+                                                            " atrás"}
                                                     </span>
                                                 </div>
                                             </div>

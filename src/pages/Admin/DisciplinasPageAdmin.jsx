@@ -231,6 +231,8 @@ function DisciplinasPageAdmin() {
                         table={table}
                         addSubject={(subject) => setSubjects([...subjects, subject])}
                         teachers={teachers}
+                        attachTeacherButton
+                        addNewSubjectButton
                     />
                 </CustomDataTable>
             </div>

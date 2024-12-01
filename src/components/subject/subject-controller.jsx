@@ -10,7 +10,7 @@ import AuthContext from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useContext, useState } from "react";
 
-function SubjectController({ table, addSubject, teachers }) {
+function SubjectController({ table, addSubject, teachers, attachTeacherButton, addNewSubjectButton }) {
     const [teacher, setTeacher] = useState({});
     const { toast } = useToast();
     const { postRequest } = useContext(AuthContext);
@@ -69,55 +69,60 @@ function SubjectController({ table, addSubject, teachers }) {
             </div>
 
             <div className="flex gap-2">
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                            <GraduationCap size={20} />
-                            Atribuir a um professor
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px]">
-                        <DialogHeader>
-                            <DialogTitle>Atribuir a um professor</DialogTitle>
-                        </DialogHeader>
-                        <div className="flex flex-col gap-3">
-                            <Select onValueChange={(value) => setTeacher(value)}>
-                                <SelectTrigger className="text-muted-foreground">
-                                    <SelectValue placeholder="Selecione uma turma" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {teachers
-                                        ? teachers.map((teacher, index) => (
-                                              <SelectItem key={index} value={teacher.id.toString()}>
-                                                  {teacher.name}
-                                              </SelectItem>
-                                          ))
-                                        : null}
-                                </SelectContent>
-                            </Select>
-                            <Button onClick={() => attachTeacher(table.getSelectedRowModel().rows, teacher)}>
-                                Enviar
+                {attachTeacherButton && (
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <GraduationCap size={20} />
+                                Atribuir a um professor
                             </Button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Atribuir a um professor</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-3">
+                                <Select onValueChange={(value) => setTeacher(value)}>
+                                    <SelectTrigger className="text-muted-foreground">
+                                        <SelectValue placeholder="Selecione uma turma" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {teachers
+                                            ? teachers.map((teacher, index) => (
+                                                <SelectItem key={index} value={teacher.id.toString()}>
+                                                    {teacher.name}
+                                                </SelectItem>
+                                            ))
+                                            : null}
+                                    </SelectContent>
+                                </Select>
+                                <Button onClick={() => attachTeacher(table.getSelectedRowModel().rows, teacher)}>
+                                    Enviar
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                )}
 
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
-                            <CirclePlus size={20} />
-                            Nova disciplina
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[720px]">
-                        <DialogHeader>
-                            <DialogTitle>Novo disciplina</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <SubjectForm onSubmit={onSubmit} />
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                {addNewSubjectButton && (
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-[10px] md:text-sm bg-orange-600 gap-2">
+                                <CirclePlus size={20} />
+                                Nova disciplina
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[720px]">
+                            <DialogHeader>
+                                <DialogTitle>Novo disciplina</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <SubjectForm onSubmit={onSubmit} />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                )}
+
             </div>
         </div>
     );

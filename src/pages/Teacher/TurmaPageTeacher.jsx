@@ -34,10 +34,12 @@ const columns = [
             );
         },
         cell: ({ row }) => (
-            <div className="capitalize flex items-center gap-2">
+            <div className="capitalize flex items-center gap-3">
                 <Avatar>
                     <AvatarImage src={row.original.image} />
-                    <AvatarFallback>-</AvatarFallback>
+                    <AvatarFallback>
+                        <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                    </AvatarFallback>
                 </Avatar>
                 {row.getValue("name")}
             </div>
@@ -155,7 +157,6 @@ function TurmaPageTeacher() {
                             Estudantes
                         </TabsTrigger>
 
-
                         {students?.length > 0 ? (
                             <>
                                 <TabsTrigger value="grades" className="w-full">
@@ -177,15 +178,22 @@ function TurmaPageTeacher() {
                     {students?.length > 0 ? (
                         <>
                             <TabsContent value="grades" className="flex-1">
-                                <GradeViewTeacher students={students} teacherSubjects={teacherSubjects} classYear={classYear} />
+                                <GradeViewTeacher
+                                    students={students}
+                                    teacherSubjects={teacherSubjects}
+                                    classYear={classYear}
+                                />
                             </TabsContent>
 
                             <TabsContent value="attendance" className="flex-1">
-                                <AttendanceView classYear={classYear} students={students} teacherSubjects={teacherSubjects} />
+                                <AttendanceView
+                                    classYear={classYear}
+                                    students={students}
+                                    teacherSubjects={teacherSubjects}
+                                />
                             </TabsContent>
                         </>
                     ) : null}
-
                 </Tabs>
             </div>
         </div>

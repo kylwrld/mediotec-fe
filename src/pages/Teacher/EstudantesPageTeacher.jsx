@@ -29,10 +29,12 @@ export const columns = [
             );
         },
         cell: ({ row }) => (
-            <div className="capitalize flex items-center gap-2">
+            <div className="capitalize flex items-center gap-3">
                 <Avatar>
                     <AvatarImage src={row.original.image} />
-                    <AvatarFallback>-</AvatarFallback>
+                    <AvatarFallback>
+                        <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                    </AvatarFallback>
                 </Avatar>
                 {row.getValue("name")}
             </div>
@@ -128,7 +130,7 @@ function EstudantesPageTeacher() {
         fetchStudents();
     }, []);
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner />;
 
     return (
         <div className="h-full">

@@ -67,10 +67,12 @@ function getColumns(students, setStudents) {
                 );
             },
             cell: ({ row }) => (
-                <div className="capitalize flex items-center gap-2">
-                <Avatar>
+                <div className="capitalize flex items-center gap-3">
+                    <Avatar>
                         <AvatarImage src={row.original.image} alt="@shadcn" />
-                        <AvatarFallback>-</AvatarFallback>
+                        <AvatarFallback>
+                            <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                        </AvatarFallback>
                     </Avatar>
                     {row.getValue("name")}
                 </div>
@@ -163,7 +165,7 @@ function getColumns(students, setStudents) {
                                                     variant: "success",
                                                     title: "Estudante editado com sucesso",
                                                 });
-                                                changeStateOnEdit(students, setStudents, row, student)
+                                                changeStateOnEdit(students, setStudents, row, student);
                                                 // setStudents(
                                                 //     students.map((studentObj) =>
                                                 //         studentObj.id !== row.original.id

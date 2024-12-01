@@ -34,7 +34,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function getColumns(state, setState) {
     const { toast } = useToast();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { deleteRequest, putRequest } = useContext(AuthContext);
 
     const columns = [
@@ -80,10 +80,14 @@ function getColumns(state, setState) {
                 );
             },
             cell: ({ row }) => (
-                <div className="capitalize flex items-center gap-2">
+                <div
+                    className="capitalize flex items-center gap-3"
+                    onClick={() => navigate(`/professor/${row.original.id}`)}>
                     <Avatar>
                         <AvatarImage src={row.original.image} alt="@shadcn" />
-                        <AvatarFallback>-</AvatarFallback>
+                        <AvatarFallback>
+                            <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                        </AvatarFallback>
                     </Avatar>
                     {row.getValue("name")}
                 </div>
@@ -103,7 +107,9 @@ function getColumns(state, setState) {
                         {/* edit */}
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button aria-label="Editar professor" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
+                                <Button
+                                    aria-label="Editar professor"
+                                    className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:bg-slate-200 outline-none">
                                     <Pencil size={18} />
                                 </Button>
                             </DialogTrigger>
@@ -146,7 +152,7 @@ function getColumns(state, setState) {
                                                     variant: "success",
                                                     title: "Professor editado com sucesso",
                                                 });
-                                                changeStateOnEdit(state, setState, row, obj)
+                                                changeStateOnEdit(state, setState, row, obj);
                                                 // setState(
                                                 //     state.map((stateObj) =>
                                                 //         stateObj.id !== row.original.id
@@ -169,7 +175,9 @@ function getColumns(state, setState) {
                         {/* delete */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button aria-label="Remover professor" className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                <Button
+                                    aria-label="Remover professor"
+                                    className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
                                     <Trash2 size={18} />
                                 </Button>
                             </AlertDialogTrigger>
@@ -185,9 +193,7 @@ function getColumns(state, setState) {
                                     <AlertDialogAction
                                         className="bg-red-600 hover:bg-red-800"
                                         onClick={async () => {
-                                            const res = await deleteRequest(
-                                                `teacher/${row.original.id}/`
-                                            );
+                                            const res = await deleteRequest(`teacher/${row.original.id}/`);
                                             if (res.ok) {
                                                 toast({
                                                     variant: "success",
@@ -270,7 +276,7 @@ function ProfessoresPageAdmin() {
         fetchClasses();
     }, []);
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner />;
 
     return (
         <div className="h-full">
