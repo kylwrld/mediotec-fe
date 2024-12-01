@@ -7,12 +7,12 @@ import { Input } from "@/components/ui/input";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useContext } from "react";
 import AnnouncementForm from "./announcement-form";
 
 function AnnouncementController({ table, addAnnouncement, classes }) {
-    const { toast } = useToast();
+
     const { postRequest } = useContext(AuthContext);
 
     async function onSubmit(announcement) {

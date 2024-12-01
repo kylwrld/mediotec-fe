@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useContext, useEffect, useState } from "react";
 
 import Spinner from "@/components/Spinner";

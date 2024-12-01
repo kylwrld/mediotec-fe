@@ -27,13 +27,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import Spinner from "@/components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function getColumns(state, setState) {
-    const { toast } = useToast();
+
     const navigate = useNavigate();
     const { deleteRequest, putRequest } = useContext(AuthContext);
 

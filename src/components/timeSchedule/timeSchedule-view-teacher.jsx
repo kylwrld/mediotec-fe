@@ -1,5 +1,5 @@
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { containsArray, MAX_TIMESCHEDULES, mergeLists, SHIFT_AFTERNOON, SHIFT_MORNING } from "@/lib/utils";
 import {
     getCoreRowModel,
@@ -130,7 +130,7 @@ function TimeScheduleViewTeacher({ id }) {
     const [loading, setLoading] = useState(true);
     // const [teacherSubjectsAlreadyTaken, setTeacherSubjectsAlreadyTaken] = useState(ALREADY_TAKEN)
 
-    const { toast } = useToast();
+
     const { postRequest, getRequest } = useContext(AuthContext);
 
     const columns = getColumns(timeSchedules, setTimeSchedules, classYearTeacherSubjects);

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { formatDate } from "@/lib/utils";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ import StudentForm from "./student-form";
 function StudentControllerClass({ table, addStudent, newStudentButton = false }) {
     const [_class, setClass] = useState({});
     const { id } = useParams();
-    const { toast } = useToast();
+
     const { postRequest } = useContext(AuthContext);
 
     async function attachClass(student, _class) {

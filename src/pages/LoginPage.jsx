@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -25,7 +25,7 @@ const formSchema = z.object({
 
 function LoginPage() {
     const [loading, setLoading] = useState(false);
-    const { toast } = useToast();
+
     const { postLogin } = useContext(AuthContext);
     const navigate = useNavigate();
     const form = useForm({

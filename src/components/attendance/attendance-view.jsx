@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import Spinner from "../Spinner";
 import CustomDataTable from "../ui/custom-data-table";
 
@@ -77,7 +77,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
     const [attendances, setAttendances] = useState([]);
     const [defaultAttendances, setDefaultAttendances] = useState([]);
 
-    const { toast } = useToast();
+
     const { postRequest, getRequest } = useContext(AuthContext);
 
     const columns = getColumns(attendances, setAttendances);

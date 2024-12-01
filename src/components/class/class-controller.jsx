@@ -9,12 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useContext } from "react";
 import ClassForm from "./class-form";
 
 function ClassController({ table, addClass, newClassButton = false }) {
-    const { toast } = useToast();
+
     const { postRequest } = useContext(AuthContext);
 
     async function onSubmit(_class) {

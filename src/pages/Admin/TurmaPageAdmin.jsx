@@ -20,7 +20,7 @@ import { ArrowUpDown, Dot } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast"
 
 const columns = [
     {
@@ -117,7 +117,7 @@ function TurmaPageAdmin() {
     });
 
     const { id } = useParams();
-    const { toast } = useToast();
+    //
     const { getRequest, postRequest } = useContext(AuthContext);
 
     const fetchData = async (year) => {
@@ -183,7 +183,14 @@ function TurmaPageAdmin() {
 
         console.log(data)
 
-        if (data.student.length === 0) return;
+        if (data.student.length === 0) {
+            toast({
+                variant: "destructive",
+                title: "Selecione no mínimo 1 estudante.",
+                description: "Você não selecionou nenhum estudante.",
+            });
+            return
+        };
 
         const res = await postRequest(`student_class/${class_id}/${year}/`, data);
 

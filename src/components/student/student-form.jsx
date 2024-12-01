@@ -16,7 +16,7 @@ import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 const MAX_FILE_SIZE = 500_000;
 
@@ -69,7 +69,7 @@ const formSchema = z.object({
 
 function StudentForm({ onSubmit }) {
     const [_class, setClass] = useState({});
-    const { toast } = useToast();
+
 
     const form = useForm({
         resolver: zodResolver(formSchema),

@@ -9,13 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { formatDate } from "@/lib/utils";
 
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { useContext, useState } from "react";
 import StudentForm from "./student-form";
 
 function StudentController({ table, classes, addStudent, newStudentButton = false, attachClassButton = false }) {
     const [_class, setClass] = useState({});
-    const { toast } = useToast();
+
     const { postRequest } = useContext(AuthContext);
 
     async function attachClass(rows, class_id) {

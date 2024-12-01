@@ -18,14 +18,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { dateDiff, deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import { useContext } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import AnnouncementFormEdit from "./announcement-form-edit";
 
 export default function AnnouncementDataTable({ table, controller, classes, state, setState }) {
-    const { toast } = useToast();
+
     const { deleteRequest, putRequest } = useContext(AuthContext);
 
     return (

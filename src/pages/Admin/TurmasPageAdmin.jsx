@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import CustomDataTable from "@/components/ui/custom-data-table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { deleteUndefinedKeys, mergeObjs } from "@/lib/utils";
 import {
     getCoreRowModel,
@@ -30,7 +30,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function getColumns(state, setState) {
-    const { toast } = useToast();
+
     const { deleteRequest, putRequest } = useContext(AuthContext);
     const navigate = useNavigate();
 

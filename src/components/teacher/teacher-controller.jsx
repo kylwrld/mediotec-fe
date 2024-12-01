@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AuthContext from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { formatDate } from "@/lib/utils";
 import { useContext, useState } from "react";
 import TeacherForm from "./teacher-form";
@@ -28,7 +28,7 @@ function TeacherController({
     const [subject, setSubject] = useState({});
     const { postRequest, getRequest } = useContext(AuthContext);
 
-    const { toast } = useToast();
+
 
     async function fetchTeacherSubject() {
         const teacher_id = table.getSelectedRowModel().rows[0].original.id;
