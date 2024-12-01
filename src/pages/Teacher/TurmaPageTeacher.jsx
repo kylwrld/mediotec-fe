@@ -76,9 +76,10 @@ const columns = [
 
 function TurmaPageTeacher() {
     const [loading, setLoading] = useState(true);
-    const [classYear, setClassYear] = useState();
+    const [classYear, setClassYear] = useState({});
     const [students, setStudents] = useState([]);
     const [teacherSubjects, setTeacherSubjects] = useState([]);
+
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
@@ -96,16 +97,16 @@ function TurmaPageTeacher() {
         const fetchTeacherSubjects = async () => {
             // TODO: Change year variable to be dinamic
             // teacher all subjects from a class
-            const response = await getRequest(`teacher/${id}/${2024}/${user.id}`);
+            const response = await getRequest(`teacher/${id}/${new Date().getFullYear()}/${user.id}`);
             const data = await response.json();
             setTeacherSubjects(data.teacher_subject);
         };
 
         const fetchStudents = async () => {
-            const response = await getRequest(`student_class/${id}/2024/`);
+            const response = await getRequest(`student_class/${id}/${new Date().getFullYear()}/`);
             const data = await response.json();
-            setStudents(data.students);
-            setClassYear(data);
+            setStudents(data.class_year?.students);
+            setClassYear(data.class_year);
             setLoading(false);
         };
 

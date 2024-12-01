@@ -9,7 +9,7 @@ import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import CustomDataTable from "../ui/custom-data-table";
 import { gradeColumnsAdmin } from "@/lib/data-table-columns";
 
-function GradeViewAdmin({ students, subjects }) {
+function GradeViewAdmin({ students, subjects, year }) {
     const [loading, setLoading] = useState(true);
     const [selectedStudent, setSelectedStudent] = useState(students[0].id);
     const [defaultGrades, setDefaultGrades] = useState([]);
@@ -18,7 +18,7 @@ function GradeViewAdmin({ students, subjects }) {
     const { getRequest } = useContext(AuthContext);
 
     async function fetchGrades(student_id, grades) {
-        const response = await getRequest(`grade/${student_id}/2024/`);
+        const response = await getRequest(`grade/${student_id}/${year}/`);
         const data = await response.json();
 
         // colocando as notas nas disciplinas certas
