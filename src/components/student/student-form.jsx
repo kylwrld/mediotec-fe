@@ -60,8 +60,9 @@ const formSchema = z.object({
             .string({
                 required_error: "Por favor preencha o CPF do responsável.",
             })
-            .min(14, { message: "O CPF precisa ter 14 dígitos" }),
-        // .regex(/[0-9]+\.[0-9]+\.[0-9]+-[0-9]{2}/, { message: "CPF precisa estar no padrão XXX.XXX.XXX-XX" }),
+            .min(14, { message: "O CPF precisa ter 14 dígitos" })
+            // 
+            .regex(/[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}/, { message: "CPF precisa estar no padrão XXX.XXX.XXX-XX" }),
     }),
     phone: z.array(phoneSchema),
     image: z.instanceof(FileList).optional()

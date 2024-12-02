@@ -55,7 +55,7 @@ function AnnouncementForm({ classes, onSubmit }) {
                         <FormItem>
                             <FormLabel>Conteúdo</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Digite o conteúdo do aviso" className="resize-none" {...field} />
+                                <Textarea placeholder="Digite o conteúdo do aviso" className="" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

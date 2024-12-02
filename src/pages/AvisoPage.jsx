@@ -25,44 +25,74 @@ function AvisoPage() {
     if (loading) return <Spinner />;
 
     return (
-        <div className="flex flex-col gap-5 mt-10 mx-96">
-            <h1 className="text-2xl md:text-3xl">{announcement.title}</h1>
-            <h2 className="text-xl md:text-xl font-normal">{announcement.body}</h2>
-            <div className="flex gap-2">
-                <Users color="black" />
-                {announcement.comments.length > 0 ? (
-                    <p>{announcement.comments.length} comentário da turma</p>
-                ) : announcement.comments.length > 1 ? (
-                    <p>{announcement.comments.length} comentários da turma</p>
-                ) : (
-                    <p>Comentários da turma</p>
-                )}
+        <div className="flex flex-col my-10 lg:mx-16 xl:mx-46 2xl:mx-72">
+            <div className="flex flex-row items-center gap-3 bg-blue-600 p-4 rounded-t-lg">
+                <Avatar>
+                    <AvatarImage src={announcement.user.image} />
+                    <AvatarFallback>
+                        <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                    </AvatarFallback>
+                </Avatar>
+                <h1 className="text-xl lg:text-2xl text-white">{announcement.title}</h1>
             </div>
-            <div className="mb-10">
-                {announcement.comments.length > 0
-                    ? announcement.comments.map((commentObj, index) => (
-                        <>
-                            <div key={commentObj.id} className={`flex flex-col py-4 gap-2 rounded-lg`}>
-                                <div className="flex flex-row items-center gap-3">
-                                    <div className="flex gap-2 items-center">
-                                        <Avatar>
-                                            <AvatarImage src={commentObj.user.image} />
-                                            <AvatarFallback>
-                                                <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <p className="font-inter-semibold">{commentObj.user.name}</p>
+            <div className="flex flex-col border-x border-b rounded-b-lg border-slate-300">
+
+                <p className="flex flex-row items-center gap-2 px-4 py-2 text-slate-500">
+                    {announcement.user.name}
+                    <div className="bg-slate-500 w-1 h-1 rounded-full"></div>
+                    {new Date(announcement.created_at).toLocaleString("pt-BR")}</p>
+                {/* body */}
+                <div className="p-4">
+                    <h2 className="text-lg lg:text-lg xl:text-xl font-normal whitespace-pre-wrap">{announcement.body}</h2>
+                </div>
+
+                <div className="border-b border-slate-300" />
+
+                <div className="p-4">
+                    <div className="flex gap-2">
+                        <Users color="black" />
+                        {announcement.comments.length > 1 ? (
+                            <p>{announcement.comments.length} comentários da turma</p>
+                        ) : announcement.comments.length > 0 ? (
+                            <p>{announcement.comments.length} comentário da turma</p>
+                        ) : (
+                            <p>Comentários da turma</p>
+                        )}
+                    </div>
+                </div>
+                    {announcement.comments.length > 0 && (
+                        <div className="border-b border-slate-300" />
+                    )}
+                {/* <div className="border-b border-slate-300"></div> */}
+                {/* Comentários */}
+                <div className="rounded-b-lg">
+                    {announcement.comments.length > 0
+                        ? announcement.comments.map((commentObj, index) => (
+                            <>
+                                <div key={commentObj.id} className={`flex flex-col p-4 gap-2 transition-colors hover:bg-muted/50`}>
+                                    <div className="flex flex-row items-center gap-3">
+                                        <div className="flex gap-2 items-center">
+                                            <Avatar>
+                                                <AvatarImage src={commentObj.user.image} />
+                                                <AvatarFallback>
+                                                    <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <p className="font-inter-semibold">{commentObj.user.name}</p>
+                                        </div>
+                                        <p className="font-inter-regular text-slate-500">
+                                            {new Date(commentObj.created_at).toLocaleString("pt-BR")}
+                                        </p>
                                     </div>
-                                    <p className="font-inter-regular text-gray-500">
-                                        {new Date(commentObj.created_at).toLocaleString("pt-BR")}
-                                    </p>
+                                    <p className="font-inter-regular ">{commentObj.body}</p>
                                 </div>
-                                <p className="font-inter-regular ">{commentObj.body}</p>
-                            </div>
-                            {index != announcement.comments.length-1 && <div className="border-b border-gray-300"></div>}
-                        </>
-                      ))
-                    : null}
+                                {announcement.comments.length > 0 && index != announcement.comments.length - 1 && (
+                                    <div className="h-[1px] bg-slate-300"></div>
+                                )}
+                            </>
+                        ))
+                        : null}
+                </div>
             </div>
         </div>
     );

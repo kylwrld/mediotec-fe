@@ -165,7 +165,7 @@ export default function AnnouncementDataTable({ table, controller, classes, stat
                                         </div>
                                         <div className="flex flex-col gap-2 mt-4">
                                             <p className="text-xl font-bold">{row.original.title}</p>
-                                            <p>{row.original.body}</p>
+                                            <p className="whitespace-pre-wrap">{row.original.body}</p>
                                         </div>
                                     </td>
                                 </TableRow>
