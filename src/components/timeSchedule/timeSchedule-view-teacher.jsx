@@ -13,7 +13,7 @@ import Spinner from "../Spinner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import CustomTimeScheduleDataTable from "./timeSchedule-data-table";
 
-function getColumns(state, setState, classYearTeacherSubjects) {
+function getColumns(state, setState, classYearTeacherSubjects, id) {
     const columns = [
         {
             accessorKey: "hour",
@@ -31,7 +31,8 @@ function getColumns(state, setState, classYearTeacherSubjects) {
             header: ({ column }) => <div className="capitalize text-center">Segunda</div>,
             cell: ({ row }) => (
                 <div className="capitalize text-center">
-                    {row.original.monday_class_year_teacher_subject != null ? (
+                    {row.original.monday_class_year_teacher_subject != null &&
+                    row.original.monday_class_year_teacher_subject.teacher_subject.teacher.id == id ? (
                         <div className="flex flex-col">
                             <div>{row.original.monday_class_year_teacher_subject?.teacher_subject.subject.name}</div>
                             <div className="text-[10px] md:text-xs text-black/70">
@@ -50,7 +51,8 @@ function getColumns(state, setState, classYearTeacherSubjects) {
             header: ({ column }) => <div className="capitalize text-center">Terça</div>,
             cell: ({ row }) => (
                 <div className="capitalize text-center">
-                    {row.original.tuesday_class_year_teacher_subject != null ? (
+                    {row.original.tuesday_class_year_teacher_subject != null &&
+                    row.original.tuesday_class_year_teacher_subject.teacher_subject.teacher.id == id ? (
                         <div className="flex flex-col">
                             <div>{row.original.tuesday_class_year_teacher_subject?.teacher_subject.subject.name}</div>
                             <div className="text-xs text-black/70">{row.original.class_year?._class.name}</div>
@@ -67,7 +69,8 @@ function getColumns(state, setState, classYearTeacherSubjects) {
             header: ({ column }) => <div className="capitalize text-center">Quarta</div>,
             cell: ({ row }) => (
                 <div className="capitalize text-center">
-                    {row.original.wednesday_class_year_teacher_subject != null ? (
+                    {row.original.wednesday_class_year_teacher_subject != null &&
+                    row.original.wednesday_class_year_teacher_subject.teacher_subject.teacher.id == id ? (
                         <div className="flex flex-col">
                             <div>{row.original.wednesday_class_year_teacher_subject?.teacher_subject.subject.name}</div>
                             <div className="text-xs text-black/70">{row.original.class_year?._class.name}</div>
@@ -84,7 +87,8 @@ function getColumns(state, setState, classYearTeacherSubjects) {
             header: ({ column }) => <div className="capitalize text-center">Quinta</div>,
             cell: ({ row }) => (
                 <div className="capitalize text-center">
-                    {row.original.thursday_class_year_teacher_subject != null ? (
+                    {row.original.thursday_class_year_teacher_subject != null &&
+                    row.original.thursday_class_year_teacher_subject.teacher_subject.teacher.id == id ? (
                         <div className="flex flex-col">
                             <div>{row.original.thursday_class_year_teacher_subject?.teacher_subject.subject.name}</div>
                             <div className="text-xs text-black/70">{row.original.class_year?._class.name}</div>
@@ -101,7 +105,8 @@ function getColumns(state, setState, classYearTeacherSubjects) {
             header: ({ column }) => <div className="capitalize text-center">Sexta</div>,
             cell: ({ row }) => (
                 <div className="capitalize text-center">
-                    {row.original.friday_class_year_teacher_subject != null ? (
+                    {row.original.friday_class_year_teacher_subject != null &&
+                    row.original.friday_class_year_teacher_subject.teacher_subject.teacher.id == id ? (
                         <div className="flex flex-col">
                             <div>{row.original.friday_class_year_teacher_subject?.teacher_subject.subject.name}</div>
                             <div className="text-xs text-black/70">{row.original.class_year?._class.name}</div>
@@ -130,10 +135,9 @@ function TimeScheduleViewTeacher({ id }) {
     const [loading, setLoading] = useState(true);
     // const [teacherSubjectsAlreadyTaken, setTeacherSubjectsAlreadyTaken] = useState(ALREADY_TAKEN)
 
-
     const { postRequest, getRequest } = useContext(AuthContext);
 
-    const columns = getColumns(timeSchedules, setTimeSchedules, classYearTeacherSubjects);
+    const columns = getColumns(timeSchedules, setTimeSchedules, classYearTeacherSubjects, id);
     const timeScheduleTable = useReactTable({
         columns: columns,
         data: timeSchedules,
@@ -144,7 +148,7 @@ function TimeScheduleViewTeacher({ id }) {
     });
 
     useEffect(() => {
-    const defaultTimeScheduleTemp = Array.from({ length: MAX_TIMESCHEDULES }, () => ({})).map((item, index) => {
+        const defaultTimeScheduleTemp = Array.from({ length: MAX_TIMESCHEDULES }, () => ({})).map((item, index) => {
             item.hour = SHIFT_MORNING[index][0];
             item.minute = SHIFT_MORNING[index][1];
             item.monday_class_year_teacher_subject = null;
@@ -161,6 +165,14 @@ function TimeScheduleViewTeacher({ id }) {
             const data = await res.json();
             const accMorning = [];
             const accAfternoon = [];
+            // const filteredTimeSchedules = data.time_schedules.filter((timeSchedule) =>
+            //     timeSchedule.monday_class_year_teacher_subject?.teacher_subject.teacher.id == id ||
+            //     timeSchedule.tuesday_class_year_teacher_subject?.teacher_subject.teacher.id == id ||
+            //     timeSchedule.wednesday_class_year_teacher_subject?.teacher_subject.teacher.id == id ||
+            //     timeSchedule.thursday_class_year_teacher_subject?.teacher_subject.teacher.id == id ||
+            //     timeSchedule.friday_class_year_teacher_subject?.teacher_subject.teacher.id == id
+            // )
+            // console.log(filteredTimeSchedules)
 
             for (const timeSchedule of data.time_schedules) {
                 if (containsArray(SHIFT_MORNING, [timeSchedule.hour, timeSchedule.minute])) {
@@ -179,7 +191,7 @@ function TimeScheduleViewTeacher({ id }) {
             setTimeSchedulesMorning(timeSchedulesMorningTemp);
 
             const defaultTimeScheduleTempAfternoon = defaultTimeScheduleTemp.map((item, index) => {
-            return { ...item, hour: SHIFT_AFTERNOON[index][0], minute: SHIFT_AFTERNOON[index][1] };
+                return { ...item, hour: SHIFT_AFTERNOON[index][0], minute: SHIFT_AFTERNOON[index][1] };
             });
             setTimeSchedulesAfternoon(
                 mergeLists(
