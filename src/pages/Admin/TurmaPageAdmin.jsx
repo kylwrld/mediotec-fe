@@ -319,18 +319,16 @@ function TurmaPageAdmin() {
                     </TabsList>
 
                     <TabsContent value="students">
-                        {students?.length > 0 ? (
-                            <CustomDataTable table={studentsTable} pagination>
-                                <StudentControllerClass
-                                    table={studentsTable}
-                                    addStudent={(student) => {
-                                        student.degree = classYear._class?.degree;
-                                        setStudents([...students, student]);
-                                    }}
-                                    newStudentButton
-                                />
-                            </CustomDataTable>
-                        ) : null}
+                        <CustomDataTable table={studentsTable} pagination>
+                            <StudentControllerClass
+                                table={studentsTable}
+                                addStudent={(student) => {
+                                    student.degree = classYear._class?.degree;
+                                    setStudents([...students, student]);
+                                }}
+                                newStudentButton
+                            />
+                        </CustomDataTable>
 
                         {_class.degree < 3 ? (
                             <div className="flex gap-2">
