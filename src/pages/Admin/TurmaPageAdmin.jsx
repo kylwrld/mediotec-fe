@@ -23,7 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
-function getColumns(class_id, year) {
+function getColumns(state, setState, class_id, year) {
     const { deleteRequest } = useContext(AuthContext)
 
     const columns = [
@@ -132,8 +132,8 @@ function getColumns(class_id, year) {
                                                     variant: "success",
                                                     title: "Estudante removido com sucesso",
                                                 });
-                                                setStudents(
-                                                    students.filter((studentObj) => studentObj.id !== row.original.id)
+                                                setState(
+                                                    state.filter((studentObj) => studentObj.id !== row.original.id)
                                                 );
                                             } else {
                                                 toast({
@@ -216,7 +216,7 @@ function TurmaPageAdmin() {
         fetchData(selectedYear);
     }, []);
 
-    const columns = getColumns(classYear?._class.id, selectedYear)
+    const columns = getColumns(students, setStudents, classYear?._class.id, selectedYear)
     const studentsTable = useReactTable({
         columns,
         data: students,
