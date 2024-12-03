@@ -16,85 +16,146 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Dot } from "lucide-react";
+import { ArrowUpDown, Dot, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
-const columns = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Seleciona todos"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Seleciona linha"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0">
-                    Nome
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
+function getColumns(class_id, year) {
+    const { deleteRequest } = useContext(AuthContext)
+
+    const columns = [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Seleciona todos"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Seleciona linha"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
         },
-        cell: ({ row }) => (
-            <div className="capitalize flex items-center gap-3">
-                <Avatar>
-                    <AvatarImage src={row.original.image} />
-                    <AvatarFallback>
-                        <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
-                    </AvatarFallback>
-                </Avatar>
-                {row.getValue("name")}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-    },
-    {
-        accessorKey: "degree",
-        header: ({ column }) => {
-            return (
-                <div className="flex justify-end">
+        {
+            accessorKey: "name",
+            header: ({ column }) => {
+                return (
                     <Button
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        className="justify-end p-0">
-                        Ano
+                        className="p-0">
+                        Nome
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="capitalize flex items-center gap-3">
+                    <Avatar>
+                        <AvatarImage src={row.original.image} />
+                        <AvatarFallback>
+                            <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851" />
+                        </AvatarFallback>
+                    </Avatar>
+                    {row.getValue("name")}
                 </div>
-            );
+            ),
         },
-        cell: ({ row }) => {
-            const degree = parseFloat(row.getValue("degree"));
+        {
+            accessorKey: "email",
+            header: "Email",
+            cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        },
+        {
+            accessorKey: "degree",
+            header: ({ column }) => {
+                return (
+                    <div className="flex justify-end">
+                        <Button
+                            variant="ghost"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                            className="justify-end p-0">
+                            Ano
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    </div>
+                );
+            },
+            cell: ({ row }) => {
+                const degree = parseFloat(row.getValue("degree"));
 
-            return <div className="text-right font-medium">{degree ? degree : 0}</div>;
+                return <div className="text-right font-medium">{degree ? degree : 0}</div>;
+            },
+            filterFn: "includesString",
         },
-        filterFn: "includesString",
-    },
-];
+        {
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                return (
+                    <div className="flex justify-end items-end gap-2">
+                        {/* delete */}
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button
+                                    aria-label="Remover estudante"
+                                    className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+                                    <Trash2 size={18} />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Tem certeza que deseja remover o estudante dessa turma?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Esta ação não pode ser desfeita. Os dados serão permanentemente deletados dessa turma.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        className="bg-red-600 hover:bg-red-800"
+                                        onClick={async () => {
+                                            console.log("here")
+                                            const res = await deleteRequest(`student_class/${class_id}/${year}/${row.original.id}/`);
+                                            if (res.ok) {
+                                                toast({
+                                                    variant: "success",
+                                                    title: "Estudante removido com sucesso",
+                                                });
+                                                setStudents(
+                                                    students.filter((studentObj) => studentObj.id !== row.original.id)
+                                                );
+                                            } else {
+                                                toast({
+                                                    variant: "destructive",
+                                                    title: "Não foi possível remover estudante",
+                                                });
+                                            }
+                                        }}>
+                                        Remover
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
+                );
+            },
+        },
+    ];
+
+    return columns
+}
+
 
 function TurmaPageAdmin() {
     const [loading, setLoading] = useState(true);
@@ -155,6 +216,7 @@ function TurmaPageAdmin() {
         fetchData(selectedYear);
     }, []);
 
+    const columns = getColumns(classYear?._class.id, selectedYear)
     const studentsTable = useReactTable({
         columns,
         data: students,
@@ -229,7 +291,7 @@ function TurmaPageAdmin() {
                         </SelectTrigger>
                         <SelectContent>
                             {years
-                                ? years.map((year) => <SelectItem value={year}>{year}</SelectItem>)
+                                ? years.map((year, index) => <SelectItem key={index} value={year}>{year}</SelectItem>)
                                 : "Não especificado"}
                         </SelectContent>
                     </Select>

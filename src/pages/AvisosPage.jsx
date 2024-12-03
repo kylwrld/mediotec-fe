@@ -124,7 +124,11 @@ function AvisosPage() {
                         <AnnouncementController
                             table={table}
                             classes={classes}
-                            addAnnouncement={(announcement) => setAnnouncements([...announcements, announcement])}
+                            addAnnouncement={(announcement) => {
+                                announcement.fixed
+                                ? setAnnouncements([announcement, ...announcements])
+                                : setAnnouncements([...announcements, announcement])
+                            }}
                         />
                     }></AnnouncementDataTable>
             </div>

@@ -89,26 +89,52 @@ export function appendFieldsUserForm(fields) {
     return form
 }
 
-export function changeStateOnEdit(state, setState, row, obj) {
-    const newState = []
-
+// maybe there's something better than copying the whole array and changing
+// one value
+export function changeStateOnEdit(state, setState, row, newStateObj) {
     const fileReader = new FileReader;
-    for (let stateObj of state) {
-        if (stateObj.id != row.original.id) {
-            newState.push(stateObj)
-        } else if (obj["image"]) {
-            fileReader.onload = () => {
-                newState.push({...stateObj, image: fileReader.result})
-                setState(newState)
-            }
-            fileReader.readAsDataURL(obj["image"][0])
-        } else {
-            const mergedObj = mergeObjs(stateObj, obj)
-            newState.push(mergedObj)
+
+    if (newStateObj["image"]) {
+        const mergedObj = mergeObjs(state[row.index], newStateObj)
+        fileReader.onload = () => {
+            const tempObj = {...mergedObj, image: fileReader.result}
+
+            // for some reason changing state[index] directly
+            // doesn't work
+            const tempList = [...state]
+            tempList[row.index] = tempObj
+
+            setState(tempList)
         }
+        fileReader.readAsDataURL(newStateObj["image"][0])
+    } else {
+        const mergedObj = mergeObjs(state[row.index], newStateObj)
+
+        // for some reason changing state[index] directly
+        // doesn't work
+        const tempList = [...state]
+        tempList[row.index] = mergedObj
+
+        setState(tempList)
     }
 
-    setState(newState)
+    // const newState = []
+    // for (let stateObj of state) {
+    //     if (stateObj.id != row.original.id) {
+    //         newState.push(stateObj)
+    //     } else if (newStateObj["image"]) {
+    //         fileReader.onload = () => {
+    //             newState.push({...stateObj, image: fileReader.result})
+    //             setState(newState)
+    //         }
+    //         fileReader.readAsDataURL(newStateObj["image"][0])
+    //     } else {
+    //         const mergedObj = mergeObjs(stateObj, newStateObj)
+    //         newState.push(mergedObj)
+    //     }
+    // }
+
+    // setState(newState)
 }
 
 

@@ -159,8 +159,8 @@ function getColumns(state, setState) {
                                                     variant: "success",
                                                     title: "Coordenador(a) removido com sucesso",
                                                 });
-                                                setStudents(
-                                                    students.filter((studentObj) => studentObj.id !== row.original.id)
+                                                setState(
+                                                    state.filter((stateObj) => stateObj.id !== row.original.id)
                                                 );
                                             } else {
                                                 toast({
