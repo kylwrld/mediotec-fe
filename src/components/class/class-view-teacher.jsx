@@ -10,12 +10,26 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Trash2 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function getColumns() {
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
+
+function getColumns(state, setState) {
     const navigate = useNavigate();
+    const { deleteRequest } = useContext(AuthContext)
 
     const columns = [
         {
@@ -50,6 +64,56 @@ function getColumns() {
             },
             filterFn: "includesString",
         },
+        // {
+        //     id: "actions",
+        //     enableHiding: false,
+        //     cell: ({ row }) => {
+        //         return (
+        //             <div className="flex justify-end items-end gap-2">
+        //                 {/* delete */}
+        //                 <AlertDialog>
+        //                     <AlertDialogTrigger asChild>
+        //                         <Button
+        //                             aria-label="Remover disciplina do professor"
+        //                             className="justify-start px-2 shadow-none gap-2 bg-transparent text-black hover:text-white hover:bg-red-600 outline-none">
+        //                             <Trash2 size={18} />
+        //                         </Button>
+        //                     </AlertDialogTrigger>
+        //                     <AlertDialogContent>
+        //                         <AlertDialogHeader>
+        //                             <AlertDialogTitle>Tem certeza que deseja remover a turma do professor?</AlertDialogTitle>
+        //                             <AlertDialogDescription>
+        //                                 Esta ação não pode ser desfeita. Os dados serão permanentemente deletados.
+        //                             </AlertDialogDescription>
+        //                         </AlertDialogHeader>
+        //                         <AlertDialogFooter>
+        //                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
+        //                             <AlertDialogAction
+        //                                 className="bg-red-600 hover:bg-red-800"
+        //                                 onClick={async () => {
+        //                                     const res = await deleteRequest(`class_year/${row.original.id}/`);
+        //                                     if (res.ok) {
+        //                                         toast({
+        //                                             variant: "success",
+        //                                             title: "Turma removida com sucesso",
+        //                                         });
+        //                                         setState(state.filter((_class) => _class.id !== row.original.id));
+        //                                     } else {
+        //                                         toast({
+        //                                             variant: "destructive",
+        //                                             title: "Não foi possível remover a turma",
+        //                                         });
+        //                                     }
+        //                                 }}>
+        //                                 Remover
+        //                             </AlertDialogAction>
+        //                         </AlertDialogFooter>
+        //                     </AlertDialogContent>
+        //                 </AlertDialog>
+        //             </div>
+        //         );
+        //     },
+        // },
     ];
 
     return columns;
@@ -61,7 +125,7 @@ function ClassViewTeacher({ id }) {
 
     const { getRequest, decodeToken } = useContext(AuthContext);
 
-    const columns = getColumns();
+    const columns = getColumns(classes, setClasses);
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});

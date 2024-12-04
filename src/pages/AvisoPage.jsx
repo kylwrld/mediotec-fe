@@ -9,13 +9,20 @@ function AvisoPage() {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [announcement, setAnnouncement] = useState({});
+    const [error, setError] = useState("")
+
     const { getRequest } = useContext(AuthContext);
 
     const fetchAnnouncement = async () => {
         const response = await getRequest(`announcement/${id}`);
         const data = await response.json();
-        setAnnouncement(data);
-        setLoading(false);
+        if (!response.ok) {
+            setError(data.detail)
+            setLoading(false)
+        } else {
+            setAnnouncement(data);
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -23,6 +30,13 @@ function AvisoPage() {
     }, []);
 
     if (loading) return <Spinner />;
+    if (error) return (
+        <div className="h-full flex flex-col">
+            <div className="flex flex-col justify-start text-left gap-3">
+                <h1 className="text-4xl text-blue-600 font-bold">{error}</h1>
+            </div>
+        </div>
+    )
 
     return (
         <div className="flex flex-col my-10 lg:mx-16 xl:mx-46 2xl:mx-72">

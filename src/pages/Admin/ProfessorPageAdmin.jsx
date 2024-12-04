@@ -40,7 +40,10 @@ function ProfessorPageAdmin() {
                             <img src="https://tiermaker.com/images/media/avatars-2024/jvilla699/jvilla699.jpg?1721389851"/>
                         </AvatarFallback>
                     </Avatar>
-                    <h1 className="text-4xl text-blue-600 font-bold">{teacher.name || "Não especificado"}</h1>
+                    <div className="flex flex-col">
+                        <h1 className="text-4xl text-blue-600 font-bold">{teacher.name || "Não especificado"}</h1>
+                        <h1 className="text-md text-slate-400 font-bold">{teacher.email || "Não especificado"}</h1>
+                    </div>
                 </div>
                 <div className="flex items-end w-full">
                     {/* <h2 className="text-muted-foreground ml-[1.5px]">{user.name}</h2> */}

@@ -1,6 +1,6 @@
 import AuthContext from "@/context/AuthContext";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     getCoreRowModel,
@@ -17,34 +17,35 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Spinner from "@/components/Spinner";
 
 function getColumns(state, setState) {
+    const navigate = useNavigate();
     const columns = [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-                    aria-label="Seleciona todos"
-                />
-            ),
-            cell: ({ row, table }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => {
-                        const rowsModel = table.getSelectedRowModel();
-                        if (rowsModel.rows.length > 0) {
-                            const s_row = rowsModel.rows[0];
-                            s_row.toggleSelected(false);
-                            row.toggleSelected(!!value);
-                        } else {
-                            row.toggleSelected(!!value);
-                        }
-                    }}
-                    aria-label="Seleciona linha"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
+        // {
+        //     id: "select",
+        //     header: ({ table }) => (
+        //         <Checkbox
+        //             checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        //             aria-label="Seleciona todos"
+        //         />
+        //     ),
+        //     cell: ({ row, table }) => (
+        //         <Checkbox
+        //             checked={row.getIsSelected()}
+        //             onCheckedChange={(value) => {
+        //                 const rowsModel = table.getSelectedRowModel();
+        //                 if (rowsModel.rows.length > 0) {
+        //                     const s_row = rowsModel.rows[0];
+        //                     s_row.toggleSelected(false);
+        //                     row.toggleSelected(!!value);
+        //                 } else {
+        //                     row.toggleSelected(!!value);
+        //                 }
+        //             }}
+        //             aria-label="Seleciona linha"
+        //         />
+        //     ),
+        //     enableSorting: false,
+        //     enableHiding: false,
+        // },
         {
             accessorKey: "name",
             header: ({ column }) => {
@@ -59,7 +60,11 @@ function getColumns(state, setState) {
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+            cell: ({ row }) => <div className="capitalize"
+                                    onClick={() => navigate(`/professor/${row.original.id}`)}
+                                >
+                                {row.getValue("name")}
+                                </div>,
         },
         {
             accessorKey: "email",

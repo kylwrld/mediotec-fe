@@ -79,6 +79,7 @@ function TurmaPageTeacher() {
     const [classYear, setClassYear] = useState({});
     const [students, setStudents] = useState([]);
     const [teacherSubjects, setTeacherSubjects] = useState([]);
+    const [error, setError] = useState("")
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -99,15 +100,20 @@ function TurmaPageTeacher() {
             // teacher all subjects from a class
             const response = await getRequest(`teacher/${id}/${new Date().getFullYear()}/${user.id}`);
             const data = await response.json();
-            setTeacherSubjects(data.teacher_subject);
+            setTeacherSubjects(data.teacher_subject || []);
         };
 
         const fetchStudents = async () => {
             const response = await getRequest(`student_class/${id}/${new Date().getFullYear()}/`);
             const data = await response.json();
-            setStudents(data.class_year?.students);
-            setClassYear(data.class_year);
-            setLoading(false);
+            if (!response.ok) {
+                setError(data.detail)
+                setLoading(false)
+            } else {
+                setStudents(data.class_year?.students);
+                setClassYear(data.class_year);
+                setLoading(false);
+            }
         };
 
         fetchTeacherSubjects();
@@ -136,6 +142,13 @@ function TurmaPageTeacher() {
     });
 
     if (loading) return <Spinner />;
+    if (error) return (
+        <div className="h-full flex flex-col">
+            <div className="flex flex-col justify-start text-left gap-3">
+                <h1 className="text-4xl text-blue-600 font-bold">{error}</h1>
+            </div>
+        </div>
+    )
 
     return (
         <div className="h-full flex flex-col">

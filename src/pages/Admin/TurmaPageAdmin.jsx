@@ -167,6 +167,7 @@ function TurmaPageAdmin() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [classes, setClasses] = useState([]);
     const [nextClass, setNextClass] = useState()
+    const [error, setError] = useState("")
 
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -191,24 +192,30 @@ function TurmaPageAdmin() {
         const fetchStudents = async () => {
             const response = await getRequest(`student_class/${id}/${year}/`);
             const data = await response.json();
-            setStudents(data.class_year?.students);
-            setYears(data.years);
-            setClass(data._class);
-            setClassYear(data.class_year);
-            return data._class
+            if (!response.ok) {
+                setError(data.detail)
+                setLoading(false)
+            } else {
+                setStudents(data.class_year?.students);
+                setYears(data.years);
+                setClass(data._class);
+                setClassYear(data.class_year);
+                return data.class_year
+            }
         };
-        const fetchSubjects = async () => {
-            const response = await getRequest("subject/");
+        const fetchSubjects = async (classYearData) => {
+            // const response = await getRequest("subject/");
+            const response = await getRequest(`class_year/${classYearData.id}/subjects/`);
             const data = await response.json();
             setSubjects(data.subjects);
         };
 
         // Use Promise.all
-        const classData = await fetchStudents();
-        await fetchSubjects();
+        const classYearData = await fetchStudents();
+        await fetchSubjects(classYearData);
 
         // pass class id after fetchStudents
-        await fetchClasses(classData);
+        await fetchClasses(classYearData._class);
         setLoading(false);
     };
 
@@ -243,8 +250,6 @@ function TurmaPageAdmin() {
         data.student = rows.map((row) => row.original.id);
         data._class = class_id;
 
-        console.log(data)
-
         if (data.student.length === 0) {
             toast({
                 variant: "destructive",
@@ -272,6 +277,13 @@ function TurmaPageAdmin() {
     }
 
     if (loading) return <Spinner />;
+    if (error) return (
+        <div className="h-full flex flex-col">
+            <div className="flex flex-col justify-start text-left gap-3">
+                <h1 className="text-4xl text-blue-600 font-bold">{error}</h1>
+            </div>
+        </div>
+    )
 
     return (
         <div className="h-full flex flex-col">
