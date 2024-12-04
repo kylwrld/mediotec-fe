@@ -37,6 +37,11 @@ export default function App() {
                             element={
                                 <Redirect teacher={<EstudantesPageTeacher />} admin={<EstudantesPageAdmin />} />
                             }></Route>
+                        {/* <Route
+                            path="/estudante/:id"
+                            element={
+                                <Redirect teacher={<EstudantesPageTeacher />} admin={<EstudantesPageAdmin />} />
+                            }></Route> */}
                         <Route
                             path="/turma/:id"
                             element={<Redirect teacher={<TurmaPageTeacher />} admin={<TurmaPageAdmin />} />}></Route>

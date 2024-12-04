@@ -254,7 +254,7 @@ function TurmaPageAdmin() {
             toast({
                 variant: "destructive",
                 title: "Selecione no mínimo 1 estudante.",
-                description: "Você não selecionou nenhum estudante.",
+                description: "Você não selecionou um estudante.",
             });
             return
         };
