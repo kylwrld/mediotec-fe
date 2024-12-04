@@ -16,11 +16,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "./dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 export default function MobileNav({ links }) {
     const { decodeToken, logout } = useContext(AuthContext);
     const user = decodeToken();
     const profile = user?.type == "ADMIN" ? "Coordenação" : "Professor";
+    const navigate = useNavigate();
 
     return (
         <Sheet>
@@ -54,7 +56,7 @@ export default function MobileNav({ links }) {
                             <DropdownMenuContent>
                                 <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className="font-medium">Perfil</DropdownMenuItem>
+                                { user?.type == "TEACHER" ? (<DropdownMenuItem className="font-medium" onClick={() => navigate(`professor/${user.id}`)}>Perfil</DropdownMenuItem>) : null }
                                 <DropdownMenuItem className="font-medium" onClick={() => logout()}>
                                     Sair
                                 </DropdownMenuItem>
