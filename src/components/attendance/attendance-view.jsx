@@ -72,7 +72,7 @@ function getColumns(state, setState) {
 }
 
 function AttendanceView({ classYear, students, teacherSubjects }) {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [selectedTeacherSubject, setSelectedTeacherSubject] = useState(teacherSubjects[0]?.id);
     const [attendances, setAttendances] = useState([]);
     const [defaultAttendances, setDefaultAttendances] = useState([]);
@@ -82,29 +82,33 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
 
     const columns = getColumns(attendances, setAttendances);
 
-    useEffect(() => {
+    const fetchAttendances = async (teacherSubject) => {
+        setLoading(true)
         const date = formatDate(new Date());
-        const fetchAttendances = async () => {
-            const res = await getRequest(`attendance/${classYear._class.id}/${selectedTeacherSubject}/?date=${date}`);
-            const data = await res.json();
-            const attendanceList = students.map((student) => {
-                return {
-                    student: { id: student.id, name: student.name },
-                    type: "PRESENTE",
-                };
-            });
+        const res = await getRequest(`attendance/${classYear._class.id}/${teacherSubject}/?date=${date}`);
+        const data = await res.json();
 
-            setAttendances(
-                mergeLists(
-                    attendanceList,
-                    data.attendances,
-                    (item, first_list_item) => item.student.id === first_list_item.student.id
-                )
-            );
-            setDefaultAttendances(attendanceList);
-            setLoading(false);
-        };
-        fetchAttendances();
+        // could do this on initial render
+        const attendanceList = students.map((student) => {
+            return {
+                student: { id: student.id, name: student.name },
+                type: "PRESENTE",
+            };
+        });
+
+        setAttendances(
+            mergeLists(
+                attendanceList,
+                data.attendances,
+                (item, first_list_item) => item.student.id === first_list_item.student.id
+            )
+        );
+        setDefaultAttendances(attendanceList);
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchAttendances(selectedTeacherSubject);
     }, []);
 
     const attendanceTable = useReactTable({
@@ -145,6 +149,7 @@ function AttendanceView({ classYear, students, teacherSubjects }) {
                 <Select
                     onValueChange={(value) => {
                         setSelectedTeacherSubject(value);
+                        fetchAttendances(value)
                     }}
                     defaultValue={selectedTeacherSubject}>
                     <SelectTrigger className="text-muted-foreground">
