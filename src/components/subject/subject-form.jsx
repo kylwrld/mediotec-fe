@@ -34,7 +34,7 @@ function SubjectForm({ onSubmit }) {
                         <FormItem>
                             <FormLabel>Nome da disciplina</FormLabel>
                             <FormControl>
-                                <Input placeholder="Digite o nome do professor" {...field} />
+                                <Input placeholder="Digite o nome da disciplina" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

@@ -84,7 +84,7 @@ function SubjectController({ table, addSubject, teachers, attachTeacherButton, a
                             <div className="flex flex-col gap-3">
                                 <Select onValueChange={(value) => setTeacher(value)}>
                                     <SelectTrigger className="text-muted-foreground">
-                                        <SelectValue placeholder="Selecione uma turma" />
+                                        <SelectValue placeholder="Selecione um professor" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {teachers
