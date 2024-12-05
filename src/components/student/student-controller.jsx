@@ -32,6 +32,7 @@ function StudentController({ table, classes, addStudent, newStudentButton = fals
                 variant: "success",
                 title: "Estudante(s) adicionado(s) a turma com sucesso.",
             });
+            rows.forEach((row) => row.toggleSelected(false))
         } else {
             toast({
                 variant: "destructive",
